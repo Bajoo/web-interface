@@ -1,0 +1,17 @@
+{
+  "name": "bajoo-web-interface",
+  "version": "1.0.0",
+  "description": "Web interface for the Bajoo cloud service.",
+  "main": "index.js",
+  "scripts": {
+      "start": "node_modules/.bin/webpack src/index.js bin/app.js --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "mithril": "^1.0.1",
+    "webpack": "^2.2.1"
+  }
+}
