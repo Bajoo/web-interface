@@ -3,10 +3,10 @@
 
 import m from 'mithril';
 import login from './pages/login';
+import index from './pages/index';
 
-
-console.log("OK");
 
 m.route(document.body, '/login', {
-    '/login': login
+    '/': index,
+    '/login': login,
 });

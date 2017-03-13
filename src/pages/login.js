@@ -1,14 +1,8 @@
 
 import m from 'mithril';
-import {crypto} from 'openpgp';
+import Session from '../models/session';
+import User from '../models/user';
 
-
-function hash_password(password) {
-    var u8a_password = crypto.hash.sha256(password);
-
-    // Convert Uint8Array to hex string.
-    return u8a_password.reduce((acc, i) => acc + ('0' + i.toString(16)).slice(-2), '');
-}
 
 
 export default {
@@ -58,58 +52,21 @@ export default {
     },
     
     submit() {
-        var base_url = 'https://api.dev.bajoo.fr';
         this.is_loading = true;
+
+        let password = User.hash_password(this.password);
         
-        console.log('submit');
-        
-        var request_data = {
-            username: this.username,
-            password: this.password,
-            grant_type: 'password'
-        };
-
-        request_data.password = hash_password(this.password);
-        console.log(`"${request_data.password}"`);
-        
-        var client_id = 'e2676e5d1fff42f7b32308e5eca3c36a';
-        var client_password = '<client-secret>';
-
-        //TODO: it may be not needed.
-        function serialize_form_urlencoded(data) {
-            var urlEncodedDataPairs = [];
-
-            // Turn the data object into an array of URL-encoded key/value pairs.
-            for (var name in request_data) {
-                urlEncodedDataPairs.push(encodeURIComponent(name) + '=' + encodeURIComponent(data[name]));
-            }
-
-            // Combine the pairs into a single string and replace all %-encoded spaces to 
-            // the '+' character; matches the behaviour of browser form submissions.
-            return urlEncodedDataPairs.join('&').replace(/%20/g, '+');
-        }
-
-        var x= m.request({
-            method: 'POST',
-            url: base_url + '/token',
-            //user: 'e2676e5d1fff42f7b32308e5eca3c36a', // client ID
-            //password: 'client-secret',
-            data: request_data,
-            background: true,
-            headers: {
-                Authorization: `Basic ${btoa([client_id, client_password].join(':'))}`,
-                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-            },
-            serialize: serialize_form_urlencoded
+        Session.from_user_credentials(this.username, password)
+        .then(session => {
+            //this.is_loading = false;
+            return User.from_session(session);
         })
-        .then(value => {
-            this.is_loading = false;
-            m.route('/');
-        }).catch(err => {
+        .then(user => m.route.set('/', {user}))
+            .catch(err => {
             
             this.is_loading = false;
             if (err.error === 'invalid_grant' && err.error_description == "Invalid credentials given.")
-                this.error_message = 'Inavlid username and/or password';
+                this.error_message = 'Invalid username and/or password';
             else if (err.error_description)
                 this.error_message = err.error_description;
             else
