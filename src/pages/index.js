@@ -1,11 +1,12 @@
 
 import m from 'mithril';
 import Session from '../models/session';
+import app from '../app';
 import layout from '../layout';
 
 
 export default {
     view(vnode) {
-        return layout(m('', `Welcome ${vnode.attrs.user.email}!`));
+        return layout(m('', `Welcome ${app.user.email}!`));
     }
 };

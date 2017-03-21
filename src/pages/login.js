@@ -3,6 +3,7 @@ import m from 'mithril';
 import Session from '../models/session';
 import User from '../models/user';
 import layout from '../layout';
+import app from '../app';
 
 
 
@@ -60,9 +61,12 @@ export default {
         Session.from_user_credentials(this.username, password)
             .then(session => {
                 //this.is_loading = false;
+                app.session = session;
                 return User.from_session(session);
+            }).then(user => {
+                app.user = user;
+                m.route.set('/');
             })
-            .then(user => m.route.set('/', {user}))
             .catch(err => {
 
                 this.is_loading = false;
