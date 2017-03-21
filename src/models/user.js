@@ -3,13 +3,13 @@ import {crypto} from 'openpgp';
 
 
 export default class User {
-    
+
     constructor({email, lang, quota}) {
         this.email = email;
         this.lang = lang;
         this.quota = quota; // in bytes
     }
-    
+
     /**
      * @return Promise<User>
      */

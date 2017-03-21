@@ -25,24 +25,24 @@ function serialize_form_urlencoded(data) {
 }
 
 /**
-    Singleton
-*/
+ Singleton
+ */
 export default class Session {
-    
+
     constructor({access_token, refresh_token}) {
-        
+
         this.access_token = access_token;
         this.refresh_token = refresh_token;
     }
-    
+
     static from_user_credentials(username, encrypted_password) {
         return m.request({
             method: 'POST',
             url: `${base_url}/token`,
-            
+
             //user: client_id,
             //password: client_secret,
-            
+
             data: {
                 grant_type: 'password',
                 username,
@@ -57,10 +57,10 @@ export default class Session {
             type: Session
         });
     }
-    
+
     /**
      Do an authenticated request to the API
-    */
+     */
     request(config) {
         if (config.url && config.url[0] == '/') {
             config.url = base_url + config.url;

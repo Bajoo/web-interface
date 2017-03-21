@@ -1,15 +1,11 @@
 
 import m from 'mithril';
 import Session from '../models/session';
+import layout from '../layout';
 
 
 export default {
-    oninit(vnode) {
-        console.log('INIT');
-        console.log(args);
-    },
-    
     view(vnode) {
-        return m('', `Welcome ${vnode.attrs.user.email}!`);
+        return layout(m('', `Welcome ${vnode.attrs.user.email}!`));
     }
 };
