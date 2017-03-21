@@ -1,10 +1,13 @@
 
 import m from 'mithril';
 import Session from '../models/session';
+import {base_url} from '../models/session';
 import User from '../models/user';
 import layout from '../layout';
 import app from '../app';
 
+
+const forgotten_password_url = `${base_url}/user/password-forgotten`;
 
 
 export default {
@@ -47,7 +50,8 @@ export default {
                             ])
                         ]),
                         m('button[type="submit"].btn.btn-default', 'Submit')
-                    ])
+                    ]),
+                    m(`a.pull-right.small[href="${forgotten_password_url}"]`, 'Forgotten password ?')
                 ])
             ])
         );
