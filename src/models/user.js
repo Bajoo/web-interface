@@ -1,5 +1,6 @@
 
 import {crypto} from 'openpgp';
+import Storage from './storage';
 
 
 export default class User {
@@ -26,5 +27,13 @@ export default class User {
 
         // Convert Uint8Array to hex string.
         return u8a_password.reduce((acc, i) => acc + ('0' + i.toString(16)).slice(-2), '');
+    }
+
+    list_storages(session) {
+        return session.request({
+            url: '/storages',
+            background: true,
+            type: Storage
+        });
     }
 }

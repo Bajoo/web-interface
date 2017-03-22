@@ -1,5 +1,16 @@
 
 import m from 'mithril';
+import app from './app';
+import side_menu from './components/side-menu';
+
+
+function two_column_content(content) {
+    return m('row', [
+        m('.col-md-2[role="nav"]', m(side_menu)),
+        m('.col-md-10[role="main"]', content)
+    ]);
+}
+
 
 /**
  * Return a mithril vnode wrapping the content (passed in parameter) around a layout common to all pages.
@@ -20,6 +31,8 @@ export default function layout(content) {
                 ])
             ])
         ]),
-        m('.container', content)
+        m('.container',
+            app.session ? two_column_content(content) : content
+        )
     ]);
 }
