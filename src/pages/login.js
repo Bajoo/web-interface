@@ -3,7 +3,6 @@ import m from 'mithril';
 import Session from '../models/session';
 import {base_url} from '../models/session';
 import User from '../models/user';
-import layout from '../layout';
 import app from '../app';
 
 
@@ -19,10 +18,6 @@ export default {
     },
 
     view(vscope) {
-        return layout(this.view2(vscope));
-    },
-
-    view2(vscope) {
         return m('.panel.panel-default',
             m('.panel-heading', m('h1.panel-title', 'Connexion')),
             m('.panel-body', [

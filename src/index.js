@@ -5,6 +5,7 @@ import m from 'mithril';
 import {logged_resolver, login_resolver} from './route_resolver';
 import login from './pages/login';
 import index from './pages/index';
+import storage from './pages/storage';
 
 
 // Workaround for bug https://github.com/lhorie/mithril.js/issues/1691
@@ -14,7 +15,9 @@ m.request = options => new Promise(function(resolve, reject) {
 });
 
 
+// Warning: no trailing slash, or else it'll fail silently.
 m.route(document.body, '/', {
-    '/': logged_resolver(index),
-    '/login': login_resolver(login)
+    '/': logged_resolver((index)),
+    '/login': login_resolver((login)),
+    '/storage/:id': logged_resolver((storage))
 });

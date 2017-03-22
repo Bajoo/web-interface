@@ -1,6 +1,7 @@
 
 import m from 'mithril';
 import app from './app';
+import layout from './components/layout';
 
 
 /**
@@ -13,7 +14,12 @@ export function logged_resolver(component) {
                 m.route.set('/login');
             else
                 return component;
+        },
+
+        render(vnode) {
+            return m(layout, vnode);
         }
+
     };
 }
 
@@ -30,8 +36,11 @@ export function login_resolver(component) {
                 m.route.set('/');
             else
                 return component;
+        },
+
+        render(vnode) {
+            return m(layout, vnode);
         }
     };
 }
-
 

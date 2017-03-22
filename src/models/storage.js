@@ -9,4 +9,12 @@ export default class Storage {
 
         this._rights = rights;
     }
+
+    static get(session, storage_id) {
+        return session.request({
+            url: `/storages/${storage_id}`,
+            background: true,
+            type: Storage
+        });
+    }
 }
