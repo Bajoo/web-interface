@@ -27,14 +27,14 @@ export default {
     },
 
     view() {
-        return m('nav[style="border-right: 1px solid grey;"]', [
+        return m('nav.side-nav', [
             m('h1.text-center', 'Bajoo storages'),
             m('ul.nav',
                 this.my_bajoo ? storage_link(this.my_bajoo) : '',
                 this.storages.length ? [
                     m('li', [
                         m('a', 'All shares'),
-                        m('ul.nav[style="padding-left: 25px;"]',
+                        m('ul.nav',
                             this.storages.map(storage => storage_link(storage))
                         )
                     ])

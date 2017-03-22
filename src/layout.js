@@ -5,7 +5,7 @@ import side_menu from './components/side-menu';
 
 
 function two_column_content(content) {
-    return m('row', [
+    return m('div.row', [
         m('.col-md-2[role="nav"]', m(side_menu)),
         m('.col-md-10[role="main"]', content)
     ]);
