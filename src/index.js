@@ -19,5 +19,7 @@ m.request = options => new Promise(function(resolve, reject) {
 m.route(document.body, '/', {
     '/': logged_resolver((index)),
     '/login': login_resolver((login)),
-    '/storage/:id': logged_resolver((storage))
+    // "key" is a special parameter name, forcing rebuild of the component.
+    '/storage/:key': logged_resolver((storage)),
+    '/storage/:key/:path...': logged_resolver((storage))
 });

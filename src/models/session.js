@@ -70,4 +70,17 @@ export default class Session {
         }
         return m.request(config);
     }
+
+    /**
+     Do an authenticated request to the storage servers
+     */
+    storage_request(config) {
+        if (config.url && config.url[0] == '/') {
+            config.url = base_storage_url + config.url;
+            config.headers = config.headers || {};
+            config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json';
+            config.headers['Authorization'] = `Bearer ${this.access_token}`;
+        }
+        return m.request(config);
+    }
 }

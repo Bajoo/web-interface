@@ -17,4 +17,27 @@ export default class Storage {
             type: Storage
         });
     }
+
+    list_files(session, folder = '') {
+        // Fake file list !!!
+        return new Promise((resolve, reject) => {
+            resolve([
+                {name: 'fichier1.txt', "hash": "45b1586118dca835e79617b22618b0ab", "last_modified": "2017-01-12T09:59:31.508590", "bytes": 1667},
+                {name: 'document.pdf', "hash": "45b1586118dca835e79617b22618b0ab", "last_modified": "2017-01-12T09:59:31.508590", "bytes": 1667},
+                {subdir: 'A folder'},
+                {subdir: 'Another folder'},
+                {name: 'film.mkv', "hash": "45b1586118dca835e79617b22618b0ab", "last_modified": "2017-01-12T09:59:31.508590", "bytes": 1667}
+            ]);
+        });
+
+        return session.storage_request({
+            url: `/${this.id}/${folder}`,
+            data: { // GET params
+                format: 'json',
+                prefix: folder,
+                delimiter: '/'
+            },
+            bakground: true
+        });
+    }
 }
