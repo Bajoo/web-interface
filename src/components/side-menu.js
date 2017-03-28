@@ -4,9 +4,10 @@ import app from '../app';
 
 
 function storage_link(storage) {
-    return m('li', m('a',{
-        href: `/storage/${storage.id}`,
-        oncreate: m.route.link
+    let href = `/storage/${storage.id}`;
+    return m('li', {class: m.route.get().substr(0, href.length) == href ? 'active' : ''}, m('a',{
+        href: href,
+        oncreate: m.route.link,
     }, storage.name));
 }
 
@@ -35,7 +36,7 @@ export default {
             m('ul.nav',
                 this.my_bajoo ? storage_link(this.my_bajoo) : '',
                 this.storages.length ? [
-                    m('li', [
+                    m('li', {class: m.route.get() == '/' ? 'active' : ''} ,[
                         m('a[href=/]', {oncreate: m.route.link}, 'All shares'),
                         m('ul.nav',
                             this.storages.map(storage => storage_link(storage))
