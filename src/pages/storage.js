@@ -1,6 +1,7 @@
 
 import m from 'mithril';
 import app from '../app';
+import relative_date from '../helpers/relative_date';
 import Storage from '../models/storage';
 
 
@@ -69,7 +70,7 @@ export default {
                         m('td', m('i.glyphicon.glyphicon-file')),
                         m('td', file.name),
                         m('td', file.bytes),
-                        m('td', file.last_modified)
+                        m('td', relative_date(file.last_modified))
                     ]))
                  )
             ])
