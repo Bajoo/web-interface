@@ -4,9 +4,27 @@ import app from '../app';
 import Storage from '../models/storage';
 
 
+function breadcrumb(storage, path) {
+    let acc_path = `/storage/${storage.id}`;
+    let folder_list = path.split('/').filter(f => f !== '');
+
+    return m('ol.breadcrumb', [
+        folder_list.length > 0 ?
+            m('li', m('a', {oncreate: m.route.link, href: `/storage/${storage.id}`}, storage.name)) :
+            m('li.active', storage.name),
+        folder_list.map((folder, idx) => {
+            let is_last = (idx == folder_list.length - 1);
+            acc_path = `${acc_path}/${folder}`;
+            return (idx == folder_list.length - 1) ?
+                m('li.active', folder) :
+                m('li', m('a', {oncreate: m.route.link, href: acc_path}, folder));
+        })
+    ]);
+}
+
 function folder_row(folder) {
     return m('tr', [
-        m('td.glyphicon.glyphicon-folder-open'),
+        m('td', m('i.glyphicon.glyphicon-folder-open')),
         m('td', m('a', {oncreate: m.route.link, href: `${m.route.get()}/${folder.subdir}`}, folder.subdir)),
         m('td', '-'),
         m('td', '-')
@@ -38,10 +56,7 @@ export default {
 
     view(vnode) {
         return m('.wall', [
-            m('h1', this.storage ? this.storage.name : '???'),
-            '...',
-            'path is: ', vnode.attrs.path,
-            m('br'),
+            m('h1', this.storage ? breadcrumb(this.storage, vnode.attrs.path || '') : '???'),
             m('table.table.table-hover', [
                 m('thead', m('tr', [
                     m('th'),
@@ -51,7 +66,7 @@ export default {
                 ])),
                 m('tbody', this.file_list.map(
                     file => file.subdir ? folder_row(file) : m('tr', [
-                        m('td.glyphicon.glyphicon-file'),
+                        m('td', m('i.glyphicon.glyphicon-file')),
                         m('td', file.name),
                         m('td', file.bytes),
                         m('td', file.last_modified)
