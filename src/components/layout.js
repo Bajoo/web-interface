@@ -2,6 +2,7 @@
 import m from 'mithril';
 import app from '../app';
 import side_menu from './side-menu';
+import disconnect_btn from './disconnect_btn.js';
 
 
 function two_column_content(content) {
@@ -27,7 +28,10 @@ export default {
                                 m('img[src=static/bajoo-logo.png][width=100]')
                             )
                         ),
-                        m('p.navbar-text', 'Bajoo web interface')
+                        m('.navbar-collapse', [
+                            m('p.navbar-text', 'Bajoo web interface'),
+                            app.session ? m(disconnect_btn) : ''
+                        ])
                     ])
                 ])
             ]),
