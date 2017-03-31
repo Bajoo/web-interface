@@ -1,6 +1,7 @@
 
 import m from 'mithril';
 import app from '../app';
+import  human_readable_bytes from '../helpers/human_readable_bytes';
 import relative_date from '../helpers/relative_date';
 
 
@@ -36,7 +37,7 @@ export default {
                 file => file.subdir ? folder_row(file) : m('tr', [
                     m('td', m('i.glyphicon.glyphicon-file')),
                     m('td', file.name),
-                    m('td', file.bytes),
+                    m('td', human_readable_bytes(file.bytes)),
                     m('td', relative_date(file.last_modified))
                 ]))
              )
