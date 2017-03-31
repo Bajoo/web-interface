@@ -3,8 +3,8 @@ import m from 'mithril';
 
 
 //const base_url = 'https://api.dev.bajoo.fr';
-export const base_url = 'http://127.0.0.1:3000';
-const base_storage_url = 'https://storage.dev.bajoo.fr';
+export const base_url = 'https://api.dev.bajoo.fr';
+const base_storage_url = 'https://storage.dev.bajoo.fr/v1';
 
 const client_id = 'e2676e5d1fff42f7b32308e5eca3c36a';
 const client_password = '<client-secret>';
