@@ -23,11 +23,19 @@ export default class Storage {
             url: `/storages/${this.id}`,
             data: { // GET params
                 format: 'json',
-                prefix: folder,
+                prefix: folder ? `${folder}/` : '',
                 delimiter: '/'
             },
             bakground: true
-        }).then(result => result.map(item => {
+        }).then(result => result.map(item => {  // Remove directory prefix
+            if ('name' in item) {
+                item.name = item.name.split('/').pop();
+            }
+            if ('subdir' in item) {
+                item.subdir = item.subdir.substr(0, item.subdir.length - 1).split('/').pop();
+            }
+            return item;
+        })).then(result => result.map(item => { // Convert last_mdified into a Date bject
             if ('last_modified' in item)
                 item.last_modified = new Date(item.last_modified);
             return item;
