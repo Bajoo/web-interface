@@ -30,13 +30,13 @@ export default {
                         ),
                         m('.navbar-collapse', [
                             m('p.navbar-text', 'Bajoo web interface'),
-                            app.session ? m(disconnect_btn) : ''
+                            app.is_logged() ? m(disconnect_btn) : ''
                         ])
                     ])
                 ])
             ]),
             m('.container',
-                app.session ? two_column_content(vnode.children) : vnode.children
+                app.is_logged() ? two_column_content(vnode.children) : vnode.children
             )
         ]);
     }

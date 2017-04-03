@@ -1,4 +1,6 @@
 
+import m from 'mithril';
+
 
 /**
  * Special singleton object
@@ -7,5 +9,16 @@
  */
 export default {
     session: null,
-    user: null
+    user: null,
+    
+    reset() {
+        this.session.disconnect();
+        this.session = null;
+        this.user = null;
+        m.route.set('/login');
+    },
+    
+    is_logged() {
+        return !!(this.session && this.user);
+    }
 };

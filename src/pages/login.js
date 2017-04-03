@@ -15,6 +15,7 @@ export default {
         this.error_message = null;
         this.username = null;
         this.password = null;
+        this.stay_connected = false;
     },
 
     view(vscope) {
@@ -28,7 +29,7 @@ export default {
                             m('label', 'Username'),
                             m('.input-group', [
                                 m('span.input-group-addon', m('span.glyphicon.glyphicon-user[aria-hidden="true"]')),
-                                m('input[type="email"].form-control', {
+                                m('input[type=email][required].form-control', {
                                     oninput: event => this.username = event.target.value,
                                     value: this.username
                                 })
@@ -44,6 +45,12 @@ export default {
                                 })
                             ])
                         ]),
+                        m('.checkbox', m('label', [
+                            m('input[type=checkbox]', {
+                                checked: this.stay_connected,
+                                onchange: event => this.stay_connected = event.target.checked}),
+                            'Stay connected'
+                        ])),
                         m('button[type="submit"].btn.btn-default', 'Submit')
                     ]),
                     m(`a.pull-right.small[href="${forgotten_password_url}"]`, 'Forgotten password ?')
@@ -59,6 +66,8 @@ export default {
 
         Session.from_user_credentials(this.username, password)
             .then(session => {
+                if (this.stay_connected)
+                    session.autosave();
                 //this.is_loading = false;
                 app.session = session;
                 return User.from_session(session);

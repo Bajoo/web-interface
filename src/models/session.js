@@ -33,6 +33,7 @@ export default class Session {
 
         this.access_token = access_token;
         this.refresh_token = refresh_token;
+        this.auto_save = false;
     }
 
     /*
@@ -57,6 +58,20 @@ export default class Session {
         });
     }
     
+    static from_cookies() {
+        let refresh_token = document.cookie.replace(/(?:(?:^|.*;\s*)refresh_token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+        if (refresh_token) {
+            return this._token_request({
+                grant_type: 'refresh_token',
+                refresh_token: refresh_token
+            }).then(session => {
+                session.autosave();
+                return session;
+            });
+        }
+        return Promise.reject('No cookie');
+    }
+    
     static from_user_credentials(username, encrypted_password) {
         return this._token_request({
             grant_type: 'password',
@@ -72,6 +87,9 @@ export default class Session {
         }).then(new_session => {
             this.refresh_token = new_session.refresh_token;
             this.access_token = new_session.access_token;
+            if (this.auto_save) {
+                document.cookie = `refresh_token=${this.refresh_token}`;
+            }
         });
     }
 
@@ -104,5 +122,18 @@ export default class Session {
      */
     storage_request(config) {
         return this._auth_request(base_storage_url, config);
+    }
+    
+    /*
+      Save the token in cookies, and automatically re-save them on refresh.
+     */
+    autosave() {
+        this.auto_save = true;
+        document.cookie =  `refresh_token=${this.refresh_token}`;
+    }
+    
+    disconnect() {
+        // TODO: revoke token for a real disconnection.
+        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
     }
 }

@@ -10,7 +10,7 @@ import layout from './components/layout';
 export function logged_resolver(component) {
     return {
         onmatch() {
-            if (!app.session)
+            if (!app.is_logged())
                 m.route.set('/login');
             else
                 return component;
@@ -32,7 +32,7 @@ export function logged_resolver(component) {
 export function login_resolver(component) {
     return {
         onmatch() {
-            if (app.session)
+            if (app.is_logged())
                 m.route.set('/');
             else
                 return component;
