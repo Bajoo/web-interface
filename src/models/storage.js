@@ -27,7 +27,9 @@ export default class Storage {
                 delimiter: '/'
             },
             bakground: true
-        }).then(result => result.map(item => {  // Remove directory prefix
+        })
+            .then(result => result.filter(item => item.name != '.key'))
+            .then(result => result.map(item => {  // Remove directory prefix
             if ('name' in item) {
                 item.name = item.name.split('/').pop();
             }
