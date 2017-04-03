@@ -35,7 +35,10 @@ export default class Session {
         this.refresh_token = refresh_token;
     }
 
-    static from_user_credentials(username, encrypted_password) {
+    /*
+     Do a requets asking for a new token (generic method).
+     */
+    static _token_request(data) {
         return m.request({
             method: 'POST',
             url: `${base_url}/token`,
@@ -43,11 +46,7 @@ export default class Session {
             //user: client_id,
             //password: client_secret,
 
-            data: {
-                grant_type: 'password',
-                username,
-                password: encrypted_password
-            },
+            data: data,
             background: true,
             headers: {
                 Authorization: `Basic ${btoa([client_id, client_password].join(':'))}`,
@@ -57,30 +56,53 @@ export default class Session {
             type: Session
         });
     }
+    
+    static from_user_credentials(username, encrypted_password) {
+        return this._token_request({
+            grant_type: 'password',
+            username,
+            password: encrypted_password
+        });
+    }
+    
+    _refresh_token() {
+        return this.constructor._token_request({
+            grant_type: 'refresh_token',
+            refresh_token: this.refresh_token
+        }).then(new_session => {
+            this.refresh_token = new_session.refresh_token;
+            this.access_token = new_session.access_token;
+        });
+    }
+
+    _auth_request(base_url, config) {
+        if (config.url && config.url[0] == '/') {
+            config.url = base_url + config.url;
+        }
+        config.headers = config.headers || {};
+        config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json';
+        config.headers['Authorization'] = `Bearer ${this.access_token}`;
+        
+        return m.request(config).catch(err => {
+            if (err.code === 401002) { //Token expired
+                console.log('token expired; refreshing ...');
+                return this._refresh_token().then(() => this.request(config));
+            }
+            throw err;
+        });
+    }
 
     /**
      Do an authenticated request to the API
      */
     request(config) {
-        if (config.url && config.url[0] == '/') {
-            config.url = base_url + config.url;
-            config.headers = config.headers || {};
-            config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json';
-            config.headers['Authorization'] = `Bearer ${this.access_token}`;
-        }
-        return m.request(config);
+        return this._auth_request(base_url, config);
     }
 
     /**
      Do an authenticated request to the storage servers
      */
     storage_request(config) {
-        if (config.url && config.url[0] == '/') {
-            config.url = base_storage_url + config.url;
-            config.headers = config.headers || {};
-            config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json';
-            config.headers['Authorization'] = `Bearer ${this.access_token}`;
-        }
-        return m.request(config);
+        return this._auth_request(base_storage_url, config);
     }
 }
