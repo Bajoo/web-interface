@@ -10,20 +10,6 @@ const client_id = 'e2676e5d1fff42f7b32308e5eca3c36a';
 const client_password = '<client-secret>';
 
 
-//TODO: it may be not needed.
-function serialize_form_urlencoded(data) {
-    let urlEncodedDataPairs = [];
-
-    // Turn the data object into an array of URL-encoded key/value pairs.
-    for (let name in data) {
-        urlEncodedDataPairs.push(encodeURIComponent(name) + '=' + encodeURIComponent(data[name]));
-    }
-
-    // Combine the pairs into a single string and replace all %-encoded spaces to 
-    // the '+' character; matches the behaviour of browser form submissions.
-    return urlEncodedDataPairs.join('&').replace(/%20/g, '+');
-}
-
 /**
  Singleton
  */
@@ -53,7 +39,7 @@ export default class Session {
                 Authorization: `Basic ${btoa([client_id, client_password].join(':'))}`,
                 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
             },
-            serialize: serialize_form_urlencoded,
+            serialize: m.buildQueryString,
             type: Session
         });
     }
