@@ -1,4 +1,8 @@
 
+import File from './file';
+import {bin2key, decrypt} from '../encryption';
+
+
 export default class Storage {
 
     constructor({id, name, description, is_encrypted, rights}) {
@@ -8,6 +12,8 @@ export default class Storage {
         this.is_encrypted = is_encrypted;
 
         this._rights = rights;
+
+        this.key = null;
     }
 
     static get(session, storage_id) {
@@ -28,19 +34,26 @@ export default class Storage {
             },
             bakground: true
         })
-            .then(result => result.filter(item => item.name != '.key'))
+            .then(result => result.filter(item => item.name !== '.key'))
             .then(result => result.map(item => {  // Remove directory prefix
-            if ('name' in item) {
-                item.name = item.name.split('/').pop();
-            }
-            if ('subdir' in item) {
-                item.subdir = item.subdir.substr(0, item.subdir.length - 1).split('/').pop();
-            }
-            return item;
-        })).then(result => result.map(item => { // Convert last_mdified into a Date bject
-            if ('last_modified' in item)
-                item.last_modified = new Date(item.last_modified);
-            return item;
-        }));
+                if ('name' in item) {
+                    return new File(this, item);
+                }
+                if ('subdir' in item) {
+                    item.subdir = item.subdir.substr(0, item.subdir.length - 1).split('/').pop();
+                }
+                return item;
+            }));
+    }
+
+    _fetch_key(session, user_key) {
+        return session.get_file(`/storages/${this.id}/.key`)
+            .then(data => decrypt(data, user_key))
+            .then(bin2key);
+    }
+
+    get_key(session, user_key) {
+        return this.key !== null ? Promise.resolve(this.key) :
+            this._fetch_key(session, user_key).then(key => (this.key = key));
     }
 }

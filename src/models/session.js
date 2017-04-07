@@ -22,8 +22,10 @@ export default class Session {
         this.auto_save = false;
     }
 
-    /*
-     Do a requets asking for a new token (generic method).
+    /**
+     * Do a request asking for a new token (generic method).
+     * @param data {Object} GET data payload, specific to the auth mechanism chosen.
+     * @private
      */
     static _token_request(data) {
         return m.request({
@@ -80,7 +82,7 @@ export default class Session {
     }
 
     _auth_request(base_url, config) {
-        if (config.url && config.url[0] == '/') {
+        if (config.url && config.url[0] === '/') {
             config.url = base_url + config.url;
         }
         config.headers = config.headers || {};
@@ -108,6 +110,23 @@ export default class Session {
      */
     storage_request(config) {
         return this._auth_request(base_storage_url, config);
+    }
+
+    /**
+     * Download a file
+     * @param url
+     * @return {Promise[Uint8Array]}
+     */
+    get_file(url) {
+        return this.storage_request({
+            url,
+            config: xhr => {xhr.responseType = 'arraybuffer';},
+            extract: xhr => {
+                if (xhr.status > 299)  // Todo: better error handling
+                    throw new Error(xhr);
+                return new Uint8Array(xhr.response);
+            }
+        });
     }
     
     /*

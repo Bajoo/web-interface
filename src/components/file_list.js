@@ -17,7 +17,7 @@ function folder_row(folder) {
 function file_row(file) {
     return m('tr', {key: file.name}, [
         m('td', m('i.glyphicon.glyphicon-file')),
-        m('td', file.name),
+        m('td', m('a', {onclick: () => file.download()}, file.name)),
         m('td', human_readable_bytes(file.bytes)),
         m('td', relative_date(file.last_modified))
     ]);

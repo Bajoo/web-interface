@@ -14,12 +14,16 @@ import app from './app';
 // Workaround for bug https://github.com/lhorie/mithril.js/issues/1691
 let mrequest = m.request;
 m.request = options => new Promise(function(resolve, reject) {
-    mrequest(Object.assign({}, options, {config: xhr => {xhr.onerror = reject;}})).then(resolve, reject);
+    mrequest(Object.assign({}, options, {
+        config: (xhr, args) => {
+            xhr.onerror = reject;
+            return 'config' in options ? options.config(xhr, args) : xhr;
+        }})).then(resolve, reject);
 });
 
 
-function set_route(e) {
-    
+function set_route() {
+
     // Warning: no trailing slash, or else it'll fail silently.
     m.route(document.body, '/', {
         '/': logged_resolver((index)),
