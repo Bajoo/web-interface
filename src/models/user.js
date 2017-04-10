@@ -1,6 +1,7 @@
 
 import {crypto} from 'openpgp';
 import {bin2key} from '../encryption';
+import cache from '../helpers/cache';
 import Storage from './storage';
 
 
@@ -12,6 +13,7 @@ export default class User {
         this.quota = quota; // in bytes
 
         this.key = null;
+        this.storages = undefined;
     }
 
     /**
@@ -32,12 +34,12 @@ export default class User {
         return u8a_password.reduce((acc, i) => acc + ('0' + i.toString(16)).slice(-2), '');
     }
 
-    list_storages(session) {
-        return session.request({
+    list_storages(session, {reload = false} = {}) {
+        return cache({target: this, attr: 'storages', reload}, () => session.request({
             url: '/storages',
             background: true,
             type: Storage
-        });
+        })).then(Array.from);
     }
 
     _fetch_key(session) {
