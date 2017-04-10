@@ -13,3 +13,25 @@
     background-color: #eee;
     color: #23527c;
 }
+
+
+.storage-item {
+    padding: 5px;
+}
+
+.storage-item:hover {
+    background-color: #eee;
+}
+
+.storage-item .media-left {
+    margin: 5px;
+    font-size: 32px;
+}
+
+.storage-item .storage-attributes {
+    font-size: 12px;
+    vertical-align: middle;
+}
+.storage-item .storage-name {
+    vertical-align: middle;
+}
