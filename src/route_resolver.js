@@ -10,14 +10,14 @@ import layout from './components/layout';
 export function logged_resolver(component) {
     return {
         onmatch() {
-            if (!app.is_logged())
+            if (app.is_logged === false)
                 m.route.set('/login');
             else
                 return component;
         },
 
         render(vnode) {
-            return m(layout, vnode);
+            return m(layout, {app: app}, vnode);
         }
 
     };
@@ -32,14 +32,14 @@ export function logged_resolver(component) {
 export function login_resolver(component) {
     return {
         onmatch() {
-            if (app.is_logged())
+            if (app.is_logged === true)
                 m.route.set('/');
             else
                 return component;
         },
 
         render(vnode) {
-            return m(layout, vnode);
+            return m(layout, {app: app}, vnode);
         }
     };
 }

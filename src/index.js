@@ -3,8 +3,6 @@
 
 import m from 'mithril';
 import {logged_resolver, login_resolver} from './route_resolver';
-import Session from './models/session';
-import User from './models/user';
 import login from './pages/login';
 import index from './pages/index';
 import storage from './pages/storage';
@@ -22,20 +20,24 @@ m.request = options => new Promise(function(resolve, reject) {
 });
 
 
-function set_route() {
+// Warning: no trailing slash, or else it'll fail silently.
+m.route(document.body, '/', {
+    '/': logged_resolver((index)),
+    '/login': login_resolver((login)),
+    // "key" is a special parameter name, forcing rebuild of the component.
+    '/storage/:key': logged_resolver((storage)),
+    '/storage/:key/:path...': logged_resolver((storage))
+});
 
-    // Warning: no trailing slash, or else it'll fail silently.
-    m.route(document.body, '/', {
-        '/': logged_resolver((index)),
-        '/login': login_resolver((login)),
-        // "key" is a special parameter name, forcing rebuild of the component.
-        '/storage/:key': logged_resolver((storage)),
-        '/storage/:key/:path...': logged_resolver((storage))
-    });
+
+// force page reload to trigger the route resolver
+function reload_route() {
+    // Note: m.route.get() can be undefined if this request resolves before the first draw.
+    if (m.route.get() !== undefined)
+        m.route.set(m.route.get());
 }
 
-
-let p = Session.from_cookies().then(session => {
-    app.session = session;
-    return User.from_session(session);
-}).then(user => app.user = user).then(set_route, set_route);
+app.log_from_cookie().then(reload_route, err => {
+    reload_route();
+    console.log('Log from cookie failed: ', err);
+});

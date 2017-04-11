@@ -64,15 +64,10 @@ export default {
 
         let password = User.hash_password(this.password);
 
-        Session.from_user_credentials(this.username, password)
-            .then(session => {
+        app.log_from_user_credentials(this.username, password)
+            .then(() => {
                 if (this.stay_connected)
-                    session.autosave();
-                //this.is_loading = false;
-                app.session = session;
-                return User.from_session(session);
-            }).then(user => {
-                app.user = user;
+                    app.session.autosave();
                 m.route.set('/');
             })
             .catch(err => {

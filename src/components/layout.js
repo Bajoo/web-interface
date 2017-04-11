@@ -1,6 +1,5 @@
 
 import m from 'mithril';
-import app from '../app';
 import side_menu from './side-menu';
 import disconnect_btn from './disconnect_btn.js';
 
@@ -16,7 +15,7 @@ function two_column_content(content) {
  * Return a mithril component wrapping its children around a layout common to all pages.
  */
 export default {
-    view(vnode) {
+    view({attrs, children}) {
         return m('', [
             m('header', [
                 m('nav.navbar.navbar-default', [
@@ -30,13 +29,17 @@ export default {
                         ),
                         m('.navbar-collapse', [
                             m('p.navbar-text', 'Bajoo web interface'),
-                            app.is_logged() ? m(disconnect_btn) : ''
+                            attrs.app.is_logged ? m(disconnect_btn) : ''
                         ])
                     ])
                 ])
             ]),
             m('.container',
-                app.is_logged() ? two_column_content(vnode.children) : vnode.children
+                attrs.app.is_logged === null ?
+                    'Connexion ...' :
+                    (
+                        attrs.app.is_logged ? two_column_content(children) : children
+                    )
             )
         ]);
     }
