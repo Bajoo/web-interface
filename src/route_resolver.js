@@ -9,11 +9,14 @@ import layout from './components/layout';
  */
 export function logged_resolver(component) {
     return {
-        onmatch() {
-            if (app.is_logged === false)
+        onmatch(_, requested_path) {
+            if (app.is_logged === false) {
+                app.redirect_to = requested_path;
                 m.route.set('/login');
-            else
+            } else {
+                app.redirect_to = null;
                 return component;
+            }
         },
 
         render(vnode) {

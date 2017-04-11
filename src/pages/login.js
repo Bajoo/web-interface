@@ -1,6 +1,5 @@
 
 import m from 'mithril';
-import Session from '../models/session';
 import {base_url} from '../models/session';
 import User from '../models/user';
 import app from '../app';
@@ -16,6 +15,8 @@ export default {
         this.username = null;
         this.password = null;
         this.stay_connected = false;
+
+        this.redirect_to = app.redirect_to;
     },
 
     view(vscope) {
@@ -68,7 +69,8 @@ export default {
             .then(() => {
                 if (this.stay_connected)
                     app.session.autosave();
-                m.route.set('/');
+
+                m.route.set(this.redirect_to || '/');
             })
             .catch(err => {
 

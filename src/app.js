@@ -24,6 +24,12 @@ export default {
     is_logged: null,
 
     /**
+     * If set, it's the URL that the user should be redirected after a login.
+     * @type {?String}
+     */
+    redirect_to: null,
+
+    /**
      * Log the user from existing cookie.
      *
      * It set both `user` and `session` attributes.
