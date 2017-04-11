@@ -20,8 +20,7 @@ export default class Storage {
 
     static get(session, storage_id) {
         return session.request({
-            url: `/storages/${storage_id}`,
-            background: true,
+            url: `/storages/${storage_id}`
         }).then(data => new Storage(session, data));
     }
 
@@ -32,8 +31,7 @@ export default class Storage {
                 format: 'json',
                 prefix: folder ? `${folder}/` : '',
                 delimiter: '/'
-            },
-            background: true
+            }
         })
             .then(result => result.filter(item => item.name !== '.key'))
             .then(result => result.map(item => {  // Remove directory prefix

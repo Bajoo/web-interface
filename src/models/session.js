@@ -85,6 +85,8 @@ export default class Session {
         if (config.url && config.url[0] === '/') {
             config.url = base_url + config.url;
         }
+        if (!('background' in config))
+            config.background = true;
         config.headers = config.headers || {};
         config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json';
         config.headers['Authorization'] = `Bearer ${this.access_token}`; // jshint ignore:line

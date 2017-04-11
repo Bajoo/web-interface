@@ -1,5 +1,4 @@
 
-import m from 'mithril';
 
 // duration in ms
 const SECOND = 1000;

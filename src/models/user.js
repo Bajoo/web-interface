@@ -23,8 +23,7 @@ export default class User {
      */
     static from_session(session) {
         return session.request({
-            url: '/user',
-            background: true
+            url: '/user'
         }).then(data => new User(session, data));
     }
 

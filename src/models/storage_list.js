@@ -20,8 +20,7 @@ export default class StorageList {
 
     static from_user_session(user) {
         return user.session.request({
-            url: '/storages',
-            background: true,
+            url: '/storages'
         }).then(data => new StorageList(user.session, data));
     }
 
