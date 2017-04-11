@@ -17,14 +17,14 @@ export default class File {
 
     download() {
         console.log('download ...');
-        app.user.get_key(app.session)
+        app.user.get_key()
             .then(user_key => {
                 if (!user_key.primaryKey.isDecrypted) {
                     if (!user_key.decrypt(prompt('Passphrase')))
                         throw new Error('Bad passphrase!');
                 }
 
-                return this.storage.get_key(app.session, user_key);
+                return this.storage.get_key(user_key);
             })
             .then(storage_key => {
                 return app.session.get_file(`/storages/${this.storage.id}/${this.fullname}`)

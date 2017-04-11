@@ -7,7 +7,9 @@ import Storage from './storage';
 
 export default class User {
 
-    constructor({email, lang, quota}) {
+    constructor(session, {email, lang, quota}) {
+        this.session = session;
+
         this.email = email;
         this.lang = lang;
         this.quota = quota; // in bytes
@@ -22,9 +24,8 @@ export default class User {
     static from_session(session) {
         return session.request({
             url: '/user',
-            background: true,
-            type: User
-        });
+            background: true
+        }).then(data => new User(session, data));
     }
 
     static hash_password(password) {
@@ -34,20 +35,19 @@ export default class User {
         return u8a_password.reduce((acc, i) => acc + ('0' + i.toString(16)).slice(-2), '');
     }
 
-    list_storages(session, {reload = false} = {}) {
-        return cache({target: this, attr: 'storages', reload}, () => session.request({
+    list_storages(reload=false) {
+        return cache({target: this, attr: 'storages', reload}, () => this.session.request({
             url: '/storages',
             background: true,
-            type: Storage
-        })).then(Array.from);
+        })).then(data => data.map(s => new Storage(this.session, s))).then(Array.from);
     }
 
     _fetch_key(session) {
         return session.get_file(`/keys/${this.email}.key`).then(bin2key);
     }
 
-    get_key(session) {
+    get_key() {
         return this.key !== null ? Promise.resolve(this.key) :
-            this._fetch_key(session).then(key => (this.key = key));
+            this._fetch_key(this.session).then(key => (this.key = key));
     }
 }

@@ -5,7 +5,9 @@ import {bin2key, decrypt} from '../encryption';
 
 export default class Storage {
 
-    constructor({id, name, description, is_encrypted, rights}) {
+    constructor(session, {id, name, description, is_encrypted, rights}) {
+        this.session = session;
+
         this.id = id;
         this.name = name;
         this.description = description;
@@ -20,19 +22,18 @@ export default class Storage {
         return session.request({
             url: `/storages/${storage_id}`,
             background: true,
-            type: Storage
-        });
+        }).then(data => new Storage(session, data));
     }
 
-    list_files(session, folder = '') {
-        return session.storage_request({
+    list_files(folder = '') {
+        return this.session.storage_request({
             url: `/storages/${this.id}`,
             data: { // GET params
                 format: 'json',
                 prefix: folder ? `${folder}/` : '',
                 delimiter: '/'
             },
-            bakground: true
+            background: true
         })
             .then(result => result.filter(item => item.name !== '.key'))
             .then(result => result.map(item => {  // Remove directory prefix
@@ -46,14 +47,14 @@ export default class Storage {
             }));
     }
 
-    _fetch_key(session, user_key) {
-        return session.get_file(`/storages/${this.id}/.key`)
+    _fetch_key(user_key) {
+        return this.session.get_file(`/storages/${this.id}/.key`)
             .then(data => decrypt(data, user_key))
             .then(bin2key);
     }
 
-    get_key(session, user_key) {
+    get_key(user_key) {
         return this.key !== null ? Promise.resolve(this.key) :
-            this._fetch_key(session, user_key).then(key => (this.key = key));
+            this._fetch_key(user_key).then(key => (this.key = key));
     }
 }

@@ -31,7 +31,7 @@ export default {
         this.sort_order = null;
         this.sort_order_asc = true;
         
-        vnode.attrs.storage.list_files(app.session, vnode.attrs.key).then(list => {
+        vnode.attrs.storage.list_files(vnode.attrs.key).then(list => {
             this.file_list = list;
             m.redraw();
         })

@@ -52,7 +52,7 @@ export default {
         this.my_bajoo = null;
         this.storages = [];
 
-        app.user.list_storages(app.session)
+        app.user.list_storages()
             .then(storages => {
                 let idx = storages.findIndex(s => s.name === 'MyBajoo');
                 if (idx !== -1) {
