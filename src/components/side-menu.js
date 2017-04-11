@@ -14,19 +14,10 @@ function storage_link(storage) {
 export default {
 
     oninit() {
-
-        this.my_bajoo = null;
-        this.storages = [];
+        this.storage_list = null;
 
         app.user.list_storages()
-            .then(storages => {
-                let idx = storages.findIndex(s => s.name === 'MyBajoo');
-                if (idx !== -1) {
-                    this.my_bajoo = storages[idx];
-                    storages.splice(idx, 1);
-                }
-                this.storages = storages.sort(s => s.name);
-            })
+            .then(storage_list => this.storage_list = storage_list)
             .then(m.redraw);
     },
 
@@ -34,15 +25,13 @@ export default {
         return m('nav.side-nav', [
             m('h1.text-center', 'Bajoo storages'),
             m('ul.nav',
-                this.my_bajoo ? storage_link(this.my_bajoo) : '',
-                this.storages.length ? [
-                    m('li', {class: m.route.get() == '/' ? 'active' : ''} ,[
-                        m('a[href=/]', {oncreate: m.route.link}, 'All shares'),
-                        m('ul.nav',
-                            this.storages.map(storage => storage_link(storage))
-                        )
-                    ])
-                ] : ''
+                this.storage_list && this.storage_list.my_bajoo ? storage_link(this.storage_list.my_bajoo) : '',
+                m('li', {class: m.route.get() == '/' ? 'active' : ''} ,[
+                    m('a[href=/]', {oncreate: m.route.link}, 'All shares'),
+                    this.storage_list ? m('ul.nav',
+                        this.storage_list.shares.map(storage => storage_link(storage))
+                    ) : '...'
+                ])
             )
         ]);
     }

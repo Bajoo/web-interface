@@ -2,7 +2,7 @@
 import {crypto} from 'openpgp';
 import {bin2key} from '../encryption';
 import cache from '../helpers/cache';
-import Storage from './storage';
+import StorageList from './storage_list';
 
 
 export default class User {
@@ -36,10 +36,7 @@ export default class User {
     }
 
     list_storages(reload=false) {
-        return cache({target: this, attr: 'storages', reload}, () => this.session.request({
-            url: '/storages',
-            background: true,
-        })).then(data => data.map(s => new Storage(this.session, s))).then(Array.from);
+        return cache({target: this, attr: 'storages', reload}, () => StorageList.from_user_session(this));
     }
 
     _fetch_key(session) {
