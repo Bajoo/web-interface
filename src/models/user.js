@@ -1,7 +1,7 @@
 
 import {crypto} from 'openpgp';
 import {bin2key} from '../encryption';
-import cache from '../helpers/cache';
+import cache from '../utils/cache';
 import StorageList from './storage_list';
 
 

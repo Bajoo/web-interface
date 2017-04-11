@@ -1,8 +1,8 @@
 
 import m from 'mithril';
 import app from '../app';
-import  human_readable_bytes from '../helpers/human_readable_bytes';
-import relative_date from '../helpers/relative_date';
+import  human_readable_bytes from '../view_helpers/human_readable_bytes';
+import relative_date from '../view_helpers/relative_date';
 
 
 function folder_row(folder) {
