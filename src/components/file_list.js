@@ -34,14 +34,14 @@ export default {
 
         this.sort_order = null;
         this.sort_order_asc = true;
-        
+
         vnode.attrs.storage.list_files(vnode.attrs.key).then(list => {
             this.file_list = list;
             m.redraw();
         })
-        .catch(err => console.log(err));
+            .catch(err => console.log(err));
     },
-    
+
     _sort_order_arrow(order_type) {
         if (this.sort_order === order_type)
             return this.sort_order_asc ?
@@ -51,49 +51,52 @@ export default {
     },
 
     view(vnode) {
-        return m('table.table.table-hover', [
-            m('thead', m('tr', [
-                m('th'),
-                m('th', {onclick: () => this.sort_by_name()}, [
-                    'Name',
-                    this._sort_order_arrow('name')
-                ]),
-                m('th', {onclick: () => this.sort_by_size()}, [
-                    'Size',
-                    this._sort_order_arrow('size')
-                ]),
-                m('th', {onclick: () => this.sort_by_date()}, [
-                    'Last modification',
-                    this._sort_order_arrow('date')
-                ])
-            ])),
-            m('tbody', this.file_list.map(
-                file => file.subdir ? folder_row(file) : file_row(file, vnode.attrs.passphrase_input)
-            ))
+        return m('', [
+            m('table.table.table-hover', [
+                m('thead', m('tr', [
+                    m('th'),
+                    m('th', {onclick: () => this.sort_by_name()}, [
+                        'Name',
+                        this._sort_order_arrow('name')
+                    ]),
+                    m('th', {onclick: () => this.sort_by_size()}, [
+                        'Size',
+                        this._sort_order_arrow('size')
+                    ]),
+                    m('th', {onclick: () => this.sort_by_date()}, [
+                        'Last modification',
+                        this._sort_order_arrow('date')
+                    ])
+                ])),
+                m('tbody', this.file_list.map(
+                    file => file.subdir ? folder_row(file) : file_row(file, vnode.attrs.passphrase_input)
+                )),
+            ]),
+            this.file_list.length === 0 ? m('.jumbotron.empty-folder', m('p', 'This folder is empty')) : ''
         ]);
     },
-    
+
     _sort_order(order_type, cmp) {
         if (this.sort_order !== order_type) {
             this.sort_order = order_type;
             this.sort_order_asc = true;
         } else
             this.sort_order_asc = !this.sort_order_asc;
-        
+
         this.file_list = this.file_list.sort(cmp);
-        
+
         if (!this.sort_order_asc)
             this.file_list = this.file_list.reverse();
     },
-    
+
     sort_by_size() {
         return this._sort_order('size', (a, b) => (a.bytes || 0) - (b.bytes || 0));
     },
-    
+
     sort_by_name() {
         return this._sort_order('name', (a, b) => (a.name || a.subdir).localeCompare(b.name || b.subdir));
     },
-    
+
     sort_by_date() {
         return this._sort_order('date', (a, b) => (a.last_modified || new Date(0)) > (b.last_modified || new Date(0)));
     }

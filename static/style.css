@@ -39,3 +39,7 @@
 .folder-row i {
     color: #f49d29;
 }
+
+.empty-folder p {
+    text-align: center;
+}
