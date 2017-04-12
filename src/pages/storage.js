@@ -16,7 +16,6 @@ function breadcrumb(storage, path) {
             m('li', m('a', {oncreate: m.route.link, href: `/storage/${storage.id}`}, storage.name)) :
             m('li.active', storage.name),
         folder_list.map((folder, idx) => {
-            let is_last = (idx == folder_list.length - 1);
             acc_path = `${acc_path}/${folder}`;
             return (idx == folder_list.length - 1) ?
                 m('li.active', folder) :
@@ -43,7 +42,7 @@ export default {
     view(vnode) {
         return m('.wall', [
             this.passphrase_input.enabled ? m(passphrase_input_modal, {model: this.passphrase_input}) : '',
-            m('h1', this.storage ? breadcrumb(this.storage, vnode.attrs.path || '') : '???'),
+            m('h1.h3', this.storage ? breadcrumb(this.storage, vnode.attrs.path || '') : '???'),
             [this.storage ? m(file_list, {storage: this.storage, key: vnode.attrs.path, passphrase_input: this.passphrase_input}) : 'Loading ...'
             ]
         ]);

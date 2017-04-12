@@ -27,7 +27,6 @@ export default {
 
     view() {
         return m('nav.side-nav', [
-            m('h1.text-center', 'Bajoo storages'),
             m('ul.nav',
                 this.storage_list && this.storage_list.my_bajoo ? storage_link(this.storage_list.my_bajoo) : '',
                 m('li', {class: m.route.get() == '/' ? 'active' : ''} ,[

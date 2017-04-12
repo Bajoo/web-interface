@@ -5,7 +5,7 @@ import relative_date from '../view_helpers/relative_date';
 
 
 function folder_row(folder) {
-    return m('tr', {key: folder.subdir}, [
+    return m('tr.folder-row', {key: folder.subdir}, [
         m('td', m('i.glyphicon.glyphicon-folder-open')),
         m('td', m('a', {oncreate: m.route.link, href: `${m.route.get()}/${folder.subdir}`}, folder.subdir)),
         m('td', '-'),
@@ -31,7 +31,7 @@ function file_row(file, passphrase_input) {
 export default {
     oninit(vnode) {
         this.file_list = [];
-        
+
         this.sort_order = null;
         this.sort_order_asc = true;
         
