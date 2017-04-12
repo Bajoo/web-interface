@@ -1,6 +1,5 @@
 
 import m from 'mithril';
-import app from '../app';
 import  human_readable_bytes from '../view_helpers/human_readable_bytes';
 import relative_date from '../view_helpers/relative_date';
 
@@ -24,6 +23,11 @@ function file_row(file) {
 }
 
 
+/**
+ * Attributes:
+ *  storage {Storage} storage containing the files.
+ *  key {string} path of the folder, relative to the container. It should have no trailing slash.
+ */
 export default {
     oninit(vnode) {
         this.file_list = [];

@@ -1,6 +1,5 @@
 
 import m from 'mithril';
-import app from '../app';
 
 
 function storage_link(storage) {
@@ -11,12 +10,17 @@ function storage_link(storage) {
     }, storage.name));
 }
 
+
+/**
+ * Attributes:
+ *  user {User} reference to the user connected.
+ */
 export default {
 
-    oninit() {
+    oninit({attrs}) {
         this.storage_list = null;
 
-        app.user.list_storages()
+        attrs.user.list_storages()
             .then(storage_list => this.storage_list = storage_list)
             .then(m.redraw);
     },

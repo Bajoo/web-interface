@@ -4,15 +4,18 @@ import side_menu from './side-menu';
 import disconnect_btn from './disconnect_btn.js';
 
 
-function two_column_content(content) {
+function two_column_content(user, content) {
     return m('div.row', [
-        m('.col-md-2[role="nav"]', m(side_menu)),
+        m('.col-md-2[role="nav"]', m(side_menu, {user: user})),
         m('.col-md-10[role="main"]', content)
     ]);
 }
 
 /**
  * Return a mithril component wrapping its children around a layout common to all pages.
+ *
+ * Attributes:
+ *  app {Application}: reference to the Application instance.
  */
 export default {
     view({attrs, children}) {
@@ -29,7 +32,7 @@ export default {
                         ),
                         m('.navbar-collapse', [
                             m('p.navbar-text', 'Bajoo web interface'),
-                            attrs.app.is_logged ? m(disconnect_btn) : ''
+                            attrs.app.is_logged ? m(disconnect_btn, {disconnect: () => attrs.app.reset()}) : ''
                         ])
                     ])
                 ])
@@ -38,7 +41,7 @@ export default {
                 attrs.app.is_logged === null ?
                     'Connexion ...' :
                     (
-                        attrs.app.is_logged ? two_column_content(children) : children
+                        attrs.app.is_logged ? two_column_content(attrs.app.user, children) : children
                     )
             )
         ]);

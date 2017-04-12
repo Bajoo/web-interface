@@ -1,17 +1,15 @@
+
 import m from 'mithril';
-import app from '../app';
 
 
+/**
+ * Attributes:
+ *  disconnect {() => undefined} callback called when the user click on the button.
+ */
 export default {
-    
-    submit() {
-        // TODO: understand why the setTimeout is necessary.
-        setTimeout(() => app.reset(), 0);
-    },
-    
-    view() {
+    view({attrs}) {
         return m('button.btn.navbar-btn.btn-danger.navbar-right[type=button]', 
-                 {onclick: this.submit },
+                 {onclick: () => attrs.disconnect() },
                  'Log out');
     }
 };
