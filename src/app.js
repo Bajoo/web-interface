@@ -2,7 +2,7 @@
 import m from 'mithril';
 import Session from './models/session';
 import User from './models/user';
-import {get_cookie, remove_cookie} from './utils/cookie';
+import {get_cookie, set_cookie, remove_cookie} from './utils/cookie';
 
 
 /**
@@ -30,6 +30,16 @@ export default {
      */
     redirect_to: null,
 
+
+    /**
+     * Save a token in the cookies.
+     * @param refresh_token {string}
+     * @private
+     */
+    _save_token(refresh_token) {
+        set_cookie('refresh_token', refresh_token);
+    },
+
     /**
      * Log the user from existing cookie.
      *
@@ -46,7 +56,7 @@ export default {
             return Promise.resolve(false);
         }
 
-        return Session.from_refresh_token(refresh_token)
+        return Session.from_refresh_token(refresh_token, this._save_token)
             .then(User.from_session)
             .then(user => {
                 this.session = user.session;
@@ -58,8 +68,16 @@ export default {
             });
     },
 
-    log_from_user_credentials(username, password) {
-        return Session.from_user_credentials(username, password)
+    /**
+     *
+     * @param username {string}
+     * @param password {string}
+     * @param persistence {boolean} if `true`, makes the session persistent.
+     * @return {Promise}
+     */
+    log_from_user_credentials(username, password, persistence) {
+        let on_token_change = persistence ? this._save_token : null;
+        return Session.from_user_credentials(username, password, on_token_change)
             .then(User.from_session)
             .then(user => {
                 this.session = user.session;

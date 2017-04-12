@@ -65,13 +65,8 @@ export default {
 
         let password = User.hash_password(this.password);
 
-        app.log_from_user_credentials(this.username, password)
-            .then(() => {
-                if (this.stay_connected)
-                    app.session.autosave();
-
-                m.route.set(this.redirect_to || '/');
-            })
+        app.log_from_user_credentials(this.username, password, this.stay_connected)
+            .then(() => m.route.set(this.redirect_to || '/'))
             .catch(err => {
 
                 this.is_loading = false;

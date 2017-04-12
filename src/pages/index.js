@@ -1,6 +1,5 @@
 
 import m from 'mithril';
-import Session from '../models/session';
 import app from '../app';
 
 
