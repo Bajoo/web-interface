@@ -1,6 +1,6 @@
 
 import m from 'mithril';
-import {set_cookie, remove_cookie} from '../utils/cookie';
+import {set_cookie} from '../utils/cookie';
 
 
 //const base_url = 'https://api.dev.bajoo.fr';
@@ -135,9 +135,24 @@ export default class Session {
         this.auto_save = true;
         set_cookie('refresh_token', this.refresh_token);
     }
-    
-    disconnect() {
-        // TODO: revoke token for a real disconnection.
-        remove_cookie('refresh_token');
+
+    /**
+     * Revoke the current session tokens. After this call, the session can't be used anymore.
+     */
+    revoke() {
+        m.request({
+            method: 'POST',
+            url: `${base_url}/token/revoke`,
+            data: {token: this.refresh_token},
+            background: true,
+            headers: {
+                Authorization: `Basic ${btoa([client_id, client_password].join(':'))}`,
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
+            serialize: m.buildQueryString,
+            extract: xhr => { console.log('b'); return xhr.responseText; }
+        }).catch(err => console.error('Error during token revocation', err));
+        this.refresh_token = null;
+        this.access_token = null;
     }
 }

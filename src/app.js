@@ -2,7 +2,7 @@
 import m from 'mithril';
 import Session from './models/session';
 import User from './models/user';
-import {get_cookie} from './utils/cookie';
+import {get_cookie, remove_cookie} from './utils/cookie';
 
 
 /**
@@ -75,7 +75,9 @@ export default {
      * Reset the session: Disconnect the user and returns to the login page.
      */
     reset() {
-        this.session.disconnect();
+        remove_cookie('refresh_token');
+
+        this.session.revoke();
         this.session = null;
         this.user = null;
         this.is_logged = false;
