@@ -2,7 +2,9 @@
 import m from 'mithril';
 import app from '../app';
 import file_list from '../components/file_list';
+import passphrase_input_modal from '../components/passphrase_input_modal';
 import Storage from '../models/storage';
+import PassphraseInput from '../viewmodels/passphrase_input';
 
 
 function breadcrumb(storage, path) {
@@ -29,6 +31,8 @@ export default {
     oninit(vnode) {
         this.storage = null;
 
+        this.passphrase_input = new PassphraseInput();
+
         // Load storage infos
         let p = Storage.get(app.session, vnode.attrs.key)
             .then(storage => this.storage = storage)
@@ -38,12 +42,10 @@ export default {
 
     view(vnode) {
         return m('.wall', [
+            this.passphrase_input.enabled ? m(passphrase_input_modal, {model: this.passphrase_input}) : '',
             m('h1', this.storage ? breadcrumb(this.storage, vnode.attrs.path || '') : '???'),
-            [this.storage ? m(file_list, {storage: this.storage, key: vnode.attrs.path}) : 'Loading ...'
+            [this.storage ? m(file_list, {storage: this.storage, key: vnode.attrs.path, passphrase_input: this.passphrase_input}) : 'Loading ...'
             ]
         ]);
     }
 };
-
-
-// bak+T15@bajoo.fr

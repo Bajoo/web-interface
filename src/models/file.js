@@ -3,6 +3,25 @@ import app from '../app';
 import {decrypt} from '../encryption';
 
 
+/**
+ * Ask the passphrase until the user gives a valid passphrase (or cancel).
+ *
+ * @param passphrase_input
+ * @param user_key
+ * @return {Promise.<encryption.key} user key
+ */
+function decrypt_user_key(passphrase_input, user_key) {
+    return passphrase_input.ask().then(passphrase => {
+        let result = user_key.decrypt(passphrase);
+        passphrase_input.set_feedback(result);
+
+        if (!result)
+            return decrypt_user_key(passphrase_input, user_key);
+        return user_key;
+    });
+}
+
+
 export default class File {
 
     constructor(storage, {name, hash, last_modified, bytes}) {
@@ -15,17 +34,14 @@ export default class File {
         this.last_modified = new Date(last_modified);
     }
 
-    download() {
+    download({passphrase_input}) {
         console.log('download ...');
         app.user.get_key()
-            .then(user_key => {
-                if (!user_key.primaryKey.isDecrypted) {
-                    if (!user_key.decrypt(prompt('Passphrase')))
-                        throw new Error('Bad passphrase!');
-                }
-
-                return this.storage.get_key(user_key);
-            })
+            .then(user_key => user_key.primaryKey.isDecrypted ?
+                user_key :
+                decrypt_user_key(passphrase_input, user_key)
+            )
+            .then(user_key => this.storage.get_key(user_key))
             .then(storage_key => {
                 return app.session.get_file(`/storages/${this.storage.id}/${this.fullname}`)
                     .then(data => decrypt(data, storage_key));
@@ -40,6 +56,10 @@ export default class File {
                 document.body.removeChild(a);
                 URL.revokeObjectURL(url);
             })
-            .then(r => console.log('encrypted file:', r), err => console.log('ERR', err, err.stack));
+            .then(r => console.log('encrypted file:', r), err => {
+                if (err instanceof passphrase_input.constructor.UserCancelError)
+                    return;
+                console.log('Download attempt failed:', err, err.stack);
+            });
     }
 }

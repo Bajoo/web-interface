@@ -1,0 +1,67 @@
+
+import m from 'mithril';
+
+
+/**
+ * ViewModel of the passphrase input modal.
+ */
+export default class PassphraseInput {
+    constructor() {
+        this.enabled = false;
+        this.passphrase = '';
+        this.wait_for_feedback = false;
+        this.error = false;
+
+        this._resolve = null;
+        this._reject = null;
+    }
+
+
+
+    /**
+     * Ask for the user to type its passphrase.
+     *
+     * @return {Promise<string>} Resolved when the user enters a passphrase. if the user refuse to respond, the promise
+     *  is rejected.
+     */
+    ask() {
+        return new Promise((resolve, reject) => {
+            this.enabled = true;
+            this._resolve = resolve;
+            this._reject = reject;
+            m.redraw();
+        });
+    }
+
+    /**
+     * Set a feedback about the passphrase returned by `ask()`
+     *
+     * @param success {boolean}: `true` if the passphrase is valid; `false` otherwise.
+     */
+    set_feedback(success) {
+        this.wait_for_feedback = false;
+        if (success)
+            this.enabled = false;
+        else {
+            this.passphrase = '';
+            this.error = true;
+        }
+    }
+
+    cancel() {
+        this.enabled = false;
+        this._reject(new this.constructor.UserCancelError());
+    }
+
+    submit() {
+        this._resolve(this.passphrase);
+    }
+}
+
+PassphraseInput.UserCancelError = class UserCancelError extends Error {
+    constructor() {
+        super();
+        this.name = this.constructor.name;
+        this.message = 'The user refused to enter the passphrase';
+    }
+};

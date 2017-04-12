@@ -13,10 +13,10 @@ function folder_row(folder) {
     ]);
 }
 
-function file_row(file) {
+function file_row(file, passphrase_input) {
     return m('tr', {key: file.name}, [
         m('td', m('i.glyphicon.glyphicon-file')),
-        m('td', m('a[href=#]', {onclick: () => {file.download(); return false;}}, file.name)),
+        m('td', m('a[href=#]', {onclick: () => {file.download({passphrase_input}); return false;}}, file.name)),
         m('td', human_readable_bytes(file.bytes)),
         m('td', relative_date(file.last_modified))
     ]);
@@ -50,7 +50,7 @@ export default {
         return '';
     },
 
-    view() {
+    view(vnode) {
         return m('table.table.table-hover', [
             m('thead', m('tr', [
                 m('th'),
@@ -68,7 +68,7 @@ export default {
                 ])
             ])),
             m('tbody', this.file_list.map(
-                file => file.subdir ? folder_row(file) : file_row(file)
+                file => file.subdir ? folder_row(file) : file_row(file, vnode.attrs.passphrase_input)
             ))
         ]);
     },
