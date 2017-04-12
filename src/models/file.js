@@ -36,15 +36,22 @@ export default class File {
 
     download({passphrase_input}) {
         console.log('download ...');
-        app.user.get_key()
-            .then(user_key => user_key.primaryKey.isDecrypted ?
-                user_key :
-                decrypt_user_key(passphrase_input, user_key)
-            )
-            .then(user_key => this.storage.get_key(user_key))
-            .then(storage_key => {
+
+        let p = null;
+
+        if (this.storage.is_encrypted) {
+            p = app.user.get_key()
+                .then(user_key => user_key.primaryKey.isDecrypted ?
+                    user_key :
+                    decrypt_user_key(passphrase_input, user_key))
+                .then(user_key => this.storage.get_key(user_key));
+        } else {
+            p = Promise.resolve(null);
+        }
+
+        p.then(storage_key => {
                 return app.session.get_file(`/storages/${this.storage.id}/${this.fullname}`)
-                    .then(data => decrypt(data, storage_key));
+                    .then(data => this.storage.is_encrypted ? decrypt(data, storage_key) : data);
             })
             .then(raw_file => {
                 let url = URL.createObjectURL(new Blob([raw_file]));
