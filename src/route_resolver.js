@@ -20,6 +20,9 @@ export function logged_resolver(component) {
         },
 
         render(vnode) {
+            // During the log phase, the route can change between 'onmatch' and 'render' calls.
+            if (app.is_logged === false) return '';
+
             return m(layout, {app: app}, vnode);
         }
 

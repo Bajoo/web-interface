@@ -1,5 +1,6 @@
 
 import m from 'mithril';
+import {set_cookie, remove_cookie} from '../utils/cookie';
 
 
 //const base_url = 'https://api.dev.bajoo.fr';
@@ -46,18 +47,14 @@ export default class Session {
         });
     }
     
-    static from_cookies() {
-        let refresh_token = document.cookie.replace(/(?:(?:^|.*;\s*)refresh_token\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-        if (refresh_token) {
-            return this._token_request({
-                grant_type: 'refresh_token',
-                refresh_token: refresh_token
-            }).then(session => {
-                session.autosave();
-                return session;
-            });
-        }
-        return Promise.reject('No cookie');
+    static from_refresh_token(refresh_token) {
+        return this._token_request({
+            grant_type: 'refresh_token',
+            refresh_token: refresh_token
+        }).then(session => {
+            session.autosave();
+            return session;
+        });
     }
     
     static from_user_credentials(username, encrypted_password) {
@@ -76,7 +73,7 @@ export default class Session {
             this.refresh_token = new_session.refresh_token;
             this.access_token = new_session.access_token;
             if (this.auto_save) {
-                document.cookie = `refresh_token=${this.refresh_token}`;
+                set_cookie('refresh_token', this.refresh_token);
             }
         });
     }
@@ -136,11 +133,11 @@ export default class Session {
      */
     autosave() {
         this.auto_save = true;
-        document.cookie =  `refresh_token=${this.refresh_token}`;
+        set_cookie('refresh_token', this.refresh_token);
     }
     
     disconnect() {
         // TODO: revoke token for a real disconnection.
-        document.cookie = "refresh_token=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        remove_cookie('refresh_token');
     }
 }

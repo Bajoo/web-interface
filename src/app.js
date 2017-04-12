@@ -2,6 +2,7 @@
 import m from 'mithril';
 import Session from './models/session';
 import User from './models/user';
+import {get_cookie} from './utils/cookie';
 
 
 /**
@@ -38,14 +39,20 @@ export default {
      *  it resolves immediately.
      */
     log_from_cookie() {
-        return Session.from_cookies()
+        let refresh_token = get_cookie('refresh_token');
+
+        if (refresh_token === '') {
+            this.is_logged = false;
+            return Promise.resolve(false);
+        }
+
+        return Session.from_refresh_token(refresh_token)
             .then(User.from_session)
             .then(user => {
                 this.session = user.session;
                 this.user = user;
                 this.is_logged = true;
             }).catch(err => {
-                // TODO: don't rethrow cookie error.
                 this.is_logged = false;
                 throw err;
             });

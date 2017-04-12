@@ -39,5 +39,5 @@ function reload_route() {
 
 app.log_from_cookie().then(reload_route, err => {
     reload_route();
-    console.log('Log from cookie failed: ', err);
+    console.log('Log from refresh_token (from a cookie) failed: ', err);
 });
