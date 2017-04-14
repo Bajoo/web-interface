@@ -30,7 +30,7 @@ function file_row(file, passphrase_input) {
  */
 export default {
     oninit(vnode) {
-        this.file_list = [];
+        this.file_list = null;
 
         this.sort_order = null;
         this.sort_order_asc = true;
@@ -68,11 +68,13 @@ export default {
                         this._sort_order_arrow('date')
                     ])
                 ])),
-                m('tbody', this.file_list.map(
+                m('tbody', this.file_list ? this.file_list.map(
                     file => file.subdir ? folder_row(file) : file_row(file, vnode.attrs.passphrase_input)
-                )),
+                ) : '')
             ]),
-            this.file_list.length === 0 ? m('.jumbotron.empty-folder', m('p', 'This folder is empty')) : ''
+            this.file_list === null ? m('', 'Loading ...') : (
+                this.file_list.length === 0 ? m('.jumbotron.empty-folder', m('p', 'This folder is empty')) : ''
+            )
         ]);
     },
 
