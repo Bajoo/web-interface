@@ -3,6 +3,19 @@ import m from 'mithril';
 import app from '../app';
 
 
+function create_storage_view() {
+    return m('.media.storage-item', [
+        m('i.media-left.media-middle', m('span.glyphicon.glyphicon-plus')),
+        m('.media-body', [
+            m('h4.media-heading',
+                m('a.storage-name[href=/storage/new]', {oncreate: m.route.link}, 'New Share')
+            ),
+            'Create a new share'
+        ])
+    ]);
+}
+
+
 function storage_view(storage) {
     return m('.media.storage-item', [
         m('i.media-left.media-middle', m('span.glyphicon.glyphicon-folder-open')),
@@ -37,7 +50,7 @@ function storage_grid(storage_list) {
             else
                 acc.push([storage]);
             return acc; // [[stor1, stor2], [stor3, stor4], ...]
-        }, []).map(storage_couple => m('row', storage_couple.map(
+        }, []).map(storage_couple => m('.row', storage_couple.map(
             storage => m('.col-md-6', storage_view(storage))
         )))
     );
@@ -61,6 +74,8 @@ export default {
             this.storage_list ? [
                 this.storage_list.my_bajoo ? storage_view(this.storage_list.my_bajoo) : '',
                 m('h2', 'My shares'),
+                create_storage_view(),
+                m('hr'),
                 storage_grid(this.storage_list.shares)
             ] : 'Loading ...'
         ]);
