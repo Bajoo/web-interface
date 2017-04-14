@@ -46,6 +46,7 @@ export default class PassphraseInput {
             this.passphrase = '';
             this.error = true;
         }
+        m.redraw();
     }
 
     cancel() {
