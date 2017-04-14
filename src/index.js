@@ -4,6 +4,7 @@
 import m from 'mithril';
 import {logged_resolver, login_resolver} from './route_resolver';
 import login from './pages/login';
+import register from './pages/register';
 import index from './pages/index';
 import storage from './pages/storage';
 import new_storage from './pages/new_storage';
@@ -25,6 +26,7 @@ m.request = options => new Promise(function(resolve, reject) {
 m.route(document.body, '/', {
     '/': logged_resolver((index)),
     '/login': login_resolver((login)),
+    '/register': login_resolver(register),
     // "key" is a special parameter name, forcing rebuild of the component.
     '/storage/new': logged_resolver(new_storage),
     '/storage/:key': logged_resolver((storage)),

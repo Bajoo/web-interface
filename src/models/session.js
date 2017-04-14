@@ -69,6 +69,10 @@ export default class Session {
         }).then(data => new Session(data, on_token_change));
     }
 
+    static from_client_credentials() {
+        return this._token_request({grant_type: 'client_credentials'}).then(data => new Session(data));
+    }
+
     _refresh_token() {
         return this.constructor.from_refresh_token(this.refresh_token)
             .then(new_session => {

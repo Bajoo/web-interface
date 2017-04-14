@@ -54,6 +54,8 @@ export default {
                         ])),
                         m('button[type="submit"].btn.btn-default', 'Submit')
                     ]),
+                    m('br'),
+                    m('a.small[href=/register]', {oncreate: m.route.link}, 'Create a new account'),
                     m(`a.pull-right.small[href="${forgotten_password_url}"]`, 'Forgotten password ?')
                 ])
             ])

@@ -34,6 +34,18 @@ export default class User {
         return u8a_password.reduce((acc, i) => acc + ('0' + i.toString(16)).slice(-2), '');
     }
 
+    static register(client_session, email, password, lang = null) {
+        return client_session.request({
+            method: 'POST',
+            url: '/users',
+            data: {
+                email,
+                password: User.hash_password(password),
+                lang
+            }
+        });
+    }
+
     list_storages(reload=false) {
         return cache({target: this, attr: 'storages', reload}, () => StorageList.from_user_session(this));
     }
