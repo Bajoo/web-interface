@@ -6,6 +6,7 @@ import {logged_resolver, login_resolver} from './route_resolver';
 import login from './pages/login';
 import index from './pages/index';
 import storage from './pages/storage';
+import new_storage from './pages/new_storage';
 import app from './app';
 
 
@@ -25,6 +26,7 @@ m.route(document.body, '/', {
     '/': logged_resolver((index)),
     '/login': login_resolver((login)),
     // "key" is a special parameter name, forcing rebuild of the component.
+    '/storage/new': logged_resolver(new_storage),
     '/storage/:key': logged_resolver((storage)),
     '/storage/:key/:path...': logged_resolver((storage))
 });

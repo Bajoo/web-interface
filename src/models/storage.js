@@ -24,6 +24,16 @@ export default class Storage {
         }).then(data => new Storage(session, data));
     }
 
+    static create(session, name, description, is_encrypted) {
+        return session.request({
+            method: 'POST',
+            url: '/storages',
+            data: {
+                name, description, is_encrypted
+            }
+        }).then(data => new Storage(session, data));
+    }
+
     list_files(folder = '') {
         return this.session.storage_request({
             url: `/storages/${this.id}`,

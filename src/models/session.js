@@ -86,11 +86,10 @@ export default class Session {
         if (!('background' in config))
             config.background = true;
         config.headers = config.headers || {};
-        config.headers['Content-Type'] = config.headers['Content-Type'] || 'application/json';
         config.headers['Authorization'] = `Bearer ${this.access_token}`; // jshint ignore:line
 
         return m.request(config).catch(err => {
-            if (err.code === 401002) { //Token expired
+            if (err.code === 401002) { //Token expired from api.bajoo.fr
                 console.log('token expired; refreshing ...');
                 return this._refresh_token().then(() => this.request(config));
             }
