@@ -3,6 +3,8 @@ import m from 'mithril';
 import {base_url} from '../models/session';
 import User from '../models/user';
 import app from '../app';
+import input_form from '../components/input_form';
+import prop from '../utils/prop';
 
 
 const forgotten_password_url = `${base_url}/user/password-forgotten`;
@@ -12,8 +14,8 @@ export default {
     oninit() {
         this.is_loading = false;
         this.error_message = null;
-        this.username = null;
-        this.password = null;
+        this.username = prop();
+        this.password = prop();
         this.stay_connected = false;
 
         this.redirect_to = app.redirect_to;
@@ -26,26 +28,8 @@ export default {
                 m('form', { onsubmit: ()=> this.submit()}, [
                     this.error_message ? m('.alert .alert-danger', this.error_message) : '',
                     m('fieldset', { disabled: this.is_loading}, [
-                        m('.form-group', [
-                            m('label', 'Username'),
-                            m('.input-group', [
-                                m('span.input-group-addon', m('span.glyphicon.glyphicon-user[aria-hidden="true"]')),
-                                m('input[type=email][required].form-control', {
-                                    oninput: event => this.username = event.target.value,
-                                    value: this.username
-                                })
-                            ])
-                        ]),
-                        m('.form-group', [
-                            m('label', 'Password'),
-                            m('.input-group', [
-                                m('span.input-group-addon', m('span.glyphicon.glyphicon-lock[aria-hidden="true"]')),
-                                m('input[type="password"][required].form-control',{
-                                    oninput: event => this.password = event.target.value,
-                                    value: this.password
-                                })
-                            ])
-                        ]),
+                        m(input_form, {id: 'username', label: 'Username', icon: 'user', type: 'email', value: this.username}),
+                        m(input_form, {id: 'password', label: 'Password', icon: 'lock', type: 'password', value: this.password}),
                         m('.checkbox', m('label', [
                             m('input[type=checkbox]', {
                                 checked: this.stay_connected,
@@ -65,9 +49,9 @@ export default {
     submit() {
         this.is_loading = true;
 
-        let password = User.hash_password(this.password);
+        let password = User.hash_password(this.password());
 
-        app.log_from_user_credentials(this.username, password, this.stay_connected)
+        app.log_from_user_credentials(this.username(), password, this.stay_connected)
             .then(() => m.route.set(this.redirect_to || '/'))
             .catch(err => {
 

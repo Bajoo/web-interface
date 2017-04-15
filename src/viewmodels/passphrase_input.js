@@ -1,5 +1,6 @@
 
 import m from 'mithril';
+import prop from '../utils/prop';
 
 
 /**
@@ -8,7 +9,7 @@ import m from 'mithril';
 export default class PassphraseInput {
     constructor() {
         this.enabled = false;
-        this.passphrase = '';
+        this.passphrase = prop('');
         this.wait_for_feedback = false;
         this.error = false;
 
@@ -43,7 +44,7 @@ export default class PassphraseInput {
         if (success)
             this.enabled = false;
         else {
-            this.passphrase = '';
+            this.passphrase('');
             this.error = true;
         }
         m.redraw();
@@ -55,7 +56,7 @@ export default class PassphraseInput {
     }
 
     submit() {
-        this._resolve(this.passphrase);
+        this._resolve(this.passphrase());
     }
 }
 

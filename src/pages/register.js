@@ -2,15 +2,15 @@
 import m from 'mithril';
 import Session from '../models/session';
 import User from '../models/user';
-
-
+import input_form from '../components/input_form';
+import prop from '../utils/prop';
 
 
 export default {
     oninit() {
         this.is_loading = false;
         this.error_message = null;
-        this.email = null;
+        this.email = prop('');
         this.password = null;
         this.confirm_password = null;
         this.lang = null;
@@ -23,19 +23,10 @@ export default {
         return m('.panel.panel-default',
             m('.panel-heading', m('h1.panel-title', 'Account creation')),
             m('.panel-body', [
-                m('form', { onsubmit: ()=> this.submit()}, [
+                m('form', { onsubmit: (evt)=> this.submit(evt)}, [
                     this.error_message ? m('.alert .alert-danger', this.error_message) : '',
                     m('fieldset', { disabled: this.is_loading}, [
-                        m('.form-group', [
-                            m('label.control-label', 'Email'),
-                            m('.input-group', [
-                                m('span.input-group-addon', m('span.glyphicon.glyphicon-user[aria-hidden="true"]')),
-                                m('input[type=email][required].form-control', {
-                                    oninput: event => this.email = event.target.value,
-                                    value: this.email
-                                })
-                            ])
-                        ]),
+                        m(input_form, {id: 'email', label: 'Email', icon: 'user', type:'email', value: this.email}),
                         m('.form-group', {class: this.password_error ? 'has-error' : ''}, [
                             m('label.control-label', 'Password'),
                             m('.input-group', [
@@ -97,7 +88,7 @@ export default {
         this.is_loading = true;
 
         Session.from_client_credentials()
-            .then(session => User.register(session, this.email, this.password, this.lang))
+            .then(session => User.register(session, this.email(), this.password, this.lang))
             .then(user => console.log(user)) // TODO: redirect to the 'wait passphrase' screen.
             .catch(err => {
                 this.error_message = err.toString();

@@ -1,5 +1,6 @@
 
 import m from 'mithril';
+import input_form from './input_form';
 
 
 /**
@@ -25,16 +26,7 @@ export default {
                             m('.alert .alert-danger', "We're unable to decrypt the key. Bad passphrase ?") :
                             '',
                         m('fieldset', { disabled: attrs.model.wait_for_feedback}, [
-                            m('.form-group', [
-                                m('label', 'Passphrase:'),
-                                m('.input-group', [
-                                    m('span.input-group-addon', m('span.glyphicon.glyphicon-lock[aria-hidden="true"]')),
-                                    m('input[type=password][required].form-control', {
-                                        oninput: event => attrs.model.passphrase = event.target.value,
-                                        value: attrs.model.passphrase
-                                    })
-                                ])
-                            ])
+                            m(input_form, {id: 'passphrase', label: 'Passphrase', icon: 'lock', type:'password', value: attrs.model.passphrase})
                         ])
                     ])
                 ]),
