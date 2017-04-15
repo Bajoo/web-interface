@@ -11,8 +11,8 @@ export default {
         this.is_loading = false;
         this.error_message = null;
         this.email = prop('');
-        this.password = null;
-        this.confirm_password = null;
+        this.password = prop('');
+        this.confirm_password = prop('');
         this.lang = null;
 
         this.password_error = null;
@@ -26,29 +26,11 @@ export default {
                 m('form', { onsubmit: (evt)=> this.submit(evt)}, [
                     this.error_message ? m('.alert .alert-danger', this.error_message) : '',
                     m('fieldset', { disabled: this.is_loading}, [
-                        m(input_form, {id: 'email', label: 'Email', icon: 'user', type:'email', value: this.email}),
-                        m('.form-group', {class: this.password_error ? 'has-error' : ''}, [
-                            m('label.control-label', 'Password'),
-                            m('.input-group', [
-                                m('span.input-group-addon', m('span.glyphicon.glyphicon-lock[aria-hidden="true"]')),
-                                m('input[type="password"][required].form-control', {
-                                    oninput: event => this.password = event.target.value,
-                                    value: this.password
-                                })
-                            ]),
-                            this.password_error ? m('span.help-block', this.password_error) : ''
-                        ]),
-                        m('.form-group', {class: this.confirm_password_error ? 'has-error' : ''}, [
-                            m('label.control-label', 'Password confirmation'),
-                            m('.input-group', [
-                                m('span.input-group-addon', m('span.glyphicon.glyphicon-lock[aria-hidden="true"]')),
-                                m('input[type="password"][required].form-control', {
-                                    oninput: event => this.confirm_password = event.target.value,
-                                    value: this.confirm_password
-                                })
-                            ]),
-                            this.confirm_password_error ? m('span.help-block', this.confirm_password_error) : ''
-                        ]),
+                        m(input_form, {id: 'email', label: 'Email', icon: 'user', type: 'email', value: this.email}),
+                        m(input_form, {id: 'password', label: 'Password', icon: 'lock', type: 'password',
+                            value: this.password, error: this.password_error}),
+                        m(input_form, {id: 'confirm_password', label: 'Password confirmation', icon: 'lock',
+                            type: 'password', value: this.confirm_password, error: this.confirm_password_error}),
                         m('.form-group', [
                             m('label.control-label', 'Language'),
                             m('.input-group', [
@@ -76,11 +58,11 @@ export default {
         this.confirm_password_error = null;
         this.password_error = null;
 
-        if (this.password.length < 8) {
+        if (this.password().length < 8) {
             this.password_error = 'The password must have at least 8 characters';
             return;
         }
-        if (this.password !== this.confirm_password) {
+        if (this.password() !== this.confirm_password()) {
             this.confirm_password_error = "The password and its confirmation doesn't match";
             return;
         }
@@ -88,17 +70,14 @@ export default {
         this.is_loading = true;
 
         Session.from_client_credentials()
-            .then(session => User.register(session, this.email(), this.password, this.lang))
+            .then(session => User.register(session, this.email(), this.password(), this.lang))
             .then(user => console.log(user)) // TODO: redirect to the 'wait passphrase' screen.
             .catch(err => {
+                // TODO: better error handling.
                 this.error_message = err.toString();
                 this.is_loading = false;
                 m.redraw();
                 console.error('User creation failed', err);
             });
-
-        // Step 3: wait activation.
-
-        let password = User.hash_password(this.password);
     }
 };
