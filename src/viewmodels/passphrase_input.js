@@ -58,6 +58,21 @@ export default class PassphraseInput {
     submit() {
         this._resolve(this.passphrase());
     }
+
+    /**
+     * Ask the passphrase until the user gives a valid passphrase (or cancel).
+     *
+     * @param {encryption.key} key
+     * @return {Promise.<encryption.key>} user key. If the user cancel, the promise is rejected by an `UserCancelError`.
+     */
+    decrypt_key(key) {
+        return this.ask().then(passphrase => {
+            let result = key.decrypt(passphrase);
+            this.set_feedback(result);
+
+            return result ? key : this.decrypt_key(key);
+        });
+    }
 }
 
 PassphraseInput.UserCancelError = class UserCancelError extends Error {
