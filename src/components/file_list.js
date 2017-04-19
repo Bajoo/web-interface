@@ -1,17 +1,9 @@
 
 import m from 'mithril';
+import folder_row from '../components/folder_row';
 import  human_readable_bytes from '../view_helpers/human_readable_bytes';
 import relative_date from '../view_helpers/relative_date';
 
-
-function folder_row(folder) {
-    return m('tr.folder-row', {key: folder.subdir}, [
-        m('td', m('i.glyphicon.glyphicon-folder-open')),
-        m('td', m('a', {oncreate: m.route.link, href: `${m.route.get()}/${folder.subdir}`}, folder.subdir)),
-        m('td', '-'),
-        m('td', '-')
-    ]);
-}
 
 function file_row(file, passphrase_input) {
     return m('tr', {key: file.name}, [
@@ -69,7 +61,9 @@ export default {
                     ])
                 ])),
                 m('tbody', this.file_list ? this.file_list.map(
-                    file => file.subdir ? folder_row(file) : file_row(file, vnode.attrs.passphrase_input)
+                    file => file.constructor.name === 'Folder' ?
+                        m(folder_row, {folder: file, passphrase_input: vnode.attrs.passphrase_input}) :
+                        file_row(file, vnode.attrs.passphrase_input)
                 ) : '')
             ]),
             this.file_list === null ? m('', 'Loading ...') : (

@@ -1,5 +1,6 @@
 
 import File from './file';
+import Folder from './folder';
 import {bin2key, decrypt} from '../encryption';
 
 
@@ -49,7 +50,7 @@ export default class Storage {
                     return new File(this, item);
                 }
                 if ('subdir' in item) {
-                    item.subdir = item.subdir.substr(0, item.subdir.length - 1).split('/').pop();
+                    return new Folder(this, item);
                 }
                 return item;
             }));

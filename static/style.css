@@ -43,3 +43,7 @@
 .empty-folder p {
     text-align: center;
 }
+
+.dropzone {
+    background-color: grey;
+}

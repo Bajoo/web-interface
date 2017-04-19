@@ -31,3 +31,19 @@ export function decrypt(data, key) {
         format: 'binary'
     }).then(result => result.data);
 }
+
+
+/**
+ * Encrypt data decipherable by a PGP key
+ *
+ * @param data {Uint8Array|String}
+ * @param key {openpgp.Key}
+ * @return {Promise.<Uint8Array>}
+ */
+export function encrypt(data, key) {
+    return openpgp.encrypt({
+        data,
+        publicKeys: [key],
+        armor: false
+    }).then(result => result.message.packets.write());
+}
