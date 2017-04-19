@@ -12,7 +12,9 @@ export default class File {
         this.name = name.split('/').pop();
         this.hash = hash;
         this.bytes = bytes;
-        this.last_modified = new Date(last_modified);
+
+        // TODO: fix hack in swift server
+        this.last_modified = new Date(last_modified + 'Z');
     }
 
     download({passphrase_input}) {
