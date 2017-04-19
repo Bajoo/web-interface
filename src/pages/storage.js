@@ -4,7 +4,7 @@ import app from '../app';
 import file_list from '../components/file_list';
 import passphrase_input_modal from '../components/passphrase_input_modal';
 import Storage from '../models/storage';
-import PassphraseInput from '../viewmodels/passphrase_input';
+import PassphraseInput from '../view_models/passphrase_input';
 
 
 function breadcrumb(storage, path) {
