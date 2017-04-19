@@ -18,7 +18,8 @@ export default class Folder {
     constructor(storage, {subdir}) {
         this.storage = storage;
 
-        this.fullname = subdir.substr(0, subdir.length - 1);
+        // full name (without trailing slash).
+        this.fullname = subdir.replace(/\/+$/, '');
         this.name = this.fullname.split('/').pop();
     }
 

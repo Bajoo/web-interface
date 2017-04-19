@@ -1,8 +1,10 @@
 
 import m from 'mithril';
+import dropzone from '../components/dropzone';
 import folder_row from '../components/folder_row';
 import  human_readable_bytes from '../view_helpers/human_readable_bytes';
 import relative_date from '../view_helpers/relative_date';
+import Folder from '../models/folder';
 
 
 function file_row(file, passphrase_input) {
@@ -67,7 +69,13 @@ export default {
                 ) : '')
             ]),
             this.file_list === null ? m('', 'Loading ...') : (
-                this.file_list.length === 0 ? m('.jumbotron.empty-folder', m('p', 'This folder is empty')) : ''
+                this.file_list.length === 0 ? m(dropzone, {
+                    html_tag: '.jumbotron.empty-folder',
+                    on_drop_file: file => {
+                        let folder = new Folder(vnode.attrs.storage, {subdir: vnode.attrs.key || '/'});
+                        return folder.upload(vnode.attrs.passphrase_input, file);
+                    }
+                }, m('p', 'This folder is empty')) : ''
             )
         ]);
     },
