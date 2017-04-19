@@ -43,7 +43,7 @@ export default class Folder {
 
         p.then(encrypted_file => {
             return this.storage.session.storage_request({
-                url: `/storages/${this.storage.id}/${this.fullname}/${file.name}`,
+                url: `/storages/${this.storage.id}/${this.fullname ? `${this.fullname}/${file.name}` : file.name}`,
                 method: 'PUT',
                 data: encrypted_file,
                 serialize: x => x

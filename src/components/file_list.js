@@ -29,6 +29,8 @@ export default {
         this.sort_order = null;
         this.sort_order_asc = true;
 
+        this.folder = new Folder(vnode.attrs.storage, {subdir: vnode.attrs.key || ''});
+
         vnode.attrs.storage.list_files(vnode.attrs.key).then(list => {
             this.file_list = list;
             m.redraw();
@@ -62,7 +64,10 @@ export default {
                         this._sort_order_arrow('date')
                     ])
                 ])),
-                m('tbody', this.file_list ? this.file_list.map(
+                m(dropzone, {
+                    html_tag: 'tbody',
+                    on_drop_file: file => this.folder.upload(vnode.attrs.passphrase_input, file)
+                }, this.file_list ? this.file_list.map(
                     file => file.constructor.name === 'Folder' ?
                         m(folder_row, {folder: file, passphrase_input: vnode.attrs.passphrase_input}) :
                         file_row(file, vnode.attrs.passphrase_input)
@@ -71,10 +76,7 @@ export default {
             this.file_list === null ? m('', 'Loading ...') : (
                 this.file_list.length === 0 ? m(dropzone, {
                     html_tag: '.jumbotron.empty-folder',
-                    on_drop_file: file => {
-                        let folder = new Folder(vnode.attrs.storage, {subdir: vnode.attrs.key || '/'});
-                        return folder.upload(vnode.attrs.passphrase_input, file);
-                    }
+                    on_drop_file: file => this.folder.upload(vnode.attrs.passphrase_input, file)
                 }, m('p', 'This folder is empty')) : ''
             )
         ]);

@@ -39,8 +39,11 @@ export default {
             ondragleave: evt => {
                 if (this.drag_enter !== 1)
                     evt.redraw = false;
-                if (evt.dataTransfer.types.indexOf('Files') > -1)
+                if (evt.dataTransfer.types.indexOf('Files') > -1) {
+                    evt.stopPropagation();
+                    evt.preventDefault();
                     this.drag_enter--;
+                }
             },
             ondrop: evt => {
                 this.drag_enter = 0;
