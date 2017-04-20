@@ -18,7 +18,6 @@ export default class PassphraseInput {
     }
 
 
-
     /**
      * Ask for the user to type its passphrase.
      *

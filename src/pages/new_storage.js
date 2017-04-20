@@ -56,9 +56,8 @@ export default {
         // TODO: refresh global storage list.
 
         Storage.create(app.session, this.name, this.description, this.is_encrypted)
-            .then(storage => {
-                m.route.set(`/storage/${storage.id}`);
-            }, err => {
+            .then(storage => m.route.set(`/storage/${storage.id}`))
+            .catch(err => {
                 this.is_loading = false;
                 this.error_message = 'message' in err ? err.message : err;
                 m.redraw();

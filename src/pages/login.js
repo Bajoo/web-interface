@@ -21,7 +21,7 @@ export default {
         this.redirect_to = app.redirect_to;
     },
 
-    view(vscope) {
+    view() {
         return m('.panel.panel-default',
             m('.panel-heading', m('h1.panel-title', 'Connexion')),
             m('.panel-body', [
@@ -54,15 +54,15 @@ export default {
         app.log_from_user_credentials(this.username(), password, this.stay_connected)
             .then(() => m.route.set(this.redirect_to || '/'))
             .catch(err => {
-
                 this.is_loading = false;
-                if (err.error === 'invalid_grant' && err.error_description == "Invalid credentials given.")
-                    this.error_message = 'Invalid username and/or password';
-                else if (err.error_description)
-                    this.error_message = err.error_description;
-                else
-                    this.error_message = err.message || 'Unknown error';
                 m.redraw();
+
+                if (err.error === 'invalid_grant' && err.error_description === "Invalid credentials given.") {
+                    this.error_message = 'Invalid username and/or password';
+                    return;
+                }
+                console.error('Login failed', err);
+                this.error_message = err.error_description || err.message || 'Unknown error';
             });
     }
 };

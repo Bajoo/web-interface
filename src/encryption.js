@@ -7,9 +7,8 @@ export function bin2key(data) {
     let result = key.readArmored(armored_key);
 
     if ('err' in result && result.err.length !== 0) {
-        console.error('Bad key loading', result);
-        // TODO: better error handling
-        throw new Error(result);
+        console.error('Loading of PGP key from binary data failed', result);
+        throw new Error('Loading of PGP key failed');
     }
     if (result.keys.length !== 1)
         console.warn('One and only one key should have been loaded', result);

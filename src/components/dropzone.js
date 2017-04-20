@@ -7,7 +7,7 @@ import m from 'mithril';
  *
  * Attributes
  *  html_tag (1st value passed to `m()`. If not set '' is used (producing a div).
- *  on_drop_file {Function} called when a file is droped. Receives the file in parameter.
+ *  on_drop_file {Function} called when a file is dropped. Receives the file in parameter.
  */
 export default {
     oninit() {

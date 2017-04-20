@@ -17,7 +17,7 @@ function breadcrumb(storage, path) {
             m('li.active', storage.name),
         folder_list.map((folder, idx) => {
             acc_path = `${acc_path}/${folder}`;
-            return (idx == folder_list.length - 1) ?
+            return (idx === (folder_list.length - 1)) ?
                 m('li.active', folder) :
                 m('li', m('a', {oncreate: m.route.link, href: acc_path}, folder));
         })
@@ -33,7 +33,7 @@ export default {
         this.passphrase_input = new PassphraseInput();
 
         // Load storage infos
-        let p = Storage.get(app.session, vnode.attrs.key)
+        Storage.get(app.session, vnode.attrs.key)
             .then(storage => this.storage = storage)
             .then(m.redraw)
             .catch(err => console.log(err));

@@ -73,7 +73,6 @@ export default {
             .then(session => User.register(session, this.email(), this.password(), this.lang))
             .then(user => console.log(user)) // TODO: redirect to the 'wait passphrase' screen.
             .catch(err => {
-                // TODO: better error handling.
                 this.error_message = err.toString();
                 this.is_loading = false;
                 m.redraw();
