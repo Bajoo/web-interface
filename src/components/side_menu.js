@@ -11,16 +11,14 @@ function storage_link(storage) {
 }
 
 
-/**
- * Attributes:
- *  user {User} reference to the user connected.
- */
 export default {
-
-    oninit({attrs}) {
+    /**
+     * @param user {User} reference to the user connected.
+     */
+    oninit({attrs: {user}}) {
         this.storage_list = null;
 
-        attrs.user.list_storages()
+        user.list_storages()
             .then(storage_list => this.storage_list = storage_list)
             .then(m.redraw);
     },
@@ -31,9 +29,7 @@ export default {
                 this.storage_list && this.storage_list.my_bajoo ? storage_link(this.storage_list.my_bajoo) : '',
                 m('li', {class: m.route.get() === '/' ? 'active' : ''} ,[
                     m('a[href=/]', {oncreate: m.route.link}, 'All shares'),
-                    this.storage_list ? m('ul.nav',
-                        this.storage_list.shares.map(storage => storage_link(storage))
-                    ) : '...'
+                    this.storage_list ? m('ul.nav', this.storage_list.shares.map(storage_link)) : '...'
                 ])
             )
         ]);

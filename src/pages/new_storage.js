@@ -22,7 +22,7 @@ export default {
             m('h1.h3', 'New share'),
             m('hr'),
             m('form', {onsubmit: () => this.submit()}, [
-                status_alert(this.status),
+                m(status_alert, {status: this.status}),
                 m('fieldset', { disabled: this.is_loading}, [
                     m('.form-group', [
                         m('label', 'Name'),

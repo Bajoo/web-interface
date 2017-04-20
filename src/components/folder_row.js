@@ -3,20 +3,19 @@ import m from 'mithril';
 import dropzone from './dropzone';
 
 
-/**
- * Attributes
- *  folder {Folder}
- *  passphrase_input {PassphraseInput}
- */
 export default {
-    view({attrs}) {
+    /**
+     * @param folder {Folder}
+     * @param passphrase_input {PassphraseInput}
+     */
+    view({attrs: {folder, passphrase_input}}) {
         return m(dropzone, {
             html_tag: 'tr.folder-row',
-            key: attrs.folder.fullname,
-            on_drop_file: f => attrs.folder.upload(attrs.passphrase_input, f)
+            key: folder.fullname,
+            on_drop_file: f => folder.upload(passphrase_input, f)
         }, [
             m('td', m('i.glyphicon.glyphicon-folder-open')),
-            m('td', m('a', {oncreate: m.route.link, href: `${m.route.get()}/${attrs.folder.name}`}, attrs.folder.name)),
+            m('td', m('a', {oncreate: m.route.link, href: `${m.route.get()}/${folder.name}`}, folder.name)),
             m('td', '-'),
             m('td', '-')
         ]);

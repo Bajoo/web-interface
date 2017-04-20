@@ -2,7 +2,7 @@
 import m from 'mithril';
 import dropzone from '../components/dropzone';
 import folder_row from '../components/folder_row';
-import  human_readable_bytes from '../view_helpers/human_readable_bytes';
+import human_readable_bytes from '../view_helpers/human_readable_bytes';
 import relative_date from '../view_helpers/relative_date';
 import Folder from '../models/folder';
 
@@ -17,21 +17,20 @@ function file_row(file, passphrase_input) {
 }
 
 
-/**
- * Attributes:
- *  storage {Storage} storage containing the files.
- *  key {string} path of the folder, relative to the container. It should have no trailing slash.
- */
 export default {
-    oninit(vnode) {
+    /**
+     * @param [key=''] {string} path of the folder, relative to the container. It should have no trailing slash.
+     * @param storage {Storage} storage containing the files.
+     */
+    oninit({attrs: {key, storage}}) {
         this.file_list = null;
 
         this.sort_order = null;
         this.sort_order_asc = true;
 
-        this.folder = new Folder(vnode.attrs.storage, {subdir: vnode.attrs.key || ''});
+        this.folder = new Folder(storage, {subdir: key});
 
-        vnode.attrs.storage.list_files(vnode.attrs.key).then(list => {
+        storage.list_files(key).then(list => {
             this.file_list = list;
             m.redraw();
         })
@@ -46,7 +45,7 @@ export default {
         return '';
     },
 
-    view(vnode) {
+    view({attrs: {passphrase_input}}) {
         return m('', [
             m('table.table.table-hover', [
                 m('thead', m('tr', [
@@ -66,17 +65,17 @@ export default {
                 ])),
                 m(dropzone, {
                     html_tag: 'tbody',
-                    on_drop_file: file => this.folder.upload(vnode.attrs.passphrase_input, file)
+                    on_drop_file: file => this.folder.upload(passphrase_input, file)
                 }, this.file_list ? this.file_list.map(
-                    file => file.constructor.name === 'Folder' ?
-                        m(folder_row, {folder: file, passphrase_input: vnode.attrs.passphrase_input}) :
-                        file_row(file, vnode.attrs.passphrase_input)
+                    file => file instanceof Folder ?
+                        m(folder_row, {folder:file, passphrase_input}) :
+                        file_row(file, passphrase_input)
                 ) : '')
             ]),
             this.file_list === null ? m('', 'Loading ...') : (
                 this.file_list.length === 0 ? m(dropzone, {
                     html_tag: '.jumbotron.empty-folder',
-                    on_drop_file: file => this.folder.upload(vnode.attrs.passphrase_input, file)
+                    on_drop_file: file => this.folder.upload(passphrase_input, file)
                 }, m('p', 'This folder is empty')) : ''
             )
         ]);

@@ -4,10 +4,6 @@ import m from 'mithril';
 
 /**
  * HTML tag which can receive files during an drag&drop operation.
- *
- * Attributes
- *  html_tag (1st value passed to `m()`. If not set '' is used (producing a div).
- *  on_drop_file {Function} called when a file is dropped. Receives the file in parameter.
  */
 export default {
     oninit() {
@@ -16,8 +12,13 @@ export default {
         this.drag_enter = 0;
     },
 
-    view({attrs, children}) {
-        return m(attrs.html_tag || '', {
+    /**
+     * @param [html_tag='']{string} 1st value passed to `m()`. If not set '' is used (producing a div).
+     * @param on_drop_file {Function} called when a file is dropped. Receives the file in parameter.
+     * @param children children's component
+     */
+    view({attrs: {html_tag = '', on_drop_file}, children}) {
+        return m(html_tag, {
             class: this.drag_enter > 0 ? 'dropzone' : '',
             ondragover: evt => {
                 evt.redraw = false;
@@ -52,7 +53,7 @@ export default {
                     evt.preventDefault();
 
                     for (let f of evt.dataTransfer.files) {
-                        attrs.on_drop_file(f);
+                        on_drop_file(f);
                     }
                 }
             }

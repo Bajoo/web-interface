@@ -54,15 +54,17 @@ export default {
             });
     },
 
-    view({attrs: {path}}) {
+    view({attrs: {path = ''}}) {
         return m('.wall', [
             this.passphrase_input.enabled ? m(passphrase_input_modal, {model: this.passphrase_input}) : '',
-            m('h1.h3', this.storage ? breadcrumb(this.storage, path || '') : this.is_loading ? '???' : ''),
-            status_alert(this.status),
+            m('h1.h3', this.storage ? breadcrumb(this.storage, path) : this.is_loading ? '???' : ''),
+            m(status_alert, {status: this.status}),
             (this.is_loading ? 'Loading ...' : ''),
-            this.storage ?
-                m(file_list, {storage: this.storage, key: path, passphrase_input: this.passphrase_input}) :
-                ''
+            [ // Note: this Array is required to activate the mithril's special "key" behavior.
+                this.storage ?
+                    m(file_list, {storage: this.storage, key: path, passphrase_input: this.passphrase_input}) :
+                    ''
+            ]
         ]);
     }
 };
