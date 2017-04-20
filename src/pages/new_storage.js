@@ -1,14 +1,16 @@
 
 import m from 'mithril';
 import app from '../app';
+import status_alert from '../components/status_alert';
 import Storage from '../models/storage';
+import Status from '../view_models/status';
 
 
 export default {
 
     oninit() {
         this.is_loading = false;
-        this.error_message = '';
+        this.status = new Status();
 
         this.name = null;
         this.description = '';
@@ -20,7 +22,7 @@ export default {
             m('h1.h3', 'New share'),
             m('hr'),
             m('form', {onsubmit: () => this.submit()}, [
-                this.error_message ? m('.alert .alert-danger', this.error_message) : '',
+                status_alert(this.status),
                 m('fieldset', { disabled: this.is_loading}, [
                     m('.form-group', [
                         m('label', 'Name'),
@@ -51,6 +53,8 @@ export default {
     submit() {
         this.is_loading = true;
 
+        this.status.clear();
+
         // TODO: storage key creation
         // TODO: add permissions
         // TODO: refresh global storage list.
@@ -59,7 +63,7 @@ export default {
             .then(storage => m.route.set(`/storage/${storage.id}`))
             .catch(err => {
                 this.is_loading = false;
-                this.error_message = 'message' in err ? err.message : err;
+                this.status.set_error(err.message || err);
                 m.redraw();
                 console.error('Container creation failed:', err);
             });

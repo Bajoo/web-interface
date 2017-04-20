@@ -32,7 +32,6 @@ export default {
     oninit(vnode) {
         this.storage = null;
         this.status = new Status();
-        this.error_msg = null;
         this.is_loading = true;
 
         this.passphrase_input = new PassphraseInput();
