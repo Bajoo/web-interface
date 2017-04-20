@@ -29,7 +29,7 @@ export default {
         return m('nav.side-nav', [
             m('ul.nav',
                 this.storage_list && this.storage_list.my_bajoo ? storage_link(this.storage_list.my_bajoo) : '',
-                m('li', {class: m.route.get() == '/' ? 'active' : ''} ,[
+                m('li', {class: m.route.get() === '/' ? 'active' : ''} ,[
                     m('a[href=/]', {oncreate: m.route.link}, 'All shares'),
                     this.storage_list ? m('ul.nav',
                         this.storage_list.shares.map(storage => storage_link(storage))

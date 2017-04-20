@@ -1,6 +1,6 @@
 
 import m from 'mithril';
-import side_menu from './side-menu';
+import side_menu from './side_menu';
 import disconnect_btn from './disconnect_btn.js';
 
 
