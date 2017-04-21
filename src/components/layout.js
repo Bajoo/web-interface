@@ -1,7 +1,7 @@
 
 import m from 'mithril';
 import side_menu from './side_menu';
-import disconnect_btn from './disconnect_btn.js';
+import DisconnectButton from './disconnect_button.js';
 
 
 function two_column_content(user, content) {
@@ -14,7 +14,7 @@ function two_column_content(user, content) {
 /**
  * A mithril component wrapping its children around a layout common to all pages.
  */
-export default {
+export default class Layout {
     /**
      * @param app {Application}: reference to the Application instance.
      * @param children
@@ -33,7 +33,7 @@ export default {
                         ),
                         m('.navbar-collapse', [
                             m('p.navbar-text', 'Bajoo web interface'),
-                            app.is_logged ? m(disconnect_btn, {disconnect: () => app.reset()}) : ''
+                            app.is_logged ? DisconnectButton.make(() => app.reset()) : ''
                         ])
                     ])
                 ])
@@ -47,4 +47,4 @@ export default {
             )
         ]);
     }
-};
+}

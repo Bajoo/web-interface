@@ -11,7 +11,7 @@ function storage_link(storage) {
 }
 
 
-export default {
+export default class SideMenu {
     /**
      * @param user {User} reference to the user connected.
      */
@@ -21,7 +21,7 @@ export default {
         user.list_storages()
             .then(storage_list => this.storage_list = storage_list)
             .then(m.redraw);
-    },
+    }
 
     view() {
         return m('nav.side-nav', [
@@ -34,4 +34,4 @@ export default {
             )
         ]);
     }
-};
+}

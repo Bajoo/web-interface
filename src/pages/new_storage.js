@@ -1,7 +1,7 @@
 
 import m from 'mithril';
 import app from '../app';
-import status_alert from '../components/status_alert';
+import StatusAlert from '../components/status_alert';
 import Storage from '../models/storage';
 import Status from '../view_models/status';
 
@@ -22,7 +22,7 @@ export default {
             m('h1.h3', 'New share'),
             m('hr'),
             m('form', {onsubmit: () => this.submit()}, [
-                m(status_alert, {status: this.status}),
+                StatusAlert.make(this.status),
                 m('fieldset', { disabled: this.is_loading}, [
                     m('.form-group', [
                         m('label', 'Name'),

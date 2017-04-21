@@ -2,7 +2,7 @@
 import m from 'mithril';
 
 
-export default {
+export default class InputForm {
     /**
      * @param id {string}
      * @param label {string}
@@ -26,4 +26,4 @@ export default {
             error ? m('span.help-block', error) : ''
         ]);
     }
-};
+}

@@ -1,7 +1,7 @@
 
 import m from 'mithril';
-import dropzone from '../components/dropzone';
-import folder_row from '../components/folder_row';
+import Dropzone from '../components/dropzone';
+import FolderRow from '../components/folder_row';
 import human_readable_bytes from '../view_helpers/human_readable_bytes';
 import relative_date from '../view_helpers/relative_date';
 import Folder from '../models/folder';
@@ -17,12 +17,12 @@ function file_row(file, passphrase_input) {
 }
 
 
-export default {
+export default class FileList {
     /**
      * @param [key=''] {string} path of the folder, relative to the container. It should have no trailing slash.
      * @param storage {Storage} storage containing the files.
      */
-    oninit({attrs: {key, storage}}) {
+    constructor({attrs: {key, storage}}) {
         this.file_list = null;
 
         this.sort_order = null;
@@ -35,7 +35,7 @@ export default {
             m.redraw();
         })
             .catch(err => console.log(err));
-    },
+    }
 
     _sort_order_arrow(order_type) {
         if (this.sort_order === order_type)
@@ -43,7 +43,7 @@ export default {
                 m('i.glyphicon.glyphicon-triangle-bottom') :
                 m('i.glyphicon.glyphicon-triangle-top');
         return '';
-    },
+    }
 
     view({attrs: {passphrase_input}}) {
         return m('', [
@@ -63,23 +63,21 @@ export default {
                         this._sort_order_arrow('date')
                     ])
                 ])),
-                m(dropzone, {
-                    html_tag: 'tbody',
-                    on_drop_file: file => this.folder.upload(passphrase_input, file)
-                }, this.file_list ? this.file_list.map(
-                    file => file instanceof Folder ?
-                        m(folder_row, {folder:file, passphrase_input}) :
-                        file_row(file, passphrase_input)
-                ) : '')
+                Dropzone.make('tbody', file => this.folder.upload(passphrase_input, file),
+                    (this.file_list || []).map(
+                        file => file instanceof Folder ?
+                            FolderRow.make(file, passphrase_input) :
+                            file_row(file, passphrase_input))
+                )
             ]),
             this.file_list === null ? m('', 'Loading ...') : (
-                this.file_list.length === 0 ? m(dropzone, {
-                    html_tag: '.jumbotron.empty-folder',
-                    on_drop_file: file => this.folder.upload(passphrase_input, file)
-                }, m('p', 'This folder is empty')) : ''
+                this.file_list.length === 0 ? Dropzone.make(
+                    '.jumbotron.empty-folder',
+                    file => this.folder.upload(passphrase_input, file),
+                    m('p', 'This folder is empty')) : ''
             )
         ]);
-    },
+    }
 
     _sort_order(order_type, cmp) {
         if (this.sort_order !== order_type) {
@@ -92,17 +90,17 @@ export default {
 
         if (!this.sort_order_asc)
             this.file_list = this.file_list.reverse();
-    },
+    }
 
     sort_by_size() {
         return this._sort_order('size', (a, b) => (a.bytes || 0) - (b.bytes || 0));
-    },
+    }
 
     sort_by_name() {
         return this._sort_order('name', (a, b) => (a.name || a.subdir).localeCompare(b.name || b.subdir));
-    },
+    }
 
     sort_by_date() {
         return this._sort_order('date', (a, b) => (a.last_modified || new Date(0)) > (b.last_modified || new Date(0)));
     }
-};
+}

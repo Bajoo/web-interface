@@ -1,9 +1,17 @@
 
 import m from 'mithril';
-import input_form from './input_form';
+import InputForm from './input_form';
 
 
-export default {
+export default class PassphraseInputModal {
+
+    /**
+     * @param passphrase_input {PassphraseInput}
+     */
+    static make(passphrase_input) {
+        return m(PassphraseInputModal, {model: passphrase_input});
+    }
+
     /**
      * @param model {PassphraseInput}
      */
@@ -25,7 +33,7 @@ export default {
                             m('.alert .alert-danger', "We're unable to decrypt the key. Bad passphrase ?") :
                             '',
                         m('fieldset', { disabled: model.wait_for_feedback}, [
-                            m(input_form, {id: 'passphrase', label: 'Passphrase', icon: 'lock', type: 'password',
+                            m(InputForm, {id: 'passphrase', label: 'Passphrase', icon: 'lock', type: 'password',
                                 value: model.passphrase})
                         ])
                     ])
@@ -41,4 +49,4 @@ export default {
             ]))
         );
     }
-};
+}

@@ -3,7 +3,7 @@ import m from 'mithril';
 import {base_url} from '../models/session';
 import User from '../models/user';
 import app from '../app';
-import input_form from '../components/input_form';
+import InputForm from '../components/input_form';
 import prop from '../utils/prop';
 
 
@@ -28,8 +28,8 @@ export default {
                 m('form', { onsubmit: ()=> this.submit()}, [
                     this.error_message ? m('.alert .alert-danger', this.error_message) : '',
                     m('fieldset', { disabled: this.is_loading}, [
-                        m(input_form, {id: 'username', label: 'Username', icon: 'user', type: 'email', value: this.username}),
-                        m(input_form, {id: 'password', label: 'Password', icon: 'lock', type: 'password', value: this.password}),
+                        m(InputForm, {id: 'username', label: 'Username', icon: 'user', type: 'email', value: this.username}),
+                        m(InputForm, {id: 'password', label: 'Password', icon: 'lock', type: 'password', value: this.password}),
                         m('.checkbox', m('label', [
                             m('input[type=checkbox]', {
                                 checked: this.stay_connected,

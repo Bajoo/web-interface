@@ -5,12 +5,21 @@ import m from 'mithril';
 /**
  * HTML tag which can receive files during an drag&drop operation.
  */
-export default {
-    oninit() {
+export default class Dropzone {
+    constructor() {
         // If drag_enter > 0, the user drags a file over this dropzone.
         // We must keep track of the changes, because the browser send 'leave' events when entering on child elements.
         this.drag_enter = 0;
-    },
+    }
+
+    /**
+     * @param tag {string}
+     * @param callback {Function}
+     * @param children
+     */
+    static make(tag, callback, children) {
+        return m(Dropzone, {html_tag: tag, on_drop_file: callback}, children);
+    }
 
     /**
      * @param [html_tag='']{string} 1st value passed to `m()`. If not set '' is used (producing a div).
@@ -59,4 +68,4 @@ export default {
             }
         }, children);
     }
-};
+}

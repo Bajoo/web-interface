@@ -2,7 +2,13 @@
 import m from 'mithril';
 
 
-export default {
+export default class DisconnectButton {
+
+    /**
+     * @param callback {Function}
+     */
+    static make(callback) {return m(DisconnectButton, {disconnect: callback});}
+
     /**
      * @param disconnect {() => undefined} callback called when the user click on the button.
      */
@@ -11,4 +17,4 @@ export default {
             {onclick: () => disconnect() },
             'Log out');
     }
-};
+}

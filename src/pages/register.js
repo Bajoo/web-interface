@@ -2,7 +2,7 @@
 import m from 'mithril';
 import Session from '../models/session';
 import User from '../models/user';
-import input_form from '../components/input_form';
+import InputForm from '../components/input_form';
 import prop from '../utils/prop';
 
 
@@ -26,10 +26,10 @@ export default {
                 m('form', { onsubmit: (evt)=> this.submit(evt)}, [
                     this.error_message ? m('.alert .alert-danger', this.error_message) : '',
                     m('fieldset', { disabled: this.is_loading}, [
-                        m(input_form, {id: 'email', label: 'Email', icon: 'user', type: 'email', value: this.email}),
-                        m(input_form, {id: 'password', label: 'Password', icon: 'lock', type: 'password',
+                        m(InputForm, {id: 'email', label: 'Email', icon: 'user', type: 'email', value: this.email}),
+                        m(InputForm, {id: 'password', label: 'Password', icon: 'lock', type: 'password',
                             value: this.password, error: this.password_error}),
-                        m(input_form, {id: 'confirm_password', label: 'Password confirmation', icon: 'lock',
+                        m(InputForm, {id: 'confirm_password', label: 'Password confirmation', icon: 'lock',
                             type: 'password', value: this.confirm_password, error: this.confirm_password_error}),
                         m('.form-group', [
                             m('label.control-label', 'Language'),
