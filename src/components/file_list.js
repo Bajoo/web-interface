@@ -8,7 +8,7 @@ import Folder from '../models/folder';
 
 
 function file_row(file, passphrase_input) {
-    return m('tr', {key: file.name}, [
+    return m('tr', {key: file.fullname}, [
         m('td', m('i.glyphicon.glyphicon-file')),
         m('td', m('a[href=#]', {onclick: () => {file.download({passphrase_input}); return false;}}, file.name)),
         m('td', human_readable_bytes(file.bytes)),
