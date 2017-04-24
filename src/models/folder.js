@@ -64,6 +64,8 @@ export default class Folder {
                 if (err instanceof passphrase_input.constructor.UserCancelError)
                     return;
                 console.log('Upload attempt failed:', err, err.stack);
-            });
+            })
+            .then(() => this.refresh());
+        // TODO: catch refresh errors.
     }
 }
