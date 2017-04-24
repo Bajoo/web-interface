@@ -24,6 +24,16 @@ export default class Folder {
 
         /** @type {?Array<File|Folder>} */
         this.items = undefined;
+
+        /** @type {?Error} */
+        this.error = null;
+
+        /**
+         * @type {?Function} callback, called when an error occurs.
+         * 1rst argument is the folder instance
+         * 2nd argument is the error.
+         */
+        this.onerror = null;
     }
 
     /**
@@ -31,7 +41,17 @@ export default class Folder {
      * @return {Promise}
      */
     refresh() {
-        return this.storage.list_files(this.fullname).then(items => this.items = items);
+        return this.storage.list_files(this.fullname).then(items => {
+            this.error = null;
+            this.items = items;
+            return items;
+        }, err => {
+            this.error = err;
+            this.items = null;
+            console.error(`Fetching item list of folder "${this.fullname}" failed`, err);
+            this.onerror && this.onerror(this, err);
+            throw err;
+        });
     }
 
     upload(passphrase_input, file) {
@@ -66,6 +86,5 @@ export default class Folder {
                 console.log('Upload attempt failed:', err, err.stack);
             })
             .then(() => this.refresh());
-        // TODO: catch refresh errors.
     }
 }

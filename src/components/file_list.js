@@ -36,20 +36,19 @@ export default class FileList {
         this.sort_ascendant = true;
 
         this.folder = new Folder(storage, {subdir: key});
-        this.folder.refresh()
-            .then(m.redraw, err => {
-                console.error('list files failed', err);
-                status.set_error(`Fetching file list failed: ${err.message || err.toString()}`);
-                m.redraw();
-            });
+
+        this.folder.onerror = err => {
+            status.set_error(`Fetching file list failed: ${err.message || err}`);
+            m.redraw();
+        };
+
+        this.folder.refresh().then(m.redraw, m.redraw);
     }
 
     _sort_order_arrow(cmp) {
-        if (this.sort_cmp === cmp)
-            return this.sort_ascendant ?
-                m('i.glyphicon.glyphicon-triangle-bottom') :
-                m('i.glyphicon.glyphicon-triangle-top');
-        return '';
+        return this.sort_cmp === cmp ?
+            m(`i.glyphicon.glyphicon-triangle-${this.sort_ascendant ? 'bottom' : 'top'}`) :
+            '';
     }
 
     view({attrs: {passphrase_input}}) {
@@ -78,7 +77,7 @@ export default class FileList {
                 )
             ]),
             this.folder.items === undefined ? m('', 'Loading ...') : (
-                this.folder.items.length === 0 ? Dropzone.make(
+                this.folder.items && this.folder.items.length === 0 ? Dropzone.make(
                     '.jumbotron.empty-folder',
                     file => this.folder.upload(passphrase_input, file),
                     m('p', 'This folder is empty')) : ''
