@@ -62,7 +62,8 @@ export default {
             (this.is_loading ? 'Loading ...' : ''),
             [ // Note: this Array is required to activate the mithril's special "key" behavior.
                 this.storage ?
-                    m(FileList, {storage: this.storage, key: path, passphrase_input: this.passphrase_input}) :
+                    m(FileList, {storage: this.storage, key: path, passphrase_input: this.passphrase_input,
+                        status: this.status}) :
                     ''
             ]
         ]);

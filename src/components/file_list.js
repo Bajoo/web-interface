@@ -21,8 +21,9 @@ export default class FileList {
     /**
      * @param [key=''] {string} path of the folder, relative to the container. It should have no trailing slash.
      * @param storage {Storage} storage containing the files.
+     * @param status {Status}
      */
-    constructor({attrs: {key, storage}}) {
+    constructor({attrs: {key, storage, status}}) {
         this.file_list = null;
 
         this.sort_order = null;
@@ -30,11 +31,16 @@ export default class FileList {
 
         this.folder = new Folder(storage, {subdir: key});
 
-        storage.list_files(key).then(list => {
-            this.file_list = list;
-            m.redraw();
-        })
-            .catch(err => console.log(err));
+        this.folder.list_files()
+            .then(list => {
+                this.file_list = list;
+                m.redraw();
+            })
+            .catch(err => {
+                console.error('list files failed', err);
+                status.set_error(`Fetching file list failed: ${err.message || err.toString()}`);
+                m.redraw();
+            });
     }
 
     _sort_order_arrow(order_type) {

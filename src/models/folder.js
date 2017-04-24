@@ -23,6 +23,10 @@ export default class Folder {
         this.name = this.fullname.split('/').pop();
     }
 
+    list_files() {
+        return this.storage.list_files(this.fullname);
+    }
+
     upload(passphrase_input, file) {
         console.log('upload ...');
 
