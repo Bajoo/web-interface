@@ -17,6 +17,11 @@ function file_row(file, passphrase_input) {
 }
 
 
+const size_cmp = (a, b) => (a.bytes || 0) - (b.bytes || 0);
+const name_cmp = (a, b) => a.name.localeCompare(b.name);
+const date_cmp = (a, b) => (a.last_modified || new Date(0)) > (b.last_modified || new Date(0));
+
+
 export default class FileList {
     /**
      * @param [key=''] {string} path of the folder, relative to the container. It should have no trailing slash.
@@ -24,28 +29,24 @@ export default class FileList {
      * @param status {Status}
      */
     constructor({attrs: {key, storage, status}}) {
-        this.file_list = null;
+        /** @type {Function} item comparator */
+        this.sort_cmp = x => x;
 
-        this.sort_order = null;
-        this.sort_order_asc = true;
+        /** @type {boolean} sort order: ascendant (true) or descendant (false) */
+        this.sort_ascendant = true;
 
         this.folder = new Folder(storage, {subdir: key});
-
-        this.folder.list_files()
-            .then(list => {
-                this.file_list = list;
-                m.redraw();
-            })
-            .catch(err => {
+        this.folder.refresh()
+            .then(m.redraw, err => {
                 console.error('list files failed', err);
                 status.set_error(`Fetching file list failed: ${err.message || err.toString()}`);
                 m.redraw();
             });
     }
 
-    _sort_order_arrow(order_type) {
-        if (this.sort_order === order_type)
-            return this.sort_order_asc ?
+    _sort_order_arrow(cmp) {
+        if (this.sort_cmp === cmp)
+            return this.sort_ascendant ?
                 m('i.glyphicon.glyphicon-triangle-bottom') :
                 m('i.glyphicon.glyphicon-triangle-top');
         return '';
@@ -56,28 +57,28 @@ export default class FileList {
             m('table.table.table-hover', [
                 m('thead', m('tr', [
                     m('th'),
-                    m('th', {onclick: () => this.sort_by_name()}, [
+                    m('th', {onclick: () => this._sort_order(name_cmp)}, [
                         'Name',
-                        this._sort_order_arrow('name')
+                        this._sort_order_arrow(name_cmp)
                     ]),
-                    m('th', {onclick: () => this.sort_by_size()}, [
+                    m('th', {onclick: () => this._sort_order(size_cmp)}, [
                         'Size',
-                        this._sort_order_arrow('size')
+                        this._sort_order_arrow(size_cmp)
                     ]),
-                    m('th', {onclick: () => this.sort_by_date()}, [
+                    m('th', {onclick: () => this._sort_order(date_cmp)}, [
                         'Last modification',
-                        this._sort_order_arrow('date')
+                        this._sort_order_arrow(date_cmp)
                     ])
                 ])),
                 Dropzone.make('tbody', file => this.folder.upload(passphrase_input, file),
-                    (this.file_list || []).map(
+                    this._sort(this.folder.items || []).map(
                         file => file instanceof Folder ?
                             FolderRow.make(file, passphrase_input) :
                             file_row(file, passphrase_input))
                 )
             ]),
-            this.file_list === null ? m('', 'Loading ...') : (
-                this.file_list.length === 0 ? Dropzone.make(
+            this.folder.items === undefined ? m('', 'Loading ...') : (
+                this.folder.items.length === 0 ? Dropzone.make(
                     '.jumbotron.empty-folder',
                     file => this.folder.upload(passphrase_input, file),
                     m('p', 'This folder is empty')) : ''
@@ -85,28 +86,15 @@ export default class FileList {
         ]);
     }
 
-    _sort_order(order_type, cmp) {
-        if (this.sort_order !== order_type) {
-            this.sort_order = order_type;
-            this.sort_order_asc = true;
+    _sort(items) {
+        return this.sort_ascendant ? items.sort(this.sort_cmp) : items.sort(this.sort_cmp).reverse();
+    }
+
+    _sort_order(cmp) {
+        if (this.sort_cmp !== cmp) {
+            this.sort_cmp = cmp;
+            this.sort_ascendant = true;
         } else
-            this.sort_order_asc = !this.sort_order_asc;
-
-        this.file_list = this.file_list.sort(cmp);
-
-        if (!this.sort_order_asc)
-            this.file_list = this.file_list.reverse();
-    }
-
-    sort_by_size() {
-        return this._sort_order('size', (a, b) => (a.bytes || 0) - (b.bytes || 0));
-    }
-
-    sort_by_name() {
-        return this._sort_order('name', (a, b) => (a.name || a.subdir).localeCompare(b.name || b.subdir));
-    }
-
-    sort_by_date() {
-        return this._sort_order('date', (a, b) => (a.last_modified || new Date(0)) > (b.last_modified || new Date(0)));
+            this.sort_ascendant = !this.sort_ascendant;
     }
 }

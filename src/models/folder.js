@@ -20,11 +20,18 @@ export default class Folder {
 
         // full name (without trailing slash).
         this.fullname = subdir.replace(/\/+$/, '');
-        this.name = this.fullname.split('/').pop();
+        this.name = this.fullname.split('/').pop() || '';
+
+        /** @type {?Array<File|Folder>} */
+        this.items = undefined;
     }
 
-    list_files() {
-        return this.storage.list_files(this.fullname);
+    /**
+     * Refresh the item list.
+     * @return {Promise}
+     */
+    refresh() {
+        return this.storage.list_files(this.fullname).then(items => this.items = items);
     }
 
     upload(passphrase_input, file) {
