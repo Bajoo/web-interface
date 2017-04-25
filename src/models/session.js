@@ -119,15 +119,20 @@ export default class Session {
     /**
      * Download a file
      * @param url
-     * @return {Promise[Uint8Array]}
+     * @return {Promise<Uint8Array>}
      */
     get_file(url) {
         return this.storage_request({
             url,
             config: xhr => {xhr.responseType = 'arraybuffer';},
             extract: xhr => {
-                if (xhr.status > 299)  // Todo: better error handling
-                    throw new Error(xhr);
+                if (xhr.status > 299) {
+                    let error = new Error('Download file failed');
+                    error.xhr = xhr;
+                    for (let key in xhr.response)
+                        error[key] = xhr.response[key];
+                    throw error
+                }
                 return new Uint8Array(xhr.response);
             }
         });
