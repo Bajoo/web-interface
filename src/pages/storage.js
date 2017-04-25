@@ -36,6 +36,8 @@ export default {
 
         this.passphrase_input = new PassphraseInput();
 
+        this.wall_msg = null;
+
         // Load storage infos
         Storage.get(app.session, vnode.attrs.key)
             .then(storage => this.storage = storage)
@@ -44,12 +46,17 @@ export default {
             .catch(err => {
                 this.is_loading = false;
                 console.error(`Error when fetching storage "${vnode.attrs.key}"`, err);
-                if (err.code === 403)
-                    this.status.set_error("You don't have the permission to see this storage.");
-                else if (err.code === 404)
-                    this.status.set_error('This storage does not exists');
-                else
-                    this.status.set_error(err.message || err.toString());
+                switch (true) {
+                    case (err.code === 403):
+                        this.wall_msg = "You don't have the permission to see this share.";
+                        break;
+                    case (err.code === 404):
+                    case (err.code === 400 && 'data' in err && 'storage_id' in err.data):
+                        this.wall_msg = 'This share does not exist.';
+                        break;
+                    default:
+                        this.status.set_error(err.message || err.toString());
+                }
                 m.redraw();
             });
     },
@@ -65,7 +72,8 @@ export default {
                     m(FileList, {storage: this.storage, key: path, passphrase_input: this.passphrase_input,
                         status: this.status}) :
                     ''
-            ]
+            ],
+            this.wall_msg ? m('.jumbotron.empty-box', m('p.text-danger', this.wall_msg)) : ''
         ]);
     }
 };

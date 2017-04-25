@@ -78,7 +78,7 @@ export default class FileList {
             ]),
             this.folder.items === undefined ? m('', 'Loading ...') : (
                 this.folder.items && this.folder.items.length === 0 ? Dropzone.make(
-                    '.jumbotron.empty-folder',
+                    '.jumbotron.empty-box',
                     file => this.folder.upload(passphrase_input, file),
                     m('p', 'This folder is empty')) : ''
             )
