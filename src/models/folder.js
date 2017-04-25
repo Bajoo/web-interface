@@ -25,13 +25,12 @@ export default class Folder {
         /** @type {?Array<File|Folder>} */
         this.items = undefined;
 
-        /** @type {?Error} */
+        /** @type {undefined|?Error} */
         this.error = null;
 
         /**
          * @type {?Function} callback, called when an error occurs.
-         * 1rst argument is the folder instance
-         * 2nd argument is the error.
+         * It receives the error as argument.
          */
         this.onerror = null;
     }
@@ -40,7 +39,7 @@ export default class Folder {
      * Refresh the item list.
      * @return {Promise}
      */
-    refresh() {
+    load_items() {
         return this.storage.list_files(this.fullname).then(items => {
             this.error = null;
             this.items = items;
@@ -49,7 +48,8 @@ export default class Folder {
             this.error = err;
             this.items = null;
             console.error(`Fetching item list of folder "${this.fullname}" failed`, err);
-            this.onerror && this.onerror(this, err);
+            if(this.onerror)
+                this.onerror(err);
             throw err;
         });
     }
@@ -85,6 +85,6 @@ export default class Folder {
                     return;
                 console.log('Upload attempt failed:', err, err.stack);
             })
-            .then(() => this.refresh());
+            .then(() => this.load_items());
     }
 }

@@ -1,7 +1,6 @@
 
 import {crypto} from 'openpgp';
 import {bin2key} from '../encryption';
-import cache from '../utils/cache';
 import StorageList from './storage_list';
 
 
@@ -15,7 +14,21 @@ export default class User {
         this.quota = quota; // in bytes
 
         this.key = null;
+
+        /** @type {?Promise<StorageList>} */
+        this.promise = null;
+
+        /** @type {undefined|?StorageList} */
         this.storages = undefined;
+
+        /** @type {?Error} */
+        this.error = null;
+
+        /**
+         * @type {?Function} callback, called when an error occurs.
+         * It receives the error as argument.
+         */
+        this.onerror = null;
     }
 
     /**
@@ -46,8 +59,25 @@ export default class User {
         });
     }
 
-    list_storages(reload=false) {
-        return cache({target: this, attr: 'storages', reload}, () => StorageList.from_user_session(this));
+    load_storages() {
+        if (this.promise) // reuse ongoing promise
+            return this.promise;
+
+        this.promise = StorageList.from_user_session(this).then(storage_list => {
+            this.promise = null;
+            this.error = null;
+            this.storages = storage_list;
+            return this.storages;
+        }, err => {
+            this.promise = null;
+            this.error = err;
+            this.storages = null;
+            console.error('Fetching storage list failed', err);
+            if (this.onerror)
+                this.onerror(err);
+            throw err;
+        });
+        return this.promise;
     }
 
     _fetch_key(session) {

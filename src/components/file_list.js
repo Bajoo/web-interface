@@ -42,7 +42,7 @@ export default class FileList {
             m.redraw();
         };
 
-        this.folder.refresh().then(m.redraw, m.redraw);
+        this.folder.load_items().then(m.redraw, m.redraw);
     }
 
     _sort_order_arrow(cmp) {

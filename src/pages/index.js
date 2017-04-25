@@ -1,6 +1,8 @@
 
 import m from 'mithril';
 import app from '../app';
+import StatusAlert from '../components/status_alert';
+import Status from '../view_models/status';
 
 
 function create_storage_view() {
@@ -60,24 +62,27 @@ function storage_grid(storage_list) {
 export default {
 
     oninit() {
-        this.storage_list = null;
+        this.status = new Status();
 
-        app.user.list_storages()
-            .then(storage_list => this.storage_list = storage_list)
-            .then(m.redraw);
+        app.user.onerror = err => {
+            this.status.set_error(`Unable to fetch the list of share: ${err.message || err}`);
+            m.redraw();
+        };
+        app.user.load_storages().then(m.redraw);
     },
 
     view() {
         return m('', [
             m('.lead', `Welcome ${app.user.email}!`),
             m('hr'),
-            this.storage_list ? [
-                this.storage_list.my_bajoo ? storage_view(this.storage_list.my_bajoo) : '',
+            StatusAlert.make(this.status),
+            app.user.storages ? [
+                app.user.storages.my_bajoo ? storage_view(app.user.storages.my_bajoo) : '',
                 m('h2', 'My shares'),
                 create_storage_view(),
                 m('hr'),
-                storage_grid(this.storage_list.shares)
-            ] : 'Loading ...'
+                storage_grid(app.user.storages.shares)
+            ] : (app.user.error ? '' : 'Loading ...')
         ]);
     }
 };
