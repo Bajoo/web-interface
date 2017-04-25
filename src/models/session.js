@@ -93,7 +93,8 @@ export default class Session {
         config.headers['Authorization'] = `Bearer ${this.access_token}`; // jshint ignore:line
 
         return m.request(config).catch(err => {
-            if (err.code === 401002) { //Token expired from api.bajoo.fr
+            if (err.code === 401002 ||  //Token expired from api.bajoo.fr
+                ('error' in err && err.error.code === 401)) { //Error from storage.bajoo.fr
                 console.log('token expired; refreshing ...');
                 return this._refresh_token().then(() => this.request(config));
             }
