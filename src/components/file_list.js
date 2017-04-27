@@ -1,20 +1,9 @@
 
 import m from 'mithril';
 import Dropzone from '../components/dropzone';
+import FileRow from '../components/file_row';
 import FolderRow from '../components/folder_row';
-import human_readable_bytes from '../view_helpers/human_readable_bytes';
-import relative_date from '../view_helpers/relative_date';
 import Folder from '../models/folder';
-
-
-function file_row(file, passphrase_input) {
-    return m('tr', {key: file.fullname}, [
-        m('td', m('i.glyphicon.glyphicon-file')),
-        m('td', m('a[href=#]', {onclick: () => {file.download({passphrase_input}); return false;}}, file.name)),
-        m('td', human_readable_bytes(file.bytes)),
-        m('td', relative_date(file.last_modified))
-    ]);
-}
 
 
 const size_cmp = (a, b) => (a.bytes || 0) - (b.bytes || 0);
@@ -51,7 +40,7 @@ export default class FileList {
             '';
     }
 
-    view({attrs: {passphrase_input}}) {
+    view({attrs: {status, passphrase_input}}) {
         return m('', [
             m('table.table.table-hover', [
                 m('thead', m('tr', [
@@ -73,7 +62,7 @@ export default class FileList {
                     this._sort(this.folder.items || []).map(
                         file => file instanceof Folder ?
                             FolderRow.make(file, passphrase_input) :
-                            file_row(file, passphrase_input))
+                            FileRow.make(file, status, passphrase_input))
                 )
             ]),
             this.folder.items === undefined ? m('', 'Loading ...') : (

@@ -56,8 +56,12 @@ export default class Storage {
             }));
     }
 
+    get_file(path) {
+        return this.session.get_file(`/storages/${this.id}/${path}`);
+    }
+
     _fetch_key(user_key) {
-        return this.session.get_file(`/storages/${this.id}/.key`)
+        return this.get_file('.key')
             .then(data => decrypt(data, user_key))
             .then(bin2key);
     }

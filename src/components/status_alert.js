@@ -17,7 +17,7 @@ export default class StatusAlert {
      */
     view({attrs: {status}}) {
         return status.type !== null ?
-            m('.alert', {class: status.type === 'error' ? 'alert-danger' : ''}, status.message) :
+            m('.alert', {class: status.type === 'error' ? 'alert-danger' : `alert-${status.type}`}, status.message) :
             '';
     }
 }

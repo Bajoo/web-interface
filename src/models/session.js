@@ -120,18 +120,26 @@ export default class Session {
      * Download a file
      * @param url
      * @return {Promise<Uint8Array>}
+     * @throws {Error} error containing both 'response' and 'xhr' attributes.
+     *   The `response` attribute is parsed (ie: JSON or String).
      */
     get_file(url) {
         return this.storage_request({
             url,
             config: xhr => {xhr.responseType = 'arraybuffer';},
             extract: xhr => {
-                if (xhr.status > 299) {
+                if (xhr.status > 400) {  // try to parse result in case of error.
+                    let response = xhr.response;
                     let error = new Error('Download file failed');
                     error.xhr = xhr;
-                    for (let key in xhr.response)
-                        error[key] = xhr.response[key];
-                    throw error
+                    try {
+                        response = (new TextDecoder('utf8')).decode(new DataView(xhr.response));
+                        response = JSON.parse(response);
+                        for (let key in response)
+                            error[key] = response[key];
+                    } catch(err) {}
+                    error.response = response;
+                    throw error;
                 }
                 return new Uint8Array(xhr.response);
             }
