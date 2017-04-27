@@ -75,7 +75,7 @@ export default class FileList {
     }
 
     _sort(items) {
-        return this.sort_ascendant ? items.sort(this.sort_cmp) : items.sort(this.sort_cmp).reverse();
+        return this.sort_ascendant ? Array.from(items).sort(this.sort_cmp) : Array.from(items).sort(this.sort_cmp).reverse();
     }
 
     _sort_order(cmp) {

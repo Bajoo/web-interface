@@ -51,6 +51,7 @@ export default class PassphraseInput {
 
     cancel() {
         this.enabled = false;
+        this.passphrase('');
         this._reject(new this.constructor.UserCancelError());
     }
 
