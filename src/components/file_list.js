@@ -58,17 +58,17 @@ export default class FileList {
                         this._sort_order_arrow(date_cmp)
                     ])
                 ])),
-                Dropzone.make('tbody', file => this.folder.upload(passphrase_input, file),
+                Dropzone.make('tbody', file => this.folder.upload(file).start(passphrase_input),
                     this._sort(this.folder.items || []).map(
                         file => file instanceof Folder ?
-                            FolderRow.make(file, passphrase_input) :
+                            FolderRow.make(file, status, passphrase_input) :
                             FileRow.make(file, status, passphrase_input))
                 )
             ]),
             this.folder.items === undefined ? m('', 'Loading ...') : (
                 this.folder.items && this.folder.items.length === 0 ? Dropzone.make(
                     '.jumbotron.empty-box',
-                    file => this.folder.upload(passphrase_input, file),
+                    file => this.folder.upload(file).start(passphrase_input),
                     m('p', 'This folder is empty')) : ''
             )
         ]);

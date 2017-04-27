@@ -16,9 +16,7 @@ export default class File {
         this.last_modified = new Date(last_modified + 'Z');
     }
 
-    download({passphrase_input}) {
-        let dl = new Download(this);
-        dl.start(passphrase_input);
-        return dl;
+    download() {
+        return new Download(this);
     }
 }

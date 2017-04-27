@@ -33,7 +33,7 @@ export default class FileRow {
 
 
     _start_dl(file, status, passphrase_input) {
-        this.download = file.download({passphrase_input});
+        this.download = file.download();
         this.download.onstatuschange = st => {
 
             let status2msg = {
@@ -48,6 +48,7 @@ export default class FileRow {
             switch (st) {
                 case null:
                 case DownloadStatus.ABORTED:
+                    this.download = null;
                     status.clear();
                     break;
                 case DownloadStatus.DONE:
@@ -67,6 +68,7 @@ export default class FileRow {
             }
             m.redraw();
         };
+        this.download.start(passphrase_input);
         return false;
     }
 }
