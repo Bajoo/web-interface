@@ -40,7 +40,10 @@ export default class FileList {
             '';
     }
 
-    view({attrs: {status, passphrase_input}}) {
+    /**
+     * @param task_manager {TaskManager}
+     */
+    view({attrs: {task_manager}}) {
         return m('', [
             m('table.table.table-hover', [
                 m('thead', m('tr', [
@@ -58,17 +61,17 @@ export default class FileList {
                         this._sort_order_arrow(date_cmp)
                     ])
                 ])),
-                Dropzone.make('tbody', file => this.folder.upload(file).start(passphrase_input),
+                Dropzone.make('tbody', file => task_manager.start(this.folder.upload(file)),
                     this._sort(this.folder.items || []).map(
                         file => file instanceof Folder ?
-                            FolderRow.make(file, status, passphrase_input) :
-                            FileRow.make(file, status, passphrase_input))
+                            FolderRow.make(file, task_manager) :
+                            FileRow.make(file, task_manager))
                 )
             ]),
             this.folder.items === undefined ? m('', 'Loading ...') : (
                 this.folder.items && this.folder.items.length === 0 ? Dropzone.make(
                     '.jumbotron.empty-box',
-                    file => this.folder.upload(file).start(passphrase_input),
+                    file => task_manager.start(this.folder.upload(file)),
                     m('p', 'This folder is empty')) : ''
             )
         ]);

@@ -1,5 +1,6 @@
 
 import app from '../app';
+import {TaskStatus, default as BaseTask} from './base_task';
 import {decrypt} from '../encryption';
 
 
@@ -8,25 +9,11 @@ import {decrypt} from '../encryption';
  *
  * When its status is updated, the corresponding callback is called (if set).
  */
-export default class Download {
+export default class Download extends BaseTask {
 
     constructor(file) {
+        super();
         this.file = file;
-
-        /** @type {?String} */
-        this.status = null;
-
-        /** @type {Function} */
-        this.onstatuschange = null;
-
-        /** @type {?Error} */
-        this.error = null;
-    }
-
-    set_status(status) {
-        this.status = status;
-        if (this.onstatuschange)
-            this.onstatuschange(this.status);
     }
 
     // app.user
@@ -35,7 +22,7 @@ export default class Download {
             return await this._start(passphrase_input);
         } catch (err) {
             this.error = err;
-            this.set_status(DownloadStatus.ERROR);
+            this.set_status(TaskStatus.ERROR);
             console.error(`Download of "${this.file.fullname}" failed`, err);
             throw err;
         }
@@ -45,35 +32,35 @@ export default class Download {
         let storage_key = null;
 
         if (this.file.storage.is_encrypted) {
-            this.set_status(DownloadStatus.GET_USER_KEY);
+            this.set_status(TaskStatus.GET_USER_KEY);
             let user_key = await app.user.get_key();
             if (!(user_key.primaryKey.isDecrypted)) {
-                this.set_status(DownloadStatus.WAIT_FOR_PASSPHRASE);
+                this.set_status(TaskStatus.WAIT_FOR_PASSPHRASE);
                 try {
                     await passphrase_input.decrypt_key(user_key);
                 } catch (err) {
                     if (err instanceof passphrase_input.constructor.UserCancelError) {
-                        this.set_status(DownloadStatus.ABORTED);
+                        this.set_status(TaskStatus.ABORTED);
                         return;
                     }
                     throw err;
                 }
             }
 
-            this.set_status(DownloadStatus.GET_STORAGE_KEY);
+            this.set_status(TaskStatus.GET_STORAGE_KEY);
             storage_key = await this.file.storage.get_key(user_key);
         }
 
-        this.set_status(DownloadStatus.DL_FILE);
+        this.set_status(TaskStatus.DOWNLOAD_FILE);
         let raw_file = await this.file.storage.get_file(this.file.fullname);
         if (this.file.storage.is_encrypted) {
-            this.set_status(DownloadStatus.DECRYPT_FILE);
+            this.set_status(TaskStatus.DECRYPT_FILE);
             raw_file = await decrypt(raw_file, storage_key);
         }
 
-        this.set_status(DownloadStatus.FINALIZE);
+        this.set_status(TaskStatus.FINALIZE);
         this._export(this.file.name, new Blob([raw_file]));
-        this.set_status(DownloadStatus.DONE);
+        this.set_status(TaskStatus.DONE);
     }
 
 
@@ -93,15 +80,3 @@ export default class Download {
         URL.revokeObjectURL(a.href);
     }
 }
-
-export let DownloadStatus = {
-    GET_USER_KEY: 'GET_USER_KEY',
-    WAIT_FOR_PASSPHRASE: 'WAIT_FOR_PASSPHRASE',
-    ABORTED: 'ABORTED',
-    GET_STORAGE_KEY: 'GET_STORAGE_KEY',
-    DL_FILE: 'DL_FILE',
-    DECRYPT_FILE: 'DECRYPT_FILE',
-    FINALIZE: 'FINALIZE',
-    DONE: 'DONE',
-    ERROR: 'ERROR'
-};
