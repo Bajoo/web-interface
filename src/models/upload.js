@@ -1,4 +1,5 @@
 
+import m from 'mithril';
 import app from '../app';
 import {TaskStatus, default as BaseTask} from './base_task';
 import {encrypt} from '../encryption';
@@ -77,6 +78,10 @@ export default class Upload extends BaseTask {
             serialize: x => x
         });
         this.set_status(TaskStatus.DONE);
+
+        //Reload folder list. Its result (or error) is not handled here.
+        //Note that it should not be necessary to reload it if the folder is not displayed.
+        this.dest_folder.load_items().then(m.redraw);
     }
 
 }

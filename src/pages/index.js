@@ -72,6 +72,10 @@ export default {
         app.user.load_storages().then(m.redraw);
     },
 
+    onremove() {
+        app.user.onerror = null;
+    },
+
     view() {
         return m('', [
             m('.lead', `Welcome ${app.user.email}!`),

@@ -34,6 +34,10 @@ export default class FileList {
         this.folder.load_items().then(m.redraw, m.redraw);
     }
 
+    onremove() {
+        this.folder.onerror = null;
+    }
+
     _sort_order_arrow(cmp) {
         return this.sort_cmp === cmp ?
             m(`i.glyphicon.glyphicon-triangle-${this.sort_ascendant ? 'bottom' : 'top'}`) :
