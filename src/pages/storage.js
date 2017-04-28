@@ -2,11 +2,9 @@
 import m from 'mithril';
 import app from '../app';
 import FileList from '../components/file_list';
-import PassphraseInputModal from '../components/passphrase_input_modal';
 import StatusAlert from '../components/status_alert';
+import TaskView from '../components/tasks_view';
 import Storage from '../models/storage';
-import TaskManager from '../models/task_manager';
-import PassphraseInput from '../view_models/passphrase_input';
 import Status from '../view_models/status';
 
 
@@ -35,9 +33,6 @@ export default {
         this.status = new Status();
         this.is_loading = true;
 
-        this.passphrase_input = new PassphraseInput();
-        this.task_manager = new TaskManager(this.passphrase_input, this.status);
-
         this.wall_msg = null;
 
         // Load storage infos
@@ -65,13 +60,13 @@ export default {
 
     view({attrs: {path = ''}}) {
         return m('.wall', [
-            this.passphrase_input.enabled ? PassphraseInputModal.make(this.passphrase_input) : '',
             m('h1.h3', this.storage ? breadcrumb(this.storage, path) : this.is_loading ? '???' : ''),
             StatusAlert.make(this.status),
+            TaskView.make(app.task_manager),
             (this.is_loading ? 'Loading ...' : ''),
             [ // Note: this Array is required to activate the mithril's special "key" behavior.
                 this.storage ?
-                    m(FileList, {storage: this.storage, key: path, task_manager: this.task_manager,
+                    m(FileList, {storage: this.storage, key: path, task_manager: app.task_manager,
                         status: this.status}) :
                     ''
             ],

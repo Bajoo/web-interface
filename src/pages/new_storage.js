@@ -2,6 +2,7 @@
 import m from 'mithril';
 import app from '../app';
 import StatusAlert from '../components/status_alert';
+import TaskView from '../components/tasks_view';
 import Storage from '../models/storage';
 import Status from '../view_models/status';
 
@@ -20,6 +21,7 @@ export default {
     view() {
         return m('.wall', [
             m('h1.h3', 'New share'),
+            TaskView.make(app.task_manager),
             m('hr'),
             m('form', {onsubmit: () => this.submit()}, [
                 StatusAlert.make(this.status),

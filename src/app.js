@@ -1,6 +1,7 @@
 
 import m from 'mithril';
 import Session from './models/session';
+import TaskManager from './models/task_manager';
 import User from './models/user';
 import {get_cookie, set_cookie, remove_cookie} from './utils/cookie';
 
@@ -30,6 +31,11 @@ export default {
      */
     redirect_to: null,
 
+    /**
+     * Global manager for long-running tasks.
+     * @type {TaskManager}
+     */
+    task_manager: new TaskManager(),
 
     /**
      * Save a token in the cookies.

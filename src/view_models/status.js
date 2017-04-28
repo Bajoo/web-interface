@@ -8,7 +8,7 @@ export default class Status {
     }
 
     /**
-     * @param type {?"error"}
+     * @param type {?"error"|"info"|"success"}
      * @param message {string}
      */
     set(type, message) {

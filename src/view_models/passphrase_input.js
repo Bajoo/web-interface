@@ -40,12 +40,11 @@ export default class PassphraseInput {
      */
     set_feedback(success) {
         this.wait_for_feedback = false;
+        this.passphrase(''); // Never keep the passphrase when not needed.
         if (success)
             this.enabled = false;
-        else {
-            this.passphrase('');
+        else
             this.error = true;
-        }
         m.redraw();
     }
 
