@@ -38,6 +38,7 @@ export default {
         // Load storage infos
         Storage.get(app.session, vnode.attrs.key)
             .then(storage => this.storage = storage)
+            .then(user_key => this.storage.initialize())
             .then(() => this.is_loading = false)
             .then(m.redraw)
             .catch(err => {
@@ -65,7 +66,7 @@ export default {
             TaskView.make(app.task_manager),
             (this.is_loading ? 'Loading ...' : ''),
             [ // Note: this Array is required to activate the mithril's special "key" behavior.
-                this.storage ?
+                this.storage && !this.is_loading ?
                     m(FileList, {storage: this.storage, key: path, task_manager: app.task_manager,
                         status: this.status}) :
                     ''

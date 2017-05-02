@@ -1,7 +1,8 @@
 
 import File from './file';
 import Folder from './folder';
-import {bin2key, decrypt} from '../encryption';
+import User from './user';
+import {bin2key, encrypt, decrypt, generate_key, key2bin} from '../encryption';
 
 
 export default class Storage {
@@ -16,6 +17,7 @@ export default class Storage {
 
         this._rights = rights;
 
+        this._raw_key = null;
         this.key = null;
     }
 
@@ -33,6 +35,54 @@ export default class Storage {
                 name, description, is_encrypted
             }
         }).then(data => new Storage(session, data));
+    }
+
+    /**
+     * Prepare the storage for use.
+     *
+     * Try to fetch the storage key. If there is no key, a new key is created.
+     */
+    async initialize() {
+        try {
+            await this._initialize();
+        } catch(err) {
+            console.error(`initialization storage #${this.id} failed`, err);
+            throw new Error(`Initialization failed: ${err.message || err}`);
+        }
+    }
+
+    async _initialize() {
+        if (!this.is_encrypted)
+            return;
+
+        try {
+            this._raw_key = await this.get_file('.key');
+        } catch (err) {
+            if (!('xhr' in err && err.xhr.status === 404))
+                throw err;
+            let permissions_list = await this.session.request({
+                url: `/storages/:id/rights`,
+                data: {
+                    id: this.id
+                }
+            });
+            let members = permissions_list.filter(x => x.scope === 'user').map(x => x.user);
+            // TODO: handle partial error !!
+            let public_keys = await Promise.all(members.map(member => User.get_public_key(this.session, member)));
+
+            // NOTE: the key is not saved, to force the user to use its own key before upload.
+            let key = await generate_key(`Bajoo storage "${this.name}"`, `bajoo-storage-${this.id}@bajoo.fr`);
+
+            let raw_key = key2bin(key);
+            let encrypted_key = await encrypt(raw_key, public_keys);
+            await this.session.storage_request({
+                url: `/storages/${this.id}/.key`,
+                method: 'PUT',
+                data: encrypted_key,
+                serialize: x => x
+            });
+            this._raw_key = raw_key;
+        }
     }
 
     list_files(folder = '') {

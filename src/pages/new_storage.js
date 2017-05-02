@@ -57,10 +57,6 @@ export default {
 
         this.status.clear();
 
-        // TODO: storage key creation
-        // TODO: add permissions
-        // TODO: refresh global storage list.
-
         Storage.create(app.session, this.name, this.description, this.is_encrypted)
             .then(storage => m.route.set(`/storage/${storage.id}`))
             .catch(err => {
@@ -68,6 +64,8 @@ export default {
                 this.status.set_error(err.message || err);
                 m.redraw();
                 console.error('Container creation failed:', err);
-            });
+            })
+            .then(() => app.user.load_storages())  // Update storage list
+            .then(m.redraw);
     }
 };

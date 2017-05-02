@@ -96,4 +96,9 @@ export default class User {
         return this.key !== null ? Promise.resolve(this.key) :
             this._fetch_key(this.session).then(key => (this.key = key));
     }
+
+
+    static get_public_key(session, email) {
+        return session.get_file(`/keys/${email}.key.pub`).then(bin2key);
+    }
 }

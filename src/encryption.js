@@ -16,6 +16,11 @@ export function bin2key(data) {
 }
 
 
+export function key2bin(key) {
+    return key.toPacketlist().write();
+}
+
+
 /**
  * Decrypt data using a PGP key
  *
@@ -36,13 +41,18 @@ export function decrypt(data, key) {
  * Encrypt data decipherable by a PGP key
  *
  * @param data {Uint8Array|String}
- * @param key {openpgp.Key}
+ * @param key {openpgp.Key|openpgp.Key[]}
  * @return {Promise.<Uint8Array>}
  */
 export function encrypt(data, key) {
     return openpgp.encrypt({
         data,
-        publicKeys: [key],
+        publicKeys: Array.isArray(key) ? key : [key],
         armor: false
     }).then(result => result.message.packets.write());
+}
+
+
+export function generate_key(name, email) {
+    return openpgp.generateKey({userIds: [{name, email}]}).then(key => key.key);
 }
