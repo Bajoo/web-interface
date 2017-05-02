@@ -5,6 +5,7 @@ import User from '../models/user';
 import app from '../app';
 import InputForm from '../components/input_form';
 import prop from '../utils/prop';
+import ActivationPage from './activation';
 
 
 const forgotten_password_url = `${base_url}/user/password-forgotten`;
@@ -54,6 +55,10 @@ export default {
         app.log_from_user_credentials(this.username(), password, this.stay_connected)
             .then(() => m.route.set(this.redirect_to || '/'))
             .catch(err => {
+                if (err.error === 'account_not_activated') {
+                    ActivationPage.go_to(this.username(), this.password(), this.stay_connected);
+                    return;
+                }
                 this.is_loading = false;
                 m.redraw();
 

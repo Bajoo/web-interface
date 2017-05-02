@@ -4,6 +4,7 @@ import Session from '../models/session';
 import User from '../models/user';
 import InputForm from '../components/input_form';
 import prop from '../utils/prop';
+import ActivationPage from './activation';
 
 
 export default {
@@ -71,7 +72,7 @@ export default {
 
         Session.from_client_credentials()
             .then(session => User.register(session, this.email(), this.password(), this.lang))
-            .then(user => console.log(user)) // TODO: redirect to the 'wait passphrase' screen.
+            .then(user => ActivationPage.go_to(this.email(), this.password()))
             .catch(err => {
                 this.error_message = err.toString();
                 this.is_loading = false;

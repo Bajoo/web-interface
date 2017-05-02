@@ -15,7 +15,7 @@ export default class TaskView {
      * @param task_manager {TaskManager}
      */
     static make(task_manager) {
-        return m(TaskView, {task_manager})
+        return m(TaskView, {task_manager});
     }
 
     view({attrs: {task_manager}}) {

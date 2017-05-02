@@ -3,6 +3,7 @@
 
 import m from 'mithril';
 import {logged_resolver, login_resolver} from './route_resolver';
+import activation from './pages/activation';
 import login from './pages/login';
 import register from './pages/register';
 import index from './pages/index';
@@ -24,13 +25,14 @@ m.request = options => new Promise(function(resolve, reject) {
 
 // Warning: no trailing slash, or else it'll fail silently.
 m.route(document.body, '/', {
-    '/': logged_resolver((index)),
-    '/login': login_resolver((login)),
+    '/': logged_resolver(index),
+    '/login': login_resolver(login),
+    '/activation': login_resolver(activation),
     '/register': login_resolver(register),
     // "key" is a special parameter name, forcing rebuild of the component.
     '/storage/new': logged_resolver(new_storage),
-    '/storage/:key': logged_resolver((storage)),
-    '/storage/:key/:path...': logged_resolver((storage))
+    '/storage/:key': logged_resolver(storage),
+    '/storage/:key/:path...': logged_resolver(storage)
 });
 
 

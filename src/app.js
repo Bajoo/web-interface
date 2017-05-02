@@ -26,6 +26,14 @@ export default {
     is_logged: null,
 
     /**
+     * A list of key-value pairs, transmitted between pages. It's the way to give parameters to the next page, without
+     * using URL parameters.
+     *
+     * @type {Object}
+     */
+    page_state: {},
+
+    /**
      * If set, it's the URL that the user should be redirected after a login.
      * @type {?String}
      */

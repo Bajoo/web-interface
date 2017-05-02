@@ -59,6 +59,14 @@ export default class User {
         });
     }
 
+    static resend_activation_email(client_session, email) {
+        return client_session.request({
+            method: 'POST',
+            url: '/user/:email/resend_activation_email',
+            data: {email}
+        });
+    }
+
     load_storages() {
         if (this.promise) // reuse ongoing promise
             return this.promise;

@@ -73,7 +73,9 @@ export default {
     },
 
     onremove() {
-        app.user.onerror = null;
+        if (app.user) {
+            app.user.onerror = null;
+        }
     },
 
     view() {
