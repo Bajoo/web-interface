@@ -13,10 +13,25 @@ export function logged_resolver(component) {
             if (app.is_logged === false) {
                 app.redirect_to = requested_path;
                 m.route.set('/login');
-            } else {
-                app.redirect_to = null;
-                return component;
+                return;
             }
+            app.redirect_to = null;
+
+            if (app.is_logged === null || requested_path === '/gen_key')
+                return component;
+
+            //preload user key.
+            return app.user.get_key().then(_ => component, err => {
+                if ('xhr' in err && err.xhr.status === 404) {
+                    // Redirect to the user key generation.
+                    app.redirect_to = requested_path;
+                    m.route.set('/gen_key');
+                    return;
+                }
+                console.error('During user key prefetch:', err);
+                // TODO: we should redirect to a dedicated error page.
+                return component;
+            });
         },
 
         render(vnode) {

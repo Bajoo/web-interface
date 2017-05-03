@@ -44,7 +44,7 @@ export default class PassphraseInputModal {
                         onclick: () => model.cancel()
                     }, 'Cancel'),
                     m('button.btn.btn-primary[type=submit][form=passphrase-input-form]',
-                        {disabled: model.wait_for_feedback, onclick: () => model.submit()}, 'Apply')
+                        {disabled: model.wait_for_feedback}, 'Apply')
                 ])
             ]))
         );

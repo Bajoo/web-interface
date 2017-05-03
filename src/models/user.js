@@ -1,6 +1,6 @@
 
 import {crypto} from 'openpgp';
-import {bin2key} from '../encryption';
+import {bin2key, generate_key, key2bin} from '../encryption';
 import StorageList from './storage_list';
 
 
@@ -97,6 +97,23 @@ export default class User {
             this._fetch_key(this.session).then(key => (this.key = key));
     }
 
+    generate_key(passphrase) {
+        return generate_key(this.email, this.email, passphrase)
+            .then(key => Promise.all([
+                this.session.storage_request({
+                    method: 'PUT',
+                    url: `/keys/${this.email}.key`,
+                    data: key2bin(key),
+                    serialize: x => x
+                }),
+                this.session.storage_request({
+                    method: 'PUT',
+                    url: `/keys/${this.email}.key.pub`,
+                    data: key2bin(key.toPublic()),
+                    serialize: x => x
+                })])
+            );
+    }
 
     static get_public_key(session, email) {
         return session.get_file(`/keys/${email}.key.pub`).then(bin2key);

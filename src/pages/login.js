@@ -60,7 +60,6 @@ export default {
                     return;
                 }
                 this.is_loading = false;
-                m.redraw();
 
                 if (err.error === 'invalid_grant' && err.error_description === "Invalid credentials given.") {
                     this.error_message = 'Invalid username and/or password';
@@ -68,6 +67,7 @@ export default {
                 }
                 console.error('Login failed', err);
                 this.error_message = err.error_description || err.message || 'Unknown error';
-            });
+            })
+            .then(m.redraw);
     }
 };

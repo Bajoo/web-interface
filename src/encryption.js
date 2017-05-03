@@ -53,6 +53,6 @@ export function encrypt(data, key) {
 }
 
 
-export function generate_key(name, email) {
-    return openpgp.generateKey({userIds: [{name, email}]}).then(key => key.key);
+export function generate_key(name, email, passphrase) {
+    return openpgp.generateKey({passphrase, userIds: [{name, email}]}).then(key => key.key);
 }

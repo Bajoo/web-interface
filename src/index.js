@@ -4,6 +4,7 @@
 import m from 'mithril';
 import {logged_resolver, login_resolver} from './route_resolver';
 import activation from './pages/activation';
+import gen_key from './pages/gen_key';
 import login from './pages/login';
 import register from './pages/register';
 import index from './pages/index';
@@ -26,6 +27,7 @@ m.request = options => new Promise(function(resolve, reject) {
 // Warning: no trailing slash, or else it'll fail silently.
 m.route(document.body, '/', {
     '/': logged_resolver(index),
+    '/gen_key': logged_resolver(gen_key),
     '/login': login_resolver(login),
     '/activation': login_resolver(activation),
     '/register': login_resolver(register),
