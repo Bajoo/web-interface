@@ -1,5 +1,6 @@
 
 import m from 'mithril';
+import loader from '../utils/loader';
 import side_menu from './side_menu';
 import DisconnectButton from './disconnect_button.js';
 
@@ -28,7 +29,7 @@ export default class Layout {
                             // TODO: navbar-brand declares a forced, hard-coded height value.
                             // Custom CSS should be added.
                             m('a.navbar-brand[href=#]',
-                                m('img[src=static/bajoo-logo.png][width=100]')
+                                m('img[width=100]', {src: loader('bajoo-logo.png')})
                             )
                         ),
                         m('.navbar-collapse', [

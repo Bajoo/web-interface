@@ -3,6 +3,7 @@ import m from 'mithril';
 import openpgp from 'openpgp';
 import {TaskStatus} from './base_task';
 import Download from './download';
+import {openpgp_worker_path} from '../utils/loader';
 import Status from '../view_models/status';
 import PassphraseInput from '../view_models/passphrase_input';
 
@@ -39,8 +40,7 @@ export default class TaskManager {
          */
         this.tasks = [];
 
-        // TODO: fix path for production env
-        openpgp.initWorker({ path:'./node_modules/openpgp/dist/openpgp.worker.js' });
+        openpgp.initWorker({path: openpgp_worker_path});
 
         window.onbeforeunload = () => this._onbeforeunload();
     }
