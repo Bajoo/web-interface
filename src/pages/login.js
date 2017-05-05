@@ -63,11 +63,12 @@ export default {
 
                 if (err.error === 'invalid_grant' && err.error_description === "Invalid credentials given.") {
                     this.error_message = 'Invalid username and/or password';
+                    m.redraw();
                     return;
                 }
                 console.error('Login failed', err);
                 this.error_message = err.error_description || err.message || 'Unknown error';
+                m.redraw();
             })
-            .then(m.redraw);
     }
 };

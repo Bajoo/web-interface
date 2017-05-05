@@ -61,7 +61,7 @@ export default {
 
     view({attrs: {path = ''}}) {
         return m('.wall', [
-            m('h1.h3', this.storage ? breadcrumb(this.storage, path) : this.is_loading ? '???' : ''),
+            m('h1.h3', this.storage ? breadcrumb(this.storage, path) : ''),
             StatusAlert.make(this.status),
             TaskView.make(app.task_manager),
             (this.is_loading ? 'Loading ...' : ''),
