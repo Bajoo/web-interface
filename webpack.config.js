@@ -41,7 +41,11 @@ module.exports = {
             test: path.join(__dirname, 'static/favicon.ico'),
             loader: `${file_loader}?name=favicon.ico`
         }, {
+            test: /static\/favicon\//,
+            loader: `${file_loader}?name=favicon/[name].[ext]`,
+        }, {
             test: /\.(png)$/,
+            exclude: /static\/favicon\//,
             loader: `${file_loader}?name=images/[name].[ext]`,
         }, {
             test: /(mithril|openpgp(\.worker)?)(\.min)?\.js$/,
