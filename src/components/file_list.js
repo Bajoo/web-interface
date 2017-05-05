@@ -19,7 +19,7 @@ export default class FileList {
      */
     constructor({attrs: {key, storage, status}}) {
         /** @type {Function} item comparator */
-        this.sort_cmp = x => x;
+        this.sort_cmp = name_cmp;
 
         /** @type {boolean} sort order: ascendant (true) or descendant (false) */
         this.sort_ascendant = true;
