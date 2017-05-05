@@ -43,6 +43,8 @@ function reload_route() {
     // Note: m.route.get() can be undefined if this request resolves before the first draw.
     if (m.route.get() !== undefined)
         m.route.set(m.route.get());
+    else
+        setTimeout(() => m.route.set(m.route.get()), 0);
 }
 
 app.log_from_cookie().then(reload_route, err => {
