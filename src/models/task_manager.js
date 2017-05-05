@@ -70,7 +70,7 @@ export default class TaskManager {
 
     // TODO: get a status distinct for each task.
     _status_task_change(task, task_status) {
-        let task_name = task.constructor.name;
+        let task_name = task.constructor.get_name();
         switch (task_status) {
             case null:
             case TaskStatus.ABORTED:

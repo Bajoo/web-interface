@@ -11,6 +11,10 @@ import {decrypt} from '../encryption';
  */
 export default class Download extends BaseTask {
 
+    static get_name() {
+        return 'Download';
+    }
+
     constructor(file) {
         super();
         this.file = file;

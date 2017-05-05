@@ -17,6 +17,11 @@ function blob2array_buffer(blob) {
 }
 
 export default class Upload extends BaseTask {
+
+    static get_name() {
+        return 'Upload';
+    }
+
     constructor(folder, file) {
         super();
         this.dest_folder = folder;
