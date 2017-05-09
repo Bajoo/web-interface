@@ -44,7 +44,11 @@ function reload_route() {
     if (m.route.get() !== undefined)
         m.route.set(m.route.get());
     else
-        setTimeout(() => m.route.set(m.route.get()), 0);
+        setTimeout(() => {
+            let r = m.route.get();
+            if (r)
+                m.route.set(m.route.get());
+        }, 0);
 }
 
 app.log_from_cookie().then(reload_route, err => {
