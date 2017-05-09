@@ -4,6 +4,7 @@ import fr from '../translations/fr';
 
 // List of all languages translated
 let translations = {
+    en: { _lang: 'English' },
     fr
 };
 
@@ -32,6 +33,17 @@ export function set_lang(new_lang) {
 }
 
 
+export function get_lang() {
+    return lang;
+}
+
+
+// [['fr', 'Français'], ['en', 'English']]
+export function list_lang() {
+    return Object.keys(translations).map(lang => [lang, translations[lang]._lang]);
+}
+
+
 // Set default lang
 set_lang(window.navigator.userLanguage || window.navigator.language);
 
@@ -39,7 +51,7 @@ set_lang(window.navigator.userLanguage || window.navigator.language);
 
 export default function _(strings, ...values) {
     if (!Array.isArray(strings)) { // Simple quote
-        if (lang === null)
+        if (lang === null || lang === 'en')
             return strings;
 
         if (lang in translations && strings in translations[lang])
@@ -51,7 +63,7 @@ export default function _(strings, ...values) {
     }
 
     // ES6 literal quote
-    if (lang === null)
+    if (lang === null || lang === 'en')
         return String.raw(strings, ...values);
 
 

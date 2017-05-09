@@ -1,6 +1,10 @@
 
 
 export default {
+
+    _lang: 'Français', // special lang name
+
+
     // view_models/passphrase_input.js
     'The user refused to enter the passphrase': "L'utilisateur a refusé d'entrer sa phrase de passe",
 

@@ -3,7 +3,7 @@ import m from 'mithril';
 import Session from '../models/session';
 import User from '../models/user';
 import InputForm from '../components/input_form';
-import _ from '../utils/i18n';
+import {get_lang, set_lang, list_lang, default as _} from '../utils/i18n';
 import prop from '../utils/prop';
 import ActivationPage from './activation';
 
@@ -15,7 +15,7 @@ export default {
         this.email = prop('');
         this.password = prop('');
         this.confirm_password = prop('');
-        this.lang = null;
+        this.lang = get_lang();
 
         this.password_error = null;
         this.confirm_password_error = null;
@@ -38,12 +38,10 @@ export default {
                             m('.input-group', [
                                 m('span.input-group-addon', m('span.glyphicon.glyphicon-flag[aria-hidden="true"]')),
                                 m('select[required].form-control', {
-                                    onchange : event => this.lang = event.target.value,
-                                    value: this.lang
-                                }, [
-                                    m('option[value=en]', 'English'),
-                                    m('option[value=fr]', 'Français')
-                                ])
+                                    onchange : event => this.lang = event.target.value
+                                }, list_lang().map(([code, lang]) =>
+                                    m('option', {value: code, selected: this.lang === code ? 'selected' : ''}, lang)
+                                ))
                             ]),
                         ]),
                         m('button[type="submit"].btn.btn-default', _('Submit'))
@@ -73,6 +71,7 @@ export default {
 
         Session.from_client_credentials()
             .then(session => User.register(session, this.email(), this.password(), this.lang))
+            .then(_ => set_lang(this.lang))
             .then(user => ActivationPage.go_to(this.email(), this.password()))
             .catch(err => {
                 this.error_message = err.toString();
