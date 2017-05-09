@@ -80,7 +80,7 @@ export default {
     },
 
     view() {
-        return m('', [
+        return [
             m('.lead', _`Welcome ${app.user.email}!`),
             m('hr'),
             StatusAlert.make(this.status),
@@ -92,6 +92,6 @@ export default {
                 m('hr'),
                 storage_grid(app.user.storages.shares)
             ] : (app.user.error ? '' : _('Loading ...'))
-        ]);
+        ];
     }
 };

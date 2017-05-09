@@ -19,6 +19,13 @@
     text-align: center;
 }
 
+/* Main title of the page */
+.page-title {
+    margin: 0;
+    font-size: 24px;
+}
+
+
 .storage-item {
     padding: 5px;
 }

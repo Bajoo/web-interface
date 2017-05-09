@@ -61,8 +61,8 @@ export default {
     },
 
     view({attrs: {path = ''}}) {
-        return m('.wall', [
-            m('h1.h3', this.storage ? breadcrumb(this.storage, path) : ''),
+        return [
+            m('h1.page-title', {style: 'margin: 0;'}, this.storage ? breadcrumb(this.storage, path) : ''),
             StatusAlert.make(this.status),
             TaskView.make(app.task_manager),
             (this.is_loading ? _('Loading ...') : ''),
@@ -73,6 +73,6 @@ export default {
                     ''
             ],
             this.wall_msg ? m('.jumbotron.empty-box', m('p.text-danger', this.wall_msg)) : ''
-        ]);
+        ];
     }
 };
