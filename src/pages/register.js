@@ -3,6 +3,7 @@ import m from 'mithril';
 import Session from '../models/session';
 import User from '../models/user';
 import InputForm from '../components/input_form';
+import _ from '../utils/i18n';
 import prop from '../utils/prop';
 import ActivationPage from './activation';
 
@@ -22,18 +23,18 @@ export default {
 
     view() {
         return m('.panel.panel-default',
-            m('.panel-heading', m('h1.panel-title', 'Account creation')),
+            m('.panel-heading', m('h1.panel-title', _('Account creation'))),
             m('.panel-body', [
                 m('form', { onsubmit: (evt)=> this.submit(evt)}, [
                     this.error_message ? m('.alert .alert-danger', this.error_message) : '',
                     m('fieldset', { disabled: this.is_loading}, [
-                        m(InputForm, {id: 'email', label: 'Email', icon: 'user', type: 'email', value: this.email}),
-                        m(InputForm, {id: 'password', label: 'Password', icon: 'lock', type: 'password',
+                        m(InputForm, {id: 'email', label: _('Email'), icon: 'user', type: 'email', value: this.email}),
+                        m(InputForm, {id: 'password', label: _('Password'), icon: 'lock', type: 'password',
                             value: this.password, error: this.password_error}),
-                        m(InputForm, {id: 'confirm_password', label: 'Password confirmation', icon: 'lock',
+                        m(InputForm, {id: 'confirm_password', label: _('Password confirmation'), icon: 'lock',
                             type: 'password', value: this.confirm_password, error: this.confirm_password_error}),
                         m('.form-group', [
-                            m('label.control-label', 'Language'),
+                            m('label.control-label', _('Language')),
                             m('.input-group', [
                                 m('span.input-group-addon', m('span.glyphicon.glyphicon-flag[aria-hidden="true"]')),
                                 m('select[required].form-control', {
@@ -45,10 +46,10 @@ export default {
                                 ])
                             ]),
                         ]),
-                        m('button[type="submit"].btn.btn-default', 'Submit')
+                        m('button[type="submit"].btn.btn-default', _('Submit'))
                     ]),
                     m('br'),
-                    m(`a.small[href=/login]`, {oncreate: m.route.link}, "I've already an account")
+                    m(`a.small[href=/login]`, {oncreate: m.route.link}, _("I've already an account"))
                 ])
             ])
         );
@@ -60,7 +61,7 @@ export default {
         this.password_error = null;
 
         if (this.password().length < 8) {
-            this.password_error = 'The password must have at least 8 characters';
+            this.password_error = _('The password must have at least 8 characters');
             return;
         }
         if (this.password() !== this.confirm_password()) {

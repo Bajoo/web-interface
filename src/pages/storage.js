@@ -6,6 +6,7 @@ import StatusAlert from '../components/status_alert';
 import TaskView from '../components/tasks_view';
 import Storage from '../models/storage';
 import Status from '../view_models/status';
+import _ from '../utils/i18n';
 
 
 function breadcrumb(storage, path) {
@@ -46,11 +47,11 @@ export default {
                 console.error(`Error when fetching storage "${vnode.attrs.key}"`, err);
                 switch (true) {
                     case (err.code === 403):
-                        this.wall_msg = "You don't have the permission to see this share.";
+                        this.wall_msg = _("You don't have the permission to see this share.");
                         break;
                     case (err.code === 404):
                     case (err.code === 400 && 'data' in err && 'storage_id' in err.data):
-                        this.wall_msg = 'This share does not exist.';
+                        this.wall_msg = _('This share does not exist.');
                         break;
                     default:
                         this.status.set_error(err.message || err.toString());
@@ -64,7 +65,7 @@ export default {
             m('h1.h3', this.storage ? breadcrumb(this.storage, path) : ''),
             StatusAlert.make(this.status),
             TaskView.make(app.task_manager),
-            (this.is_loading ? 'Loading ...' : ''),
+            (this.is_loading ? _('Loading ...') : ''),
             [ // Note: this Array is required to activate the mithril's special "key" behavior.
                 this.storage && !this.is_loading ?
                     m(FileList, {storage: this.storage, key: path, task_manager: app.task_manager,

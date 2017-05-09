@@ -4,6 +4,7 @@ import {base_url} from '../models/session';
 import User from '../models/user';
 import app from '../app';
 import InputForm from '../components/input_form';
+import _ from '../utils/i18n';
 import prop from '../utils/prop';
 import ActivationPage from './activation';
 
@@ -24,7 +25,7 @@ export default {
 
     view() {
         return m('.panel.panel-default',
-            m('.panel-heading', m('h1.panel-title', 'Connexion')),
+            m('.panel-heading', m('h1.panel-title', _('Connection'))),
             m('.panel-body', [
                 m('form', { onsubmit: ()=> this.submit()}, [
                     this.error_message ? m('.alert .alert-danger', this.error_message) : '',
@@ -35,13 +36,13 @@ export default {
                             m('input[type=checkbox]', {
                                 checked: this.stay_connected,
                                 onchange: event => this.stay_connected = event.target.checked}),
-                            'Stay connected'
+                            _('Stay connected')
                         ])),
-                        m('button[type="submit"].btn.btn-default', 'Submit')
+                        m('button[type="submit"].btn.btn-default', _('Submit'))
                     ]),
                     m('br'),
-                    m('a.small[href=/register]', {oncreate: m.route.link}, 'Create a new account'),
-                    m(`a.pull-right.small[href="${forgotten_password_url}"]`, 'Forgotten password ?')
+                    m('a.small[href=/register]', {oncreate: m.route.link}, _('Create a new account')),
+                    m(`a.pull-right.small[href="${forgotten_password_url}"]`, _('Forgotten password ?'))
                 ])
             ])
         );
@@ -62,13 +63,13 @@ export default {
                 this.is_loading = false;
 
                 if (err.error === 'invalid_grant' && err.error_description === "Invalid credentials given.") {
-                    this.error_message = 'Invalid username and/or password';
+                    this.error_message = _('Invalid username and/or password');
                     m.redraw();
                     return;
                 }
                 console.error('Login failed', err);
-                this.error_message = err.error_description || err.message || 'Unknown error';
+                this.error_message = err.error_description || err.message || _('Unknown error');
                 m.redraw();
-            })
+            });
     }
 };

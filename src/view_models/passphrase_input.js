@@ -1,5 +1,6 @@
 
 import m from 'mithril';
+import _ from '../utils/i18n';
 import prop from '../utils/prop';
 
 
@@ -78,6 +79,6 @@ PassphraseInput.UserCancelError = class UserCancelError extends Error {
     constructor() {
         super();
         this.name = this.constructor.name;
-        this.message = 'The user refused to enter the passphrase';
+        this.message = _('The user refused to enter the passphrase');
     }
 };

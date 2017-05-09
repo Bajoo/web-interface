@@ -3,6 +3,7 @@ import m from 'mithril';
 import app from '../app';
 import Session from '../models/session';
 import User from '../models/user';
+import _ from '../utils/i18n';
 
 
 /**
@@ -31,17 +32,17 @@ export default class RegisterPage {
 
     view() {
         return m('.panel.panel-default',
-            m('.panel-heading', m('h1.panel-title', 'This account is not activated')),
+            m('.panel-heading', m('h1.panel-title', _('This account is not activated'))),
             m('.panel-body', [
                 this.error_message ? m('.alert .alert-danger', this.error_message) : '',
-                "For continuing,  your must activate your account.", m('br'),
-                "You should receive in the next minutes, a confirmation email with an activation link.", m('br'),
-                "You must follow that link to continue.",
+                _("For continuing,  your must activate your account."), m('br'),
+                _("You should receive in the next minutes, a confirmation email with an activation link."), m('br'),
+                _("You must follow that link to continue."),
                 m('hr'),
                 m('', [
-                    m('a.btn.btn-default.pull-left[href=/login]', {oncreate: m.route.link, disabled: this.is_loading}, 'Return to the login page'),
-                    m('a.btn.btn-default.pull-right[href=/]', {disabled: this.is_loading, onclick: () => this.try_login()}, "I've activated my account"),
-                    m('p.text-center [href=/]', { disabled: this.is_loading, onclick: () => this.resend_email()}, m('a.small', 'Send again the activation email')),
+                    m('a.btn.btn-default.pull-left[href=/login]', {oncreate: m.route.link, disabled: this.is_loading}, _('Return to the login page')),
+                    m('a.btn.btn-default.pull-right[href=/]', {disabled: this.is_loading, onclick: () => this.try_login()}, _("I've activated my account")),
+                    m('p.text-center [href=/]', { disabled: this.is_loading, onclick: () => this.resend_email()}, m('a.small', _('Send again the activation email'))),
                 ])
             ])
         );
@@ -70,7 +71,7 @@ export default class RegisterPage {
             .catch(err => {
                 this.is_loading = false;
                 console.error('Login (after activation) failed', err);
-                this.error_message = err.error_description || err.message || 'Unknown error';
+                this.error_message = err.error_description || err.message || _('Unknown error');
                 m.redraw();
             });
         return false;

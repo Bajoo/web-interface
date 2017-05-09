@@ -4,6 +4,7 @@ import Dropzone from '../components/dropzone';
 import FileRow from '../components/file_row';
 import FolderRow from '../components/folder_row';
 import Folder from '../models/folder';
+import _ from '../utils/i18n';
 
 
 const size_cmp = (a, b) => (a.bytes || 0) - (b.bytes || 0);
@@ -27,7 +28,7 @@ export default class FileList {
         this.folder = new Folder(storage, {subdir: key});
 
         this.folder.onerror = err => {
-            status.set_error(`Fetching file list failed: ${err.message || err}`);
+            status.set_error(_`Fetching file list failed: ${err.message || err}`);
             m.redraw();
         };
 
@@ -53,15 +54,15 @@ export default class FileList {
                 m('thead', m('tr', [
                     m('th'),
                     m('th', {onclick: () => this._sort_order(name_cmp)}, [
-                        'Name',
+                        _('Name'),
                         this._sort_order_arrow(name_cmp)
                     ]),
                     m('th', {onclick: () => this._sort_order(size_cmp)}, [
-                        'Size',
+                        _('Size'),
                         this._sort_order_arrow(size_cmp)
                     ]),
                     m('th', {onclick: () => this._sort_order(date_cmp)}, [
-                        'Last modification',
+                        _('Last modification'),
                         this._sort_order_arrow(date_cmp)
                     ])
                 ])),
@@ -72,11 +73,11 @@ export default class FileList {
                             FileRow.make(file, task_manager))
                 )
             ]),
-            this.folder.items === undefined ? m('', 'Loading ...') : (
+            this.folder.items === undefined ? m('', _('Loading ...')) : (
                 this.folder.items && this.folder.items.length === 0 ? Dropzone.make(
                     '.jumbotron.empty-box',
                     file => task_manager.start(this.folder.upload(file)),
-                    m('p', 'This folder is empty')) : ''
+                    m('p', _('This folder is empty'))) : ''
             )
         ]);
     }

@@ -1,5 +1,6 @@
 
 import m from 'mithril';
+import _ from '../utils/i18n';
 
 
 function storage_link(storage) {
@@ -27,9 +28,9 @@ export default class SideMenu {
             m('ul.nav',
                 user.storages && user.storages.my_bajoo ? storage_link(user.storages.my_bajoo) : '',
                 m('li', {class: m.route.get() === '/' ? 'active' : ''}, [
-                    m('a[href=/]', {oncreate: m.route.link}, 'All shares'),
+                    m('a[href=/]', {oncreate: m.route.link}, _('All shares')),
                     user.storages ? m('ul.nav', user.storages.shares.map(storage_link)) :
-                        user.error ? m('.side-block.bg-danger', 'Loading error') : '...'
+                        user.error ? m('.side-block.bg-danger', _('Loading error')) : '...'
                 ])
             )
         ]);

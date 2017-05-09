@@ -4,6 +4,7 @@ import app from '../app';
 import StatusAlert from '../components/status_alert';
 import TaskView from '../components/tasks_view';
 import Storage from '../models/storage';
+import _ from '../utils/i18n';
 import Status from '../view_models/status';
 
 
@@ -27,14 +28,15 @@ export default {
                 StatusAlert.make(this.status),
                 m('fieldset', { disabled: this.is_loading}, [
                     m('.form-group', [
-                        m('label', 'Name'),
-                        m('input.form-control[required][placeholder="Eg: \"Pictures Holidays 2017\""]', {
+                        m('label', _('Name')),
+                        m('input.form-control[required]', {
+                            placeholder: _('Eg: \"Pictures Holidays 2017\"'),
                             oninput: event => this.name = event.target.value,
                             value: this.name
                         })
                     ]),
                     m('.form-group', [
-                        m('label', 'Description'),
+                        m('label', _('Description')),
                         m('textarea.form-control',{
                             oninput: event => this.description = event.target.value,
                             value: this.description
@@ -44,9 +46,9 @@ export default {
                         m('input[type=checkbox]', {
                             checked: this.is_encrypted,
                             onchange: event => this.is_encrypted = event.target.checked}),
-                        'Encrypt this share ?'
+                        _('Encrypt this share ?')
                     ])),
-                    m('button[type="submit"].btn.btn-default', 'Submit')
+                    m('button[type="submit"].btn.btn-default', _('Submit'))
                 ]),
             ])
         ]);

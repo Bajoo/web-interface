@@ -1,5 +1,6 @@
 
 import m from 'mithril';
+import _ from '../utils/i18n';
 import loader from '../utils/loader';
 import side_menu from './side_menu';
 import DisconnectButton from './disconnect_button.js';
@@ -41,7 +42,7 @@ export default class Layout {
             ]),
             m('.container',
                 app.is_logged === null ?
-                    'Connexion ...' :
+                    _('Connection ...') :
                     (
                         app.is_logged ? two_column_content(app.user, children) : children
                     )

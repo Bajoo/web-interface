@@ -1,5 +1,6 @@
 
 import m from 'mithril';
+import _ from '../utils/i18n';
 
 
 export default class DisconnectButton {
@@ -15,6 +16,6 @@ export default class DisconnectButton {
     view({attrs: {disconnect}}) {
         return m('button.btn.navbar-btn.btn-danger.navbar-right[type=button]',
             {onclick: () => disconnect() },
-            'Log out');
+            _('Log out'));
     }
 }
