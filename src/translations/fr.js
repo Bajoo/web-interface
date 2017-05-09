@@ -111,7 +111,7 @@ export default {
     'Apply': 'Appliquer',
 
     // components/side_menu.js
-    'All shares': 'Tout les partages',
+    'All shares': 'Tous les partages',
     'Loading error': 'Erreur de chargement',
 
     // components/tasks_view.js
