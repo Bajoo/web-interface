@@ -42,7 +42,7 @@ export default class TaskManager {
 
         initialize_encryption();
 
-        window.onbeforeunload = () => this._onbeforeunload();
+        window.onbeforeunload = (evt) => this._onbeforeunload(evt);
     }
 
     _onbeforeunload(evt) {
@@ -74,16 +74,13 @@ export default class TaskManager {
         switch (task_status) {
             case null:
             case TaskStatus.ABORTED:
-                this.clean_task(task);
                 this.app_status.clear();
                 break;
             case TaskStatus.DONE:
-                this.clean_task(task);
                 if (this.tasks.length === 0)
                     this.app_status.set('success', `${task_name}: ${status2msg[task_status]}`);
                 break;
             case TaskStatus.ERROR:
-                this.clean_task(task);
                 let err = task.error;
                 if (task instanceof Download && err.xhr && err.xhr.status === 404) {
                     // TODO: 404 could be caused by user key or storage key.

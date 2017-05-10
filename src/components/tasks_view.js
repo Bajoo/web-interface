@@ -22,7 +22,6 @@ export default class TaskView {
     view({attrs: {task_manager}}) {
         return [
             task_manager.passphrase_input.enabled ? PassphraseInputModal.make(task_manager.passphrase_input) : '',
-            task_manager.tasks.length > 0 ? _`Ongoing Tasks: ${task_manager.tasks.length}` : '',
             StatusAlert.make(task_manager.app_status)
         ];
     }

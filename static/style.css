@@ -59,3 +59,51 @@
     background-color: grey;
     border: 1px darkgrey dashed;
 }
+
+
+#task-manager-status {
+    float: right;
+
+    min-width: 200px;
+    text-align: center;
+
+    border: solid 1px;
+    border-radius: 4px;
+    margin: 8px 16px;
+    padding: 6px 12px;
+}
+
+#task-manager-status:hover {
+    cursor: pointer;
+}
+
+
+#task-manager-status.task-progress {
+    color: #fff;
+    background: #5bc0de;
+    border: #46b8da;
+}
+#task-manager-status.task-progress:hover {
+    background: #31b0d5;
+    border: #269abc;
+}
+
+#task-manager-status.task-done {
+    color: #fff;
+    background : #73d773;
+    border: #4cae4c;
+}
+#task-manager-status.task-done:hover {
+    background: #449d44;
+    border: #398439;
+}
+
+#task-manager-status.task-error {
+    color: #fff;
+    background: #c9302c;
+    border: #761c19;
+}
+#task-manager-status.task-error:hover {
+    background-color: #c9302c;
+    border-color: #ac2925;
+}

@@ -5,6 +5,7 @@ import loader from '../utils/loader';
 import side_menu from './side_menu';
 import DisconnectButton from './disconnect_button.js';
 import LanguageMenu from './language_menu.js';
+import TaskManagerStatus from './task_manager_status';
 
 
 function two_column_content(user, content) {
@@ -37,7 +38,8 @@ export default class Layout {
                         m('.navbar-collapse', [
                             m('p.navbar-text', 'Bajoo web interface'),
                             LanguageMenu.make(),
-                            app.is_logged ? DisconnectButton.make(() => app.reset()) : ''
+                            app.is_logged ? DisconnectButton.make(() => app.reset()) : '',
+                            TaskManagerStatus.make(app.task_manager)
                         ])
                     ])
                 ])

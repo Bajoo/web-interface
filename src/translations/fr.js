@@ -114,8 +114,9 @@ export default {
     'All shares': 'Tous les partages',
     'Loading error': 'Erreur de chargement',
 
-    // components/tasks_view.js
-    'Ongoing Tasks: {0}': 'Tâches en cours: {0}',
+    // components/task_manager_status.js
+    '{0} task(s) done' : '{0} tâche(s) terminée(s)',
+    'Task(s): {0} / {1}': 'Tâche(s): {0} / {1}',
 
     // pages/activation.js, pages/login.js
     'Unknown error': 'Erreur inconnue',
