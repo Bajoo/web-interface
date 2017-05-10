@@ -1,9 +1,8 @@
 
 import m from 'mithril';
-import openpgp from 'openpgp';
+import {initialize as initialize_encryption} from '../encryption';
 import {TaskStatus} from './base_task';
 import Download from './download';
-import {openpgp_worker_path} from '../utils/loader';
 import _ from '../utils/i18n';
 import Status from '../view_models/status';
 import PassphraseInput from '../view_models/passphrase_input';
@@ -41,7 +40,7 @@ export default class TaskManager {
          */
         this.tasks = [];
 
-        openpgp.initWorker({path: openpgp_worker_path});
+        initialize_encryption();
 
         window.onbeforeunload = () => this._onbeforeunload();
     }

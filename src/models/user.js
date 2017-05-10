@@ -1,6 +1,5 @@
 
-import {crypto} from 'openpgp';
-import {bin2key, generate_key, key2bin} from '../encryption';
+import {bin2key, generate_key, key2bin, sha256} from '../encryption';
 import StorageList from './storage_list';
 
 
@@ -41,7 +40,7 @@ export default class User {
     }
 
     static hash_password(password) {
-        let u8a_password = crypto.hash.sha256(password);
+        let u8a_password = sha256(password);
 
         // Convert Uint8Array to hex string.
         return u8a_password.reduce((acc, i) => acc + ('0' + i.toString(16)).slice(-2), '');
