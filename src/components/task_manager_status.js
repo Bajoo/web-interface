@@ -2,7 +2,6 @@
 import m from 'mithril';
 import {TaskStatus} from '../models/base_task';
 import {_3l} from '../utils/i18n';
-import TaskListModal from './task_list_modal';
 
 
 /**
@@ -28,17 +27,14 @@ export default class TaskManagerStatus {
         let tasks_done = task_manager.tasks.filter(t => t.status === TaskStatus.DONE || t.status === TaskStatus.ABORTED).length;
         let has_error = task_manager.tasks.some(t => t.status === TaskStatus.ERROR);
 
-        return [m('#task-manager-status',
-            {
-                onclick: () => task_manager.show_task_list(true),
-                class: has_error ? 'task-error' : (tasks_done === total_tasks) ? 'task-done' : 'task-progress'}, [
-                has_error ? [m('span.glyphicon.glyphicon-alert'), ' '] : '',
-                tasks_done === total_tasks ?
-                    _3l(total_tasks)`${total_tasks} task(s) done` :
-                    _3l(total_tasks)`Task(s): ${tasks_done} / ${total_tasks}`,
-                (!has_error) && tasks_done === total_tasks ? [' ', m('span.glyphicon.glyphicon-ok')] : ''
-            ]),
-            task_manager.show_task_list() ? TaskListModal.make(task_manager) : ''
-        ];
+        return m('#task-manager-status', {
+            onclick: () => task_manager.show_task_list(true),
+            class: has_error ? 'task-error' : (tasks_done === total_tasks) ? 'task-done' : 'task-progress'}, [
+            has_error ? [m('span.glyphicon.glyphicon-alert'), ' '] : '',
+            tasks_done === total_tasks ?
+                _3l(total_tasks)`${total_tasks} task(s) done` :
+                _3l(total_tasks)`Task(s): ${tasks_done} / ${total_tasks}`,
+            (!has_error) && tasks_done === total_tasks ? [' ', m('span.glyphicon.glyphicon-ok')] : ''
+        ]);
     }
 }
