@@ -4,7 +4,7 @@ import app from '../app';
 import StatusAlert from '../components/status_alert';
 import TaskView from '../components/tasks_view';
 import Storage from '../models/storage';
-import _ from '../utils/i18n';
+import {_} from '../utils/i18n';
 import Status from '../view_models/status';
 
 

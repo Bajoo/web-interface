@@ -2,7 +2,6 @@
 import m from 'mithril';
 import StatusAlert from './status_alert';
 import PassphraseInputModal from './passphrase_input_modal';
-import _ from '../utils/i18n';
 
 
 /**

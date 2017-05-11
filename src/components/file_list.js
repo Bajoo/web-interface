@@ -4,7 +4,7 @@ import Dropzone from '../components/dropzone';
 import FileRow from '../components/file_row';
 import FolderRow from '../components/folder_row';
 import Folder from '../models/folder';
-import _ from '../utils/i18n';
+import {_, _l} from '../utils/i18n';
 
 
 const size_cmp = (a, b) => (a.bytes || 0) - (b.bytes || 0);
@@ -28,7 +28,7 @@ export default class FileList {
         this.folder = new Folder(storage, {subdir: key});
 
         this.folder.onerror = err => {
-            status.set_error(_`Fetching file list failed: ${err.message || err}`);
+            status.set_error(_l`Fetching file list failed: ${err.message || err}`);
             m.redraw();
         };
 

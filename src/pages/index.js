@@ -1,7 +1,7 @@
 
 import m from 'mithril';
 import app from '../app';
-import _ from '../utils/i18n';
+import {_, _l} from '../utils/i18n';
 import StatusAlert from '../components/status_alert';
 import TaskView from '../components/tasks_view';
 import Status from '../view_models/status';
@@ -67,7 +67,7 @@ export default {
         this.status = new Status();
 
         app.user.onerror = err => {
-            this.status.set_error(_`Unable to fetch the list of share: ${err.message || err}`);
+            this.status.set_error(_l`Unable to fetch the list of share: ${err.message || err}`);
             m.redraw();
         };
         app.user.load_storages().then(m.redraw);
@@ -81,7 +81,7 @@ export default {
 
     view() {
         return [
-            m('.lead', _`Welcome ${app.user.email}!`),
+            m('.lead', _l`Welcome ${app.user.email}!`),
             m('hr'),
             StatusAlert.make(this.status),
             TaskView.make(app.task_manager),

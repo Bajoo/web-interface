@@ -2,7 +2,7 @@
 import app from '../app';
 import {TaskStatus, default as BaseTask} from './base_task';
 import {decrypt} from '../encryption';
-import _ from '../utils/i18n';
+import {_} from '../utils/i18n';
 
 
 /**

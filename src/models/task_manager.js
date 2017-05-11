@@ -3,7 +3,7 @@ import m from 'mithril';
 import {initialize as initialize_encryption} from '../encryption';
 import {TaskStatus} from './base_task';
 import Download from './download';
-import _ from '../utils/i18n';
+import {_, _l} from '../utils/i18n';
 import Status from '../view_models/status';
 import PassphraseInput from '../view_models/passphrase_input';
 
@@ -86,7 +86,7 @@ export default class TaskManager {
                     // TODO: 404 could be caused by user key or storage key.
                     this.app_status.set_error(_('Download: file not found'));
                 } else {
-                    this.app_status.set_error(_`${task_name} failed: ${err.message || err}`);
+                    this.app_status.set_error(_l`${task_name} failed: ${err.message || err}`);
                 }
                 break;
             default:

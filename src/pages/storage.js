@@ -6,7 +6,7 @@ import StatusAlert from '../components/status_alert';
 import TaskView from '../components/tasks_view';
 import Storage from '../models/storage';
 import Status from '../view_models/status';
-import _ from '../utils/i18n';
+import {_} from '../utils/i18n';
 
 
 function breadcrumb(storage, path) {

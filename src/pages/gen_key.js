@@ -2,7 +2,7 @@
 import m from 'mithril';
 import app from '../app';
 import InputForm from '../components/input_form';
-import _ from '../utils/i18n';
+import {_, _l} from '../utils/i18n';
 import prop from '../utils/prop';
 
 
@@ -87,7 +87,7 @@ export default class GenKeyPage {
         app.user.generate_key(app.user.email, passphrase).then(_ => m.route.set(app.redirect_to || '/'),
             err => {
                 console.error('User key generation failed', err);
-                this.error_message = _`Key generation failed: ${err.message || err}`;
+                this.error_message = _l`Key generation failed: ${err.message || err}`;
                 this.is_loading = false;
                 m.redraw();
             });

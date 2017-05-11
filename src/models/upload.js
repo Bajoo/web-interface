@@ -3,7 +3,7 @@ import m from 'mithril';
 import app from '../app';
 import {TaskStatus, default as BaseTask} from './base_task';
 import {encrypt} from '../encryption';
-import _ from '../utils/i18n';
+import {_} from '../utils/i18n';
 
 
 function blob2array_buffer(blob) {

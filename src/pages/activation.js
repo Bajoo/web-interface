@@ -3,7 +3,7 @@ import m from 'mithril';
 import app from '../app';
 import Session from '../models/session';
 import User from '../models/user';
-import _ from '../utils/i18n';
+import {_} from '../utils/i18n';
 
 
 /**

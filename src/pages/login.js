@@ -4,7 +4,7 @@ import {base_url} from '../models/session';
 import User from '../models/user';
 import app from '../app';
 import InputForm from '../components/input_form';
-import _ from '../utils/i18n';
+import {_} from '../utils/i18n';
 import prop from '../utils/prop';
 import ActivationPage from './activation';
 

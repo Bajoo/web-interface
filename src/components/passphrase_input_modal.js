@@ -1,6 +1,6 @@
 
 import m from 'mithril';
-import _ from '../utils/i18n';
+import {_} from '../utils/i18n';
 import InputForm from './input_form';
 
 

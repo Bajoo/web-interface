@@ -1,5 +1,5 @@
 
-import _ from '../utils/i18n';
+import {_, _3l} from '../utils/i18n';
 
 
 // duration in ms
@@ -17,26 +17,24 @@ export default function relative_date(date) {
     
     let text = '';
     switch (true) {
-        case Math.round(diff / SECOND) < 60:
-            text = _`${Math.round(diff / MINUTE)} second ago`;
+        case Math.round(diff / SECOND) < 1:
+            text = _('just now');
             break;
-        case Math.round(diff / MINUTE) < 2:
-            text = _('a minute ago');
+        case Math.round(diff / SECOND) < 60:
+            let nb_seconds = Math.round(diff / MINUTE);
+            text = _3l(nb_seconds)`${nb_seconds} second(s) ago`;
             break;
         case Math.round(diff / MINUTE) < 60:
-            text = _`${Math.round(diff / MINUTE)} minutes ago`;
-            break;
-        case Math.round(diff / HOUR) < 2:
-            text = _('a hour ago');
+            let nb_minutes = Math.round(diff / MINUTE);
+            text = _3l(nb_minutes)`${nb_minutes} minute(s) ago`;
             break;
         case Math.round(diff / HOUR) < 24:
-            text = _`${Math.round(diff / HOUR)} hours ago`;
-            break;
-        case Math.round(diff / DAY) < 1:
-            text = _('a day ago');
+            let nb_hours = Math.round(diff / HOUR);
+            text = _3l(nb_hours)`${nb_hours} hour(s) ago`;
             break;
         case Math.round(diff / DAY) < 30:
-            text = _`${Math.round(diff / DAY)} days ago`;
+            let nb_days = Math.round(diff / DAY);
+            text = _3l(nb_days)`${nb_days} day(s) ago`;
             break;
         default:
             text = date.toLocaleString();

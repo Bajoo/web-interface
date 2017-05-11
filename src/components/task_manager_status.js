@@ -1,7 +1,7 @@
 
 import m from 'mithril';
 import {TaskStatus} from '../models/base_task';
-import _ from '../utils/i18n';
+import {_l} from '../utils/i18n';
 
 
 /**
@@ -32,7 +32,7 @@ export default class TaskManagerStatus {
                 onclick: () => console.log('task status click!'),
                 class: has_error ? 'task-error' : (tasks_done === total_tasks) ? 'task-done' : 'task-progress'}, [
                 has_error ? [m('span.glyphicon.glyphicon-alert'), ' '] : '',
-                tasks_done === total_tasks ? _`${total_tasks} task(s) done` : _`Task(s): ${tasks_done} / ${total_tasks}`,
+                tasks_done === total_tasks ? _l`${total_tasks} task(s) done` : _l`Task(s): ${tasks_done} / ${total_tasks}`,
                 (!has_error) && tasks_done === total_tasks ? [' ', m('span.glyphicon.glyphicon-ok')] : ''
             ]);
     }

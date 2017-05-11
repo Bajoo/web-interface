@@ -9,13 +9,11 @@ export default {
     'The user refused to enter the passphrase': "L'utilisateur a refusé d'entrer sa phrase de passe",
 
     // view_helpers/relative_date.js
-    '{0} second ago': 'il y a {0} secondes',
-    'a minute ago': 'il y a une minute',
-    '{0} minutes ago': 'il y a {0} minutes',
-    'a hour ago': 'il y a une heure',
-    '{0} hours ago': 'il y a {0} heures',
-    'a day ago': 'il y a un jour',
-    '{0} days ago': 'il y a {0} jours',
+    'just now': "à l'instant",
+    '{0} second(s) ago': ['il y a {0} seconde(s)', 'il y a une seconde', 'il y a {0} secondes'],
+    '{0} minute(s) ago': ['il y a {0} minute(s)', 'il y a une minute', 'il y a {0} minutes'],
+    '{0} hour(s) ago': ['il y a {0} heures', 'il y a une heure', 'il y a {0} heures'],
+    '{0} day(s) ago': ['il y a {0} jours', 'il y a un jour', 'il y a {0} jours'],
 
     // pages/activation.js
     'This account is not activated': "Ce compte n'est pas activé",

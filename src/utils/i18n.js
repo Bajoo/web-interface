@@ -1,10 +1,11 @@
 
+import en from '../translations/en';
 import fr from '../translations/fr';
 
 
 // List of all languages translated
 let translations = {
-    en: { _lang: 'English' },
+    en,
     fr
 };
 
@@ -14,7 +15,7 @@ let translations = {
  *
  * @type {?String}
  */
-let lang = null;
+let lang = 'en';
 
 
 export function set_lang(new_lang) {
@@ -49,34 +50,53 @@ set_lang(window.navigator.userLanguage || window.navigator.language);
 
 
 
-export default function _(strings, ...values) {
-    if (!Array.isArray(strings)) { // Simple quote
-        if (lang === null || lang === 'en')
-            return strings;
-
-        if (lang in translations && strings in translations[lang])
-            return translations[lang][strings];
-        else {
-            console.warn(`Missing "${lang}" translation: "${strings}"`);
-            return strings;
-        }
+function i18n_simple_quote(tristate_index, string) {
+    if (lang in translations && string in translations[lang]) {
+        let tr = translations[lang][string];
+        if (Array.isArray(tr))
+            tr = tr[tristate_index];
+        return tr;
+    } else {
+        if (lang !== 'en')
+            console.warn(`Missing "${lang}" translation: "${string}"`);
+        return string;
     }
-
-    // ES6 literal quote
-    if (lang === null || lang === 'en')
-        return String.raw(strings, ...values);
+}
 
 
+function i18n_template_literal(tristate_index, strings, ...values) {
     let i18n_key = strings.reduce((x, y, index) => {
         return `${x}{${index - 1}}${y}`;
     });
 
     if (!(lang in translations && i18n_key in translations[lang])) {
-        console.warn(`Missing "${lang}" translation: "${i18n_key}"`);
+        if (lang !== 'en')
+            console.warn(`Missing "${lang}" translation: "${i18n_key}"`);
         return String.raw(strings, ...values);
     }
 
     let i18n_template = translations[lang][i18n_key];
+    if (Array.isArray(i18n_template))
+        i18n_template = i18n_template[tristate_index];
 
     return i18n_template.replace(/{(\d)}/g, (_, index) => values[index]);
+}
+
+export function _(string) {
+    return i18n_simple_quote(0, string);
+}
+
+
+export function _3(count, string) {
+    return i18n_simple_quote(count < 2 ? 1 : 2, string);
+}
+
+
+export function _l(strings, ...values) {
+    return i18n_template_literal(0, strings, ...values);
+}
+
+
+export function _3l(count) {
+    return (...args) => i18n_template_literal(count < 2 ? 1 : 2, ...args);
 }

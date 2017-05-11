@@ -3,7 +3,7 @@ import m from 'mithril';
 import Session from '../models/session';
 import User from '../models/user';
 import InputForm from '../components/input_form';
-import {get_lang, set_lang, list_lang, default as _} from '../utils/i18n';
+import {get_lang, set_lang, list_lang, _} from '../utils/i18n';
 import prop from '../utils/prop';
 import ActivationPage from './activation';
 
