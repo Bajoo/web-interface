@@ -2,7 +2,6 @@
 import app from '../app';
 import {TaskStatus, default as BaseTask} from './base_task';
 import {decrypt} from '../encryption';
-import {_} from '../utils/i18n';
 
 
 /**
@@ -12,13 +11,23 @@ import {_} from '../utils/i18n';
  */
 export default class Download extends BaseTask {
 
-    static get_name() {
-        return _('Download');
-    }
-
     constructor(file) {
         super();
         this.file = file;
+    }
+
+    /**
+     * @returns {string} name of the task. compatible 3state i18n.
+     */
+    get_name() {
+        return 'Download';
+    }
+
+    /**
+     * @return {String} name of the target.
+     */
+    get_target() {
+        return this.file.name;
     }
 
     // app.user

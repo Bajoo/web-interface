@@ -3,7 +3,6 @@ import m from 'mithril';
 import app from '../app';
 import {TaskStatus, default as BaseTask} from './base_task';
 import {encrypt} from '../encryption';
-import {_} from '../utils/i18n';
 
 
 function blob2array_buffer(blob) {
@@ -18,14 +17,24 @@ function blob2array_buffer(blob) {
 
 export default class Upload extends BaseTask {
 
-    static get_name() {
-        return _('Upload');
-    }
-
     constructor(folder, file) {
         super();
         this.dest_folder = folder;
         this.file = file;
+    }
+
+    /**
+     * @returns {string} name of the task. compatible 3state i18n.
+     */
+    get_name() {
+        return 'Upload';
+    }
+
+    /**
+     * @return {String} name of the target.
+     */
+    get_target() {
+        return this.file.name;
     }
 
     // app.user

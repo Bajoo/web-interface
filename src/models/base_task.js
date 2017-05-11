@@ -20,6 +20,10 @@ export default class BaseTask {
         if (this.onstatuschange)
             this.onstatuschange(this.status);
     }
+
+    ended() {
+        return [TaskStatus.ERROR, TaskStatus.DONE, TaskStatus.ABORTED].includes(this.status);
+    }
 }
 
 

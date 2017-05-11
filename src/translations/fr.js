@@ -112,9 +112,13 @@ export default {
     'All shares': 'Tous les partages',
     'Loading error': 'Erreur de chargement',
 
+    // components/task_list_modal.js
+    'Task list': 'Liste des tâches',
+    'There is no task': "Il n'y a aucune tâche",
+
     // components/task_manager_status.js
-    '{0} task(s) done' : '{0} tâche(s) terminée(s)',
-    'Task(s): {0} / {1}': 'Tâche(s): {0} / {1}',
+    '{0} task(s) done' : ['{0} tâche(s) terminée(s)', '{0} tâche terminée', '{0} tâches terminées'],
+    'Task(s): {0} / {1}': ['Tâche(s): {0} / {1}', 'Tâche: {0} / {1}', 'Tâches: {0} / {1}'],
 
     // pages/activation.js, pages/login.js
     'Unknown error': 'Erreur inconnue',
