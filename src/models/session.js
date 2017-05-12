@@ -1,13 +1,7 @@
 
 import m from 'mithril';
+import {api_url, storage_url, client_id, client_password} from '../../config.js';
 
-
-//const base_url = 'https://api.dev.bajoo.fr';
-export const base_url = 'https://api.dev.bajoo.fr';
-const base_storage_url = 'https://storage.dev.bajoo.fr/v1';
-
-const client_id = 'e2676e5d1fff42f7b32308e5eca3c36a';
-const client_password = '<client-secret>';
 
 
 /**
@@ -39,7 +33,7 @@ export default class Session {
     static _token_request(data) {
         return m.request({
             method: 'POST',
-            url: `${base_url}/token`,
+            url: `${api_url}/token`,
 
             //user: client_id,
             //password: client_secret,
@@ -106,14 +100,14 @@ export default class Session {
      Do an authenticated request to the API
      */
     request(config) {
-        return this._auth_request(base_url, config);
+        return this._auth_request(api_url, config);
     }
 
     /**
      Do an authenticated request to the storage servers
      */
     storage_request(config) {
-        return this._auth_request(base_storage_url, config);
+        return this._auth_request(storage_url, config);
     }
 
     /**
@@ -158,7 +152,7 @@ export default class Session {
     revoke() {
         m.request({
             method: 'POST',
-            url: `${base_url}/token/revoke`,
+            url: `${api_url}/token/revoke`,
             data: {token: this.refresh_token},
             background: true,
             headers: {

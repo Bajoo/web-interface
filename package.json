@@ -2,6 +2,9 @@
   "name": "bajoo-web-interface",
   "version": "1.0.0",
   "description": "Web interface for the Bajoo cloud service.",
+  "homepage": "https://web.bajoo.fr",
+  "repository": "Bajoo/web-interface",
+  "private": true,
   "main": "index.js",
   "scripts": {
     "start": "node_modules/.bin/webpack --watch",
