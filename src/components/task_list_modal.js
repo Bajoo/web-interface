@@ -8,18 +8,18 @@ import {TaskStatus} from '../models/base_task';
 
 
 const status2msg = {
-    [TaskStatus.GET_USER_KEY]: _('Fetch user key ...'),
-    [TaskStatus.WAIT_FOR_PASSPHRASE]: _('Wait for passphrase ...'),
-    [TaskStatus.PREPARE_FILE]: _('Read file content ...'),
-    [TaskStatus.ENCRYPT_FILE]: _('Encrypt file ...'),
-    [TaskStatus.DECRYPT_FILE]: _('Decrypt file ...'),
-    [TaskStatus.GET_STORAGE_KEY]: _('Fetch storage key ...'),
-    [TaskStatus.DOWNLOAD_FILE]: _('Download file from server ...'),
-    [TaskStatus.UPLOAD_FILE]: _('Upload file to server...'),
-    [TaskStatus.FINALIZE]: _('Finalize file ...'),
-    [TaskStatus.DONE]: _('Done!'),
-    [TaskStatus.ERROR]: _('Error!'),
-    [TaskStatus.ABORTED]: _('Cancelled!')
+    [TaskStatus.GET_USER_KEY]: 'Fetch user key ...',
+    [TaskStatus.WAIT_FOR_PASSPHRASE]: 'Wait for passphrase ...',
+    [TaskStatus.PREPARE_FILE]: 'Read file content ...',
+    [TaskStatus.ENCRYPT_FILE]: 'Encrypt file ...',
+    [TaskStatus.DECRYPT_FILE]: 'Decrypt file ...',
+    [TaskStatus.GET_STORAGE_KEY]: 'Fetch storage key ...',
+    [TaskStatus.DOWNLOAD_FILE]: 'Download file from server ...',
+    [TaskStatus.UPLOAD_FILE]: 'Upload file to server...',
+    [TaskStatus.FINALIZE]: 'Finalize file ...',
+    [TaskStatus.DONE]: 'Done!',
+    [TaskStatus.ERROR]: 'Error!',
+    [TaskStatus.ABORTED]: 'Cancelled!'
 };
 
 
@@ -67,7 +67,7 @@ export default class TaskListModal {
                             ' - ',
                             task.get_target(),
                             ' - ',
-                            status2msg[task.status],
+                            _(status2msg[task.status]),
 
                             task.ended() ?
                                 m('button.close', {onclick: () => task_manager.clean_task(task)}, m.trust('&times;'))
