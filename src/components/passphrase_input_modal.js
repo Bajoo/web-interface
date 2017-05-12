@@ -35,7 +35,7 @@ export default class PassphraseInputModal {
                             '',
                         m('fieldset', { disabled: model.wait_for_feedback}, [
                             m(InputForm, {id: 'passphrase', label: _('Passphrase'), icon: 'lock', type: 'password',
-                                value: model.passphrase})
+                                value: model.passphrase, autofocus: true})
                         ])
                     ])
                 ]),

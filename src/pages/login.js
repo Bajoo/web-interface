@@ -30,7 +30,7 @@ export default {
                 m('form', { onsubmit: ()=> this.submit()}, [
                     this.error_message ? m('.alert .alert-danger', this.error_message) : '',
                     m('fieldset', { disabled: this.is_loading}, [
-                        m(InputForm, {id: 'username', label: 'Username', icon: 'user', type: 'email', value: this.username}),
+                        m(InputForm, {id: 'username', label: 'Username', icon: 'user', type: 'email', value: this.username, autofocus: true}),
                         m(InputForm, {id: 'password', label: 'Password', icon: 'lock', type: 'password', value: this.password}),
                         m('.checkbox', m('label', [
                             m('input[type=checkbox]', {

@@ -3,6 +3,16 @@ import m from 'mithril';
 
 
 export default class InputForm {
+
+    oncreate(vnode) {
+        /** @type {boolean} enable autofocus */
+        let {attrs: {autofocus}} = vnode;
+
+        if (autofocus) {
+            setTimeout(() => vnode.dom.getElementsByTagName('input')[0].focus(), 0);
+        }
+    }
+
     /**
      * @param id {string}
      * @param label {string}
