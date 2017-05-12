@@ -78,6 +78,16 @@
 }
 
 
+/* padding is handled by .task-progressbar */
+.task-item-list {
+    padding: 0;
+}
+
+.task-progressbar {
+    padding: 10px 15px;
+}
+
+
 /* task-* are used both for navbar status and for the modal */
 .task-progress {
     color: #fff;
@@ -87,6 +97,10 @@
 .task-progress:hover {
     background: #31b0d5;
     border: #269abc;
+}
+
+.task-progress .task-progressbar {
+    color: #333
 }
 
 .task-done {

@@ -118,15 +118,21 @@ export default class Session {
 
     /**
      * Download a file
-     * @param url
+     * @param {String} url
+     * @param {Function} progress
      * @return {Promise<Uint8Array>}
      * @throws {Error} error containing both 'response' and 'xhr' attributes.
      *   The `response` attribute is parsed (ie: JSON or String).
      */
-    get_file(url) {
+    get_file(url, progress) {
         return this.storage_request({
             url,
-            config: xhr => {xhr.responseType = 'arraybuffer';},
+            config: xhr => {
+                xhr.responseType = 'arraybuffer';
+                if (progress) {
+                    xhr.addEventListener('progress', progress);
+                }
+            },
             extract: xhr => {
                 if (xhr.status > 400) {  // try to parse result in case of error.
                     let response = xhr.response;

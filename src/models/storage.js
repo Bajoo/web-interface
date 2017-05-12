@@ -106,8 +106,8 @@ export default class Storage {
             }));
     }
 
-    get_file(path) {
-        return this.session.get_file(`/storages/${this.id}/${path}`);
+    get_file(path, progress=null) {
+        return this.session.get_file(`/storages/${this.id}/${path}`, progress);
     }
 
     _fetch_key(user_key) {

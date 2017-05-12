@@ -42,6 +42,7 @@ export default class Upload extends BaseTask {
         try {
             return await this._start(passphrase_input);
         } catch (err) {
+            this.progress = null;
             this.error = err;
             this.set_status(TaskStatus.ERROR);
             console.error(`Upload failed`, err);
@@ -89,8 +90,18 @@ export default class Upload extends BaseTask {
             url: `/storages/${this.dest_folder.storage.id}/${this.dest_folder.fullname ? `${this.dest_folder.fullname}/` : ''}${file.name}`,
             method: 'PUT',
             data: file_content,
-            serialize: x => x
+            serialize: x => x,
+            config: xhr => {
+                xhr.upload.addEventListener('progress', evt => {
+                    if (evt.lengthComputable) {
+                        this.progress = evt.loaded / evt.total;
+                        m.redraw();
+                    }
+                });
+            }
         });
+        this.progress = 1;
+        m.redraw();
         this.set_status(TaskStatus.DONE);
 
         //Reload folder list. Its result (or error) is not handled here.

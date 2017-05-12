@@ -19,7 +19,7 @@ const status2msg = {
     [TaskStatus.FINALIZE]: _('Finalize file ...'),
     [TaskStatus.DONE]: _('Done!'),
     [TaskStatus.ERROR]: _('Error!'),
-    [TaskStatus.ABORTED]: _('Aborted!')
+    [TaskStatus.ABORTED]: _('Cancelled!')
 };
 
 
@@ -31,9 +31,9 @@ export default class TaskListModal {
     _task2icon(task) {
         switch (true) {
             case task instanceof Download:
-                return 'glyphicon-download-alt';
+                return 'glyphicon-cloud-download';
             case task instanceof Upload:
-                return 'glyphicon-upload';
+                return 'glyphicon-cloud-upload';
             default:
                 return 'glyphicon-play-circle';
         }
@@ -56,19 +56,24 @@ export default class TaskListModal {
         return Modal.make(show_prop,
             _('Task list'), 'task-list-modal', [
                 task_manager.tasks.length ? m('ul.list-group', task_manager.tasks.map(task =>
-                    m('li.list-group-item', {class: this._task2class(task)}, [
-                        m('span.glyphicon', {class: this._task2icon(task)}),
-                        ' ',
-                        _(task.get_name()),
-                        ' - ',
-                        task.get_target(),
-                        ' - ',
-                        status2msg[task.status],
+                    m('li.list-group-item.task-item-list', {class: this._task2class(task)}, m('.task-progressbar',
+                        {style: task.progress !== null ?
+                            `background: linear-gradient(to right, transparent ${task.progress * 100}%, #ffffff7f ${task.progress * 100}%)` :
+                            ''
+                        }, [
+                            m('span.glyphicon', {class: this._task2icon(task)}),
+                            ' ',
+                            _(task.get_name()),
+                            ' - ',
+                            task.get_target(),
+                            ' - ',
+                            status2msg[task.status],
 
-                        task.ended() ?
-                            m('button.close', {onclick: () => task_manager.clean_task(task)}, m.trust('&times;'))
-                            : ''
-                    ])
+                            task.ended() ?
+                                m('button.close', {onclick: () => task_manager.clean_task(task)}, m.trust('&times;'))
+                                : ''
+                        ])
+                    )
                 )) : _('There is no task')
             ]
         );

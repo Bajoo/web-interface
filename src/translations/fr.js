@@ -71,17 +71,6 @@ export default {
     'Download': 'Téléchargement',
 
     // models/task_manager.js
-    'Fetch user key ...': 'Récupération de la clé utilisateur ...',
-    'Wait for passphrase ...': 'En attente de la phrase secrète ...',
-    'Read file content ...': 'Lecture du fichier ...',
-    'Encrypt file ...': 'Chiffrement du fichier ...',
-
-    'Decrypt file ...': 'Déchiffrement du fichier ...',
-    'Fetch storage key ...': 'Récupération de la clé du partage',
-    'Download file from server ...': 'Téléchargement du fichier à partir du serveur ...',
-    'Upload file to server...': 'Upload du fichier ...',
-    'Finalize file ...': 'Préparation du fichier ...',
-    'Done!': 'Fait !',
     'Some of your operations (upload or download) are not done yet.\nLeaving this page will interrupt them. Are you sure to leave ?': 'Certaines opérations (téléchargement ou upload) sont toujours en cours.\nQuitter va les interrompre. Êtes-vous sûr de quitter la page ?',
     'Download: file not found': 'Téléchargement: fichier non trouvé',
     '{0} failed: {1}': '{0} échoué: {1}',
@@ -113,8 +102,21 @@ export default {
     'Loading error': 'Erreur de chargement',
 
     // components/task_list_modal.js
+    'Fetch user key ...': 'Récupération de la clé utilisateur ...',
+    'Wait for passphrase ...': 'En attente de la phrase secrète ...',
+    'Read file content ...': 'Lecture du fichier ...',
+    'Encrypt file ...': 'Chiffrement du fichier ...',
+    'Decrypt file ...': 'Déchiffrement du fichier ...',
+    'Fetch storage key ...': 'Récupération de la clé du partage',
+    'Download file from server ...': 'Téléchargement du fichier à partir du serveur ...',
+    'Upload file to server...': 'Upload du fichier ...',
+    'Finalize file ...': 'Préparation du fichier ...',
+    'Done!': 'Fait !',
+    'Cancelled!': 'Annulé!',
+    'Error!': 'Erreur !',
     'Task list': 'Liste des tâches',
     'There is no task': "Il n'y a aucune tâche",
+
 
     // components/task_manager_status.js
     '{0} task(s) done' : ['{0} tâche(s) terminée(s)', '{0} tâche terminée', '{0} tâches terminées'],

@@ -13,6 +13,9 @@ export default class BaseTask {
 
         /** @type {?Error} */
         this.error = null;
+
+        /** @type {?number} between 0 and 1. */
+        this.progress = null;
     }
 
     set_status(status) {

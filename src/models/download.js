@@ -1,4 +1,5 @@
 
+import m from 'mithril';
 import app from '../app';
 import {TaskStatus, default as BaseTask} from './base_task';
 import {decrypt} from '../encryption';
@@ -35,6 +36,7 @@ export default class Download extends BaseTask {
         try {
             return await this._start(passphrase_input);
         } catch (err) {
+            this.progress = null;
             this.error = err;
             this.set_status(TaskStatus.ERROR);
             console.error(`Download of "${this.file.fullname}" failed`, err);
@@ -66,7 +68,14 @@ export default class Download extends BaseTask {
         }
 
         this.set_status(TaskStatus.DOWNLOAD_FILE);
-        let raw_file = await this.file.storage.get_file(this.file.fullname);
+        let raw_file = await this.file.storage.get_file(this.file.fullname, evt => {
+            if (evt.lengthComputable) {
+                this.progress = evt.loaded / evt.total;
+                m.redraw();
+            }
+        });
+        this.progress = 1;
+        m.redraw();
         if (this.file.storage.is_encrypted) {
             this.set_status(TaskStatus.DECRYPT_FILE);
             raw_file = await decrypt(raw_file, storage_key);
