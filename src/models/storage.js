@@ -120,4 +120,19 @@ export default class Storage {
         return this.key !== null ? Promise.resolve(this.key) :
             this._fetch_key(user_key).then(key => (this.key = key));
     }
+
+    /**
+     * Save name and description attributes
+     * @return {Promise}
+     */
+    save() {
+        return this.session.request({
+            method: 'PATCH',
+            url: `/storages/${this.id}`,
+            data: {
+                name: this.name,
+                description: this.description
+            }
+        });
+    }
 }

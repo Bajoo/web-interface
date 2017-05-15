@@ -20,7 +20,7 @@ function create_storage_view() {
 }
 
 
-function storage_view(storage) {
+function storage_view(storage, is_my_bajoo=false) {
     return m('.media.storage-item', [
         m('i.media-left.media-middle', m('span.glyphicon.glyphicon-folder-open')),
         m('.media-body', [
@@ -36,7 +36,11 @@ function storage_view(storage) {
                 )
             ]),
             storage.description
-        ])
+        ]),
+        is_my_bajoo ? '' : m('.media-right.media-middle.storage-edit', m('a.btn.btn-default', {
+            href:  `/storage/edit/${storage.id}`,
+            oncreate: m.route.link
+        }, m('span.glyphicon.glyphicon-pencil')))
     ]);
 }
 
@@ -86,7 +90,7 @@ export default {
             StatusAlert.make(this.status),
             TaskView.make(app.task_manager),
             app.user.storages ? [
-                app.user.storages.my_bajoo ? storage_view(app.user.storages.my_bajoo) : '',
+                app.user.storages.my_bajoo ? storage_view(app.user.storages.my_bajoo, true) : '',
                 m('h2', _('My shares')),
                 create_storage_view(),
                 m('hr'),

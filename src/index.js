@@ -10,6 +10,7 @@ import register from './pages/register';
 import index from './pages/index';
 import storage from './pages/storage';
 import new_storage from './pages/new_storage';
+import EditPage from './pages/edit_storage';
 import app from './app';
 
 
@@ -33,6 +34,7 @@ m.route(document.body, '/', {
     '/register': login_resolver(register),
     // "key" is a special parameter name, forcing rebuild of the component.
     '/storage/new': logged_resolver(new_storage),
+    '/storage/edit/:key': logged_resolver(EditPage),
     '/storage/:key': logged_resolver(storage),
     '/storage/:key/:path...': logged_resolver(storage)
 });

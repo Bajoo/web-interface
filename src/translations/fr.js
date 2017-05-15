@@ -24,6 +24,11 @@ export default {
     "I've activated my account": "J'ai activé mon compte",
     'Send again the activation email': "Renvoyer le mail d'activation",
 
+    // pages/edit_storage.js
+    'Edit {0}': 'Édition de ',
+    'Edit share': 'Édition de partage',
+    'The share has been updated.': 'Le partage a été mis à jour.',
+
     // pages/gen_key.js
     'Creation of your encryption key': 'Création de votre clé de chiffrement',
     "Before starting, we must create your encryption key. In order to do that, you need to define a passphrase.": 'Avant de commencer, nous devons créer votre clé de chiffrement. Pour cela, vous devez choisir une phrase secrète.',
@@ -37,7 +42,6 @@ export default {
     'Key generation failed: {0}': 'La génération de clé a échoué: {0}',
 
     // pages/index.js
-    'New Share': 'Nouveau partage',
     'Create a new share': 'Créer un nouveau partage',
     'encrypted': 'chiffré',
     'not encrypted': 'non chiffré',
@@ -52,7 +56,7 @@ export default {
     'Forgotten password ?': 'Mot de passe oublié ?',
     'Invalid username and/or password': 'login et/ou mot de passe invalide.',
 
-    // pages/new_storage.js
+    // pages/new_storage.js, pages/edit_storage.js
     'Eg: \"Pictures Holidays 2017\"': 'Ex: Photo vacances 2017',
     'Description': 'Description',
     'Encrypt this share ?': 'Chiffrer ce partage ?',
@@ -125,18 +129,20 @@ export default {
     // pages/activation.js, pages/login.js
     'Unknown error': 'Erreur inconnue',
 
-    // pages/storage.js
+    // pages/storage.js, pages/edit_storage.js
     "You don't have the permission to see this share.": "Vous n'avez pas les permissions pour accèder à ce partage.",
     'This share does not exist.': "Ce partage n'existe pas",
 
+    // pages/index.js, pages/new_storage.js
+    'New Share': 'Nouveau partage',
 
-    // pages/login.hjs, pages/new_storage.js, pages/register.js
+    // pages/login.hjs, pages/new_storage.js, pages/register.js, pages/edit_storage.js
     'Submit': 'Envoyer',
 
     // pages/index.js, pages/storage.js, components/file_list.js
     'Loading ...': 'Chargement ...',
 
-    // pages/new_storage.js components/file_list.js
+    // pages/new_storage.js components/file_list.js, pages/edit_storage.js
     'Name': 'Nom',
 
     // pages/gen_key.js, components/passphrase_input_modal.js

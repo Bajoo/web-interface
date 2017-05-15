@@ -20,8 +20,8 @@ export default {
     },
 
     view() {
-        return m('.wall', [
-            m('h1.h3', 'New share'),
+        return m('', [
+            m('h1.h3', _('New share')),
             TaskView.make(app.task_manager),
             m('hr'),
             m('form', {onsubmit: () => this.submit()}, [

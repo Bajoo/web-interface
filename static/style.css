@@ -47,6 +47,11 @@
     vertical-align: middle;
 }
 
+.storage-item:not(:hover) .storage-edit
+{
+    display: none;
+}
+
 
 #file-zone {
     min-height: 50vh;
