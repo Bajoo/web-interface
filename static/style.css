@@ -47,6 +47,11 @@
     vertical-align: middle;
 }
 
+
+#file-zone {
+    min-height: 50vh;
+}
+
 .folder-row i {
     color: #f49d29;
 }

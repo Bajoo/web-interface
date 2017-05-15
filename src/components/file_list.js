@@ -49,37 +49,35 @@ export default class FileList {
      * @param task_manager {TaskManager}
      */
     view({attrs: {task_manager}}) {
-        return m('', [
-            m('table.table.table-hover', [
-                m('thead', m('tr', [
-                    m('th'),
-                    m('th', {onclick: () => this._sort_order(name_cmp)}, [
-                        _('Name'),
-                        this._sort_order_arrow(name_cmp)
-                    ]),
-                    m('th', {onclick: () => this._sort_order(size_cmp)}, [
-                        _('Size'),
-                        this._sort_order_arrow(size_cmp)
-                    ]),
-                    m('th', {onclick: () => this._sort_order(date_cmp)}, [
-                        _('Last modification'),
-                        this._sort_order_arrow(date_cmp)
-                    ])
-                ])),
-                Dropzone.make('tbody', file => task_manager.start(this.folder.upload(file)),
-                    this._sort(this.folder.items || []).map(
+        return m('', this.folder.items === undefined ?
+            m('#file-zone', _('Loading ...')) :
+            Dropzone.make('#file-zone', file => task_manager.start(this.folder.upload(file)), [
+                m('table.table.table-hover', [
+                    m('thead', m('tr', [
+                        m('th'),
+                        m('th', {onclick: () => this._sort_order(name_cmp)}, [
+                            _('Name'),
+                            this._sort_order_arrow(name_cmp)
+                        ]),
+                        m('th', {onclick: () => this._sort_order(size_cmp)}, [
+                            _('Size'),
+                            this._sort_order_arrow(size_cmp)
+                        ]),
+                        m('th', {onclick: () => this._sort_order(date_cmp)}, [
+                            _('Last modification'),
+                            this._sort_order_arrow(date_cmp)
+                        ])
+                    ])),
+                    m('tbody', this._sort(this.folder.items || []).map(
                         file => file instanceof Folder ?
                             FolderRow.make(file, task_manager) :
                             FileRow.make(file, task_manager))
-                )
-            ]),
-            this.folder.items === undefined ? m('', _('Loading ...')) : (
-                this.folder.items && this.folder.items.length === 0 ? Dropzone.make(
-                    '.jumbotron.empty-box',
-                    file => task_manager.start(this.folder.upload(file)),
-                    m('p', _('This folder is empty'))) : ''
-            )
-        ]);
+                    )
+                ]),
+                (this.folder.items && this.folder.items.length === 0) ?
+                    m('.jumbotron.empty-box', m('p', _('This folder is empty'))) :
+                    ''
+            ]));
     }
 
     _sort(items) {
