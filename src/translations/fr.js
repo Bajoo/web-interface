@@ -25,7 +25,7 @@ export default {
     'Send again the activation email': "Renvoyer le mail d'activation",
 
     // pages/edit_storage.js
-    'Edit {0}': 'Édition de ',
+    'Edit {0}': 'Édition de {0}',
     'Edit share': 'Édition de partage',
     'The share has been updated.': 'Le partage a été mis à jour.',
 
@@ -60,10 +60,10 @@ export default {
     'Eg: \"Pictures Holidays 2017\"': 'Ex: Photo vacances 2017',
     'Description': 'Description',
     'Encrypt this share ?': 'Chiffrer ce partage ?',
+    'Member list': 'Liste des membres',
 
     // pages/register.js
     'Account creation': 'Création de compte',
-    'Email': 'Email',
     'Password': 'Mot de passe',
     'Password confirmation': 'Confirmation de mot de passe',
     'Language': 'Language',
@@ -105,6 +105,13 @@ export default {
     'All shares': 'Tous les partages',
     'Loading error': 'Erreur de chargement',
 
+    // components/storage_member_list.js
+    'Permission level': 'Niveau de permission',
+    'Read': 'Lecture',
+    'Write': 'Écriture',
+    'Admin': 'Admin',
+    'Note: it must always remains at least one admin member.': 'Note: il doit toujours rester au moins un membre administrateur.',
+
     // components/task_list_modal.js
     'Fetch user key ...': 'Récupération de la clé utilisateur ...',
     'Wait for passphrase ...': 'En attente de la phrase secrète ...',
@@ -121,10 +128,13 @@ export default {
     'Task list': 'Liste des tâches',
     'There is no task': "Il n'y a aucune tâche",
 
-
     // components/task_manager_status.js
     '{0} task(s) done' : ['{0} tâche(s) terminée(s)', '{0} tâche terminée', '{0} tâches terminées'],
     'Task(s): {0} / {1}': ['Tâche(s): {0} / {1}', 'Tâche: {0} / {1}', 'Tâches: {0} / {1}'],
+
+
+    // pages/register.js, components/storage_member_list.js
+    'Email': 'Email',
 
     // pages/activation.js, pages/login.js
     'Unknown error': 'Erreur inconnue',
@@ -139,7 +149,7 @@ export default {
     // pages/login.hjs, pages/new_storage.js, pages/register.js, pages/edit_storage.js
     'Submit': 'Envoyer',
 
-    // pages/index.js, pages/storage.js, components/file_list.js
+    // pages/index.js, pages/storage.js, components/file_list.js, pages/edit_storage.js
     'Loading ...': 'Chargement ...',
 
     // pages/new_storage.js components/file_list.js, pages/edit_storage.js

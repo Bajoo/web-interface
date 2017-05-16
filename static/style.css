@@ -182,3 +182,26 @@ a.menus-icons.disabled {
     cursor: default;
     color: #ec673b44;
 }
+
+
+#member-list {
+    margin-bottom: 0;
+}
+
+#member-list th {
+    text-align: center;
+}
+
+.member-row > .email-member {
+    vertical-align: middle;
+    padding: 5px 10px;
+}
+
+.member-row-changed {
+    font-weight: bold;
+}
+
+.member-row-deleted > .email-member {
+    font-weight: bold;
+    text-decoration: line-through;
+}

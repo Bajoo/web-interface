@@ -15,7 +15,10 @@ export default class Storage {
         this.description = description;
         this.is_encrypted = is_encrypted;
 
-        this._rights = rights;
+        this.rights = rights;
+
+        /** @type {?Array} */
+        this.permissions = null;
 
         this._raw_key = null;
         this.key = null;
@@ -35,6 +38,15 @@ export default class Storage {
                 name, description, is_encrypted
             }
         }).then(data => new Storage(session, data));
+    }
+
+    get_permissions() {
+        return this.session.request({
+            url: `/storages/:id/rights`,
+            data: {
+                id: this.id
+            }
+        }).then(result => this.permissions = result);
     }
 
     /**
@@ -60,12 +72,7 @@ export default class Storage {
         } catch (err) {
             if (!('xhr' in err && err.xhr.status === 404))
                 throw err;
-            let permissions_list = await this.session.request({
-                url: `/storages/:id/rights`,
-                data: {
-                    id: this.id
-                }
-            });
+            let permissions_list = await this.get_permissions();
             let members = permissions_list.filter(x => x.scope === 'user').map(x => x.user);
             // TODO: handle partial error !!
             let public_keys = await Promise.all(members.map(member => User.get_public_key(this.session, member)));

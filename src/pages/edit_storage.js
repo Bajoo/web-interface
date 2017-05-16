@@ -2,6 +2,7 @@
 import m from 'mithril';
 import app from '../app';
 import StatusAlert from '../components/status_alert';
+import StorageMemberList from '../components/storage_member_list';
 import Storage from '../models/storage';
 import {_, _l} from '../utils/i18n';
 import Status from '../view_models/status';
@@ -18,7 +19,8 @@ export default class EditStorage {
 
         Storage.get(app.session, vnode.attrs.key)
             .then(storage => this.storage = storage)
-            .then(user_key => this.storage.initialize())
+            .then(() => this.storage.initialize())
+            .then(() => this.storage.get_permissions())
             .then(() => this.is_loading = false)
             .then(m.redraw)
             .catch(err => {
@@ -68,6 +70,12 @@ export default class EditStorage {
                             }),
                             _('Encrypt this share ?')
                         ])),
+                        m('.form-group', [
+                            m('label', _('Member list')),
+                            this.storage && this.storage.permissions ?
+                                StorageMemberList.make(this.storage.permissions, app.user, this.storage.rights.admin) :
+                                m('', _('Loading ...'))
+                        ]),
                         m('button[type="submit"].btn.btn-default', _('Submit'))
                     ]),
                 ])

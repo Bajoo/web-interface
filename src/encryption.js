@@ -81,7 +81,7 @@ export function encrypt(data, key) {
  * @param {?String} passphrase passphrase of the key. can be null for no passphrase.
  * @return {Promise.<openpgp.Key>}
  */
-export function generate_key(name, email, passphrase) {
+export function generate_key(name, email, passphrase=null) {
     return openpgp.generateKey({passphrase, userIds: [{name, email}]}).then(key => key.key);
 }
 

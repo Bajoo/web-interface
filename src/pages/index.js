@@ -20,7 +20,7 @@ function create_storage_view() {
 }
 
 
-function storage_view(storage, is_my_bajoo=false) {
+function storage_view(storage, allow_edit=false) {
     return m('.media.storage-item', [
         m('i.media-left.media-middle', m('span.glyphicon.glyphicon-folder-open')),
         m('.media-body', [
@@ -37,7 +37,7 @@ function storage_view(storage, is_my_bajoo=false) {
             ]),
             storage.description
         ]),
-        is_my_bajoo ? '' : m('.media-right.media-middle.storage-edit', m('a.btn.btn-default', {
+        !allow_edit ? '' : m('.media-right.media-middle.storage-edit', m('a.btn.btn-default', {
             href:  `/storage/edit/${storage.id}`,
             oncreate: m.route.link
         }, m('span.glyphicon.glyphicon-pencil')))
@@ -59,7 +59,7 @@ function storage_grid(storage_list) {
                 acc.push([storage]);
             return acc; // [[stor1, stor2], [stor3, stor4], ...]
         }, []).map(storage_couple => m('.row', storage_couple.map(
-            storage => m('.col-md-6', storage_view(storage))
+            storage => m('.col-md-6', storage_view(storage, storage.rights.admin))
         )))
     );
 }
