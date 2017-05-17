@@ -2,9 +2,11 @@
 import m from 'mithril';
 import app from '../app';
 import FileList from '../components/file_list';
+import SelectionActionMenu from '../components/selection_action_menu';
 import StatusAlert from '../components/status_alert';
 import TaskView from '../components/tasks_view';
 import Storage from '../models/storage';
+import FileSelection from '../view_models/file_selection';
 import Status from '../view_models/status';
 import {_} from '../utils/i18n';
 
@@ -27,6 +29,14 @@ function breadcrumb(storage, path) {
 }
 
 
+function title(storage, path, file_selection) {
+    return m('#storage-title', [
+        m('h1.page-title', storage ? breadcrumb(storage, path) : ''),
+        SelectionActionMenu.make(file_selection),
+        m('.clearfix')
+    ]);
+}
+
 export default {
 
     oninit(vnode) {
@@ -35,6 +45,8 @@ export default {
         this.is_loading = true;
 
         this.wall_msg = null;
+
+        this.file_selection = new FileSelection();
 
         // Load storage infos
         Storage.get(app.session, vnode.attrs.key)
@@ -62,14 +74,19 @@ export default {
 
     view({attrs: {path = ''}}) {
         return [
-            m('h1.page-title', {style: 'margin: 0;'}, this.storage ? breadcrumb(this.storage, path) : ''),
+            title(this.storage, path, this.file_selection),
             StatusAlert.make(this.status),
             TaskView.make(app.task_manager),
             (this.is_loading ? _('Loading ...') : ''),
             [ // Note: this Array is required to activate the mithril's special "key" behavior.
                 this.storage && !this.is_loading ?
-                    m(FileList, {storage: this.storage, key: path, task_manager: app.task_manager,
-                        status: this.status}) :
+                    m(FileList, {
+                        storage: this.storage,
+                        key: path,
+                        task_manager: app.task_manager,
+                        status: this.status,
+                        file_selection: this.file_selection
+                    }) :
                     ''
             ],
             this.wall_msg ? m('.jumbotron.empty-box', m('p.text-danger', this.wall_msg)) : ''

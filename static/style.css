@@ -138,3 +138,47 @@
     background:  lightgrey;
     border: grey;
 }
+
+
+#storage-title {
+    background: #f5f5f5;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    padding: 5px 15px;
+}
+
+#storage-title .page-title {
+    display: inline-block;
+}
+
+#storage-title .breadcrumb {
+    margin: 0;
+    padding: 0;
+}
+
+
+.action-zone {
+    text-align: center;
+}
+
+@media (min-width: 768px) {
+    .action-zone {
+        float: right;
+    }
+}
+
+a.menus-icons {
+    cursor: pointer;
+    color: #ec673b;
+    font-size: 1.6em;
+    padding: 0 4px 0 4px;
+    margin: 0;
+}
+a.menus-icons:hover {
+    color: #9e462a;
+}
+
+a.menus-icons.disabled {
+    cursor: default;
+    color: #ec673b44;
+}

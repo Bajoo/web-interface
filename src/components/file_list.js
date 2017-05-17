@@ -17,8 +17,9 @@ export default class FileList {
      * @param [key=''] {string} path of the folder, relative to the container. It should have no trailing slash.
      * @param storage {Storage} storage containing the files.
      * @param status {Status}
+     * @param file_selection {FileSelection}
      */
-    constructor({attrs: {key, storage, status}}) {
+    constructor({attrs: {key, storage, status, file_selection}}) {
         /** @type {Function} item comparator */
         this.sort_cmp = name_cmp;
 
@@ -33,10 +34,13 @@ export default class FileList {
         };
 
         this.folder.load_items().then(m.redraw, m.redraw);
+        file_selection.reload = () => this.folder.load_items().then(m.redraw, m.redraw);
+        file_selection.clear();
     }
 
-    onremove() {
+    onremove({attrs: {file_selection}}) {
         this.folder.onerror = null;
+        file_selection.reload = null;
     }
 
     _sort_order_arrow(cmp) {
@@ -47,13 +51,18 @@ export default class FileList {
 
     /**
      * @param task_manager {TaskManager}
+     * @param file_selection {FileSelection}
      */
-    view({attrs: {task_manager}}) {
+    view({attrs: {task_manager, file_selection}}) {
         return m('', this.folder.items === undefined ?
             m('#file-zone', _('Loading ...')) :
             Dropzone.make('#file-zone', file => task_manager.start(this.folder.upload(file)), [
                 m('table.table.table-hover', [
                     m('thead', m('tr', [
+                        m('th', m('input[type=checkbox]', {
+                            checked: file_selection.all_selected(this.folder.items || []),
+                            onchange: evt => evt.target.checked ? file_selection.select_all(this.folder.items) : file_selection.clear()
+                        })),
                         m('th'),
                         m('th', {onclick: () => this._sort_order(name_cmp)}, [
                             _('Name'),
@@ -70,8 +79,8 @@ export default class FileList {
                     ])),
                     m('tbody', this._sort(this.folder.items || []).map(
                         file => file instanceof Folder ?
-                            FolderRow.make(file, task_manager) :
-                            FileRow.make(file, task_manager))
+                            FolderRow.make(file, task_manager, file_selection) :
+                            FileRow.make(file, task_manager, file_selection))
                     )
                 ]),
                 (this.folder.items && this.folder.items.length === 0) ?

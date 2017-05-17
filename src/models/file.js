@@ -19,4 +19,11 @@ export default class File {
     download() {
         return new Download(this);
     }
+
+    del() {
+        return this.storage.session.storage_request({
+            method: 'DELETE',
+            url: `/storages/${this.storage.id}/${this.fullname}`
+        });
+    }
 }
