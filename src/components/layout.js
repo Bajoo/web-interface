@@ -5,6 +5,7 @@ import loader from '../utils/loader';
 import side_menu from './side_menu';
 import DisconnectButton from './disconnect_button.js';
 import LanguageMenu from './language_menu.js';
+import PassphraseInputModal from './passphrase_input_modal';
 import TaskListModal from './task_list_modal';
 import TaskManagerStatus from './task_manager_status';
 
@@ -41,7 +42,8 @@ export default class Layout {
                             LanguageMenu.make(),
                             app.is_logged ? DisconnectButton.make(() => app.reset()) : '',
                             TaskManagerStatus.make(app.task_manager),
-                            app.task_manager.show_task_list() ? TaskListModal.make(app.task_manager) : ''
+                            TaskListModal.make(app.task_manager),
+                            PassphraseInputModal.make(app.task_manager.passphrase_input)
                         ])
                     ])
                 ])

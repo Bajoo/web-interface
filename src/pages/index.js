@@ -3,7 +3,6 @@ import m from 'mithril';
 import app from '../app';
 import {_, _l} from '../utils/i18n';
 import StatusAlert from '../components/status_alert';
-import TaskView from '../components/tasks_view';
 import Status from '../view_models/status';
 
 
@@ -88,7 +87,7 @@ export default {
             m('.lead', _l`Welcome ${app.user.email}!`),
             m('hr'),
             StatusAlert.make(this.status),
-            TaskView.make(app.task_manager),
+            StatusAlert.make(app.task_manager.app_status),
             app.user.storages ? [
                 app.user.storages.my_bajoo ? storage_view(app.user.storages.my_bajoo, true) : '',
                 m('h2', _('My shares')),

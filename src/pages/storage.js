@@ -4,7 +4,6 @@ import app from '../app';
 import FileList from '../components/file_list';
 import SelectionActionMenu from '../components/selection_action_menu';
 import StatusAlert from '../components/status_alert';
-import TaskView from '../components/tasks_view';
 import Storage from '../models/storage';
 import FileSelection from '../view_models/file_selection';
 import Status from '../view_models/status';
@@ -76,7 +75,7 @@ export default {
         return [
             title(this.storage, path, this.file_selection),
             StatusAlert.make(this.status),
-            TaskView.make(app.task_manager),
+            StatusAlert.make(app.task_manager.app_status),
             (this.is_loading ? _('Loading ...') : ''),
             [ // Note: this Array is required to activate the mithril's special "key" behavior.
                 this.storage && !this.is_loading ?

@@ -7,10 +7,11 @@ import InputForm from './input_form';
 export default class PassphraseInputModal {
 
     /**
+     * Create a PassphraseInputModal (only if `passphrase_input.enabled` is true).
      * @param passphrase_input {PassphraseInput}
      */
     static make(passphrase_input) {
-        return m(PassphraseInputModal, {model: passphrase_input});
+        return passphrase_input.enabled ? m(PassphraseInputModal, {model: passphrase_input}) : '';
     }
 
     /**

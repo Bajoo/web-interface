@@ -24,6 +24,11 @@ const status2msg = {
 
 
 export default class TaskListModal {
+
+    /**
+     * Create a TaskListModal (displayed only if `task_manager.show_task_list` is `true`).
+     * @param task_manager {TaskManager}
+     */
     static make(task_manager) {
         return m(TaskListModal, {show_prop: task_manager.show_task_list, task_manager});
     }
