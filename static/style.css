@@ -47,7 +47,7 @@
     vertical-align: middle;
 }
 
-.storage-item:not(:hover) .storage-edit
+.storage-item:not(:hover) .storage-details
 {
     display: none;
 }

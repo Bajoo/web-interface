@@ -24,9 +24,9 @@ export default {
     "I've activated my account": "J'ai activé mon compte",
     'Send again the activation email': "Renvoyer le mail d'activation",
 
-    // pages/edit_storage.js
-    'Edit {0}': 'Édition de {0}',
-    'Edit share': 'Édition de partage',
+    // pages/details_storage.js
+    'Details of {0}': 'Détails de {0}',
+    'Share details': 'Détails du partage',
     'Update storage data failed: {0}': 'La mise à jour du partage a échoué: {0}',
     'Update permission failed: {0}': 'La mise à jour des permissions a échoué: {0}',
     'The share has been updated.': 'Le partage a été mis à jour.',
@@ -58,7 +58,7 @@ export default {
     'Forgotten password ?': 'Mot de passe oublié ?',
     'Invalid username and/or password': 'login et/ou mot de passe invalide.',
 
-    // pages/new_storage.js, pages/edit_storage.js
+    // pages/new_storage.js, pages/details_storage.js
     'Eg: \"Pictures Holidays 2017\"': 'Ex: Photo vacances 2017',
     'Description': 'Description',
     'Encrypt this share ?': 'Chiffrer ce partage ?',
@@ -141,20 +141,20 @@ export default {
     // pages/activation.js, pages/login.js
     'Unknown error': 'Erreur inconnue',
 
-    // pages/storage.js, pages/edit_storage.js
+    // pages/storage.js, pages/details_storage.js
     "You don't have the permission to see this share.": "Vous n'avez pas les permissions pour accèder à ce partage.",
     'This share does not exist.': "Ce partage n'existe pas",
 
     // pages/index.js, pages/new_storage.js
     'New share': 'Nouveau partage',
 
-    // pages/login.hjs, pages/new_storage.js, pages/register.js, pages/edit_storage.js
+    // pages/login.hjs, pages/new_storage.js, pages/register.js, pages/details_storage.js
     'Submit': 'Envoyer',
 
-    // pages/index.js, pages/storage.js, components/file_list.js, pages/edit_storage.js
+    // pages/index.js, pages/storage.js, components/file_list.js, pages/details_storage.js
     'Loading ...': 'Chargement ...',
 
-    // pages/new_storage.js components/file_list.js, pages/edit_storage.js
+    // pages/new_storage.js components/file_list.js, pages/details_storage.js
     'Name': 'Nom',
 
     // pages/gen_key.js, components/passphrase_input_modal.js

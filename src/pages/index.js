@@ -36,10 +36,13 @@ function storage_view(storage, allow_edit=false) {
             ]),
             storage.description
         ]),
-        !allow_edit ? '' : m('.media-right.media-middle.storage-edit', m('a.btn.btn-default', {
-            href:  `/storage/edit/${storage.id}`,
+        m('.media-right.media-middle.storage-details', m('a.btn.btn-default', {
+            href:  `/storage/details/${storage.id}`,
             oncreate: m.route.link
-        }, m('span.glyphicon.glyphicon-pencil')))
+        }, [
+            m('span.glyphicon.glyphicon-eye-open'),
+            !allow_edit ? '' : ['/', m('span.glyphicon.glyphicon-pencil')]
+        ]))
     ]);
 }
 

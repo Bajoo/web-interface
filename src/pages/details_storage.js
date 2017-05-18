@@ -51,7 +51,7 @@ export default class EditStorage {
 
     view() {
         return m('', [
-            m('h1.h3', this.storage ? _l`Edit ${this.storage.name}` : _('Edit share')),
+            m('h1.h3', this.storage ? _l`Details of ${this.storage.name}` : _('Share details')),
             m('hr'),
             this.wall_msg ? m('.jumbotron.empty-box', m('p.text-danger', this.wall_msg)) :
                 m('form', {onsubmit: () => this.submit()}, [
