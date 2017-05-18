@@ -4,7 +4,9 @@ import app from '../app';
 import StatusAlert from '../components/status_alert';
 import StorageMemberList from '../components/storage_member_list';
 import Storage from '../models/storage';
+import StorageMemberTask from '../models/storage_member_task';
 import {_, _l} from '../utils/i18n';
+import DiffMemberList from '../view_models/diff_member_list';
 import Status from '../view_models/status';
 
 
@@ -17,11 +19,17 @@ export default class EditStorage {
         // used to global error (storage not loading)
         this.wall_msg = null;
 
+        this.diff_list = null;
+
+
         Storage.get(app.session, vnode.attrs.key)
             .then(storage => this.storage = storage)
             .then(() => this.storage.initialize())
             .then(() => this.storage.get_permissions())
             .then(() => this.is_loading = false)
+            .then(() => {
+                this.diff_list = new DiffMemberList(this.storage.permissions);
+            })
             .then(m.redraw)
             .catch(err => {
                 this.is_loading = false;
@@ -72,8 +80,8 @@ export default class EditStorage {
                         ])),
                         m('.form-group', [
                             m('label', _('Member list')),
-                            this.storage && this.storage.permissions ?
-                                StorageMemberList.make(this.storage.permissions, app.user, this.storage.rights.admin) :
+                            this.diff_list ?
+                                StorageMemberList.make(this.diff_list, app.user, this.storage.rights) :
                                 m('', _('Loading ...'))
                         ]),
                         m('button[type="submit"].btn.btn-default', _('Submit'))
@@ -82,18 +90,34 @@ export default class EditStorage {
         ]);
     }
 
-    submit() {
+    async submit() {
         this.is_loading = true;
-        this.storage.save()
-            .then(() => this.is_loading = false)
-            .then(() => {
-                this.status.set('success', _('The share has been updated.'));
-                m.redraw();
-            }, err => {
-                this.is_loading = false;
-                console.error('Storage edit failed', err);
-                this.status.set_error(err.message || err.toString());
-                m.redraw();
-            });
+
+        try {
+            await this.storage.save();
+        } catch (err) {
+            console.error('Update storage data failed', err);
+            this.status.set_error(_l`Update storage data failed: ${err.message || err.toString()}`);
+            this.is_loading = false;
+            m.redraw();
+            return;
+        }
+
+        try {
+            let t = new StorageMemberTask();
+            await t.start(this.storage, this.diff_list, app.task_manager.passphrase_input);
+            await this.storage.get_permissions();
+            this.diff_list = new DiffMemberList(this.storage.permissions);
+        } catch (err) {
+            console.error('Update permission failed', err);
+            this.status.set_error(_l`Update permission failed: ${err.message || err.toString()}`);
+            this.is_loading = false;
+            m.redraw();
+            return;
+        }
+
+        this.status.set('success', _('The share has been updated.'));
+        this.is_loading = false;
+        m.redraw();
     }
 }

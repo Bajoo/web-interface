@@ -80,16 +80,20 @@ export default class Storage {
             // NOTE: the key is not saved, to force the user to use its own key before upload.
             let key = await generate_key(`Bajoo storage "${this.name}"`, `bajoo-storage-${this.id}@bajoo.fr`);
 
-            let raw_key = key2bin(key);
-            let encrypted_key = await encrypt(raw_key, public_keys);
-            await this.session.storage_request({
-                url: `/storages/${this.id}/.key`,
-                method: 'PUT',
-                data: encrypted_key,
-                serialize: x => x
-            });
-            this._raw_key = raw_key;
+            this.encrypt_key(public_keys, key);
         }
+    }
+
+    async encrypt_key(public_keys, key) {
+        let bin_key = key2bin(key);
+
+        this._raw_key = await encrypt(bin_key, public_keys);
+        await this.session.storage_request({
+            url: `/storages/${this.id}/.key`,
+            method: 'PUT',
+            data: this._raw_key,
+            serialize: x => x
+        });
     }
 
     list_files(folder = '') {
@@ -139,6 +143,30 @@ export default class Storage {
             data: {
                 name: this.name,
                 description: this.description
+            }
+        });
+    }
+
+    set_member(email, permission) {
+        return this.session.request({
+            method: 'PUT',
+            url: `/storages/${this.id}/rights/users/${email}`,
+            data: {
+                read: true,
+                write: permission === 'admin' || permission === 'write',
+                admin: permission === 'admin'
+            }
+        });
+    }
+
+    remove_member(email) {
+        return this.session.request({
+            method: 'PUT',
+            url: `/storages/${this.id}/rights/users/${email}`,
+            data: {
+                read: false,
+                write: false,
+                admin: false
             }
         });
     }

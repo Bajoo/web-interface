@@ -48,23 +48,7 @@ export default class Download extends BaseTask {
         let storage_key = null;
 
         if (this.file.storage.is_encrypted) {
-            this.set_status(TaskStatus.GET_USER_KEY);
-            let user_key = await app.user.get_key();
-            if (!(user_key.primaryKey.isDecrypted)) {
-                this.set_status(TaskStatus.WAIT_FOR_PASSPHRASE);
-                try {
-                    await passphrase_input.decrypt_key(user_key);
-                } catch (err) {
-                    if (err instanceof passphrase_input.constructor.UserCancelError) {
-                        this.set_status(TaskStatus.ABORTED);
-                        return;
-                    }
-                    throw err;
-                }
-            }
-
-            this.set_status(TaskStatus.GET_STORAGE_KEY);
-            storage_key = await this.file.storage.get_key(user_key);
+            storage_key = await this.unlock_storage(this.file.storage, app.user, passphrase_input);
         }
 
         this.set_status(TaskStatus.DOWNLOAD_FILE);

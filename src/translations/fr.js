@@ -27,6 +27,8 @@ export default {
     // pages/edit_storage.js
     'Edit {0}': 'Édition de {0}',
     'Edit share': 'Édition de partage',
+    'Update storage data failed: {0}': 'La mise à jour du partage a échoué: {0}',
+    'Update permission failed: {0}': 'La mise à jour des permissions a échoué: {0}',
     'The share has been updated.': 'Le partage a été mis à jour.',
 
     // pages/gen_key.js
@@ -144,7 +146,7 @@ export default {
     'This share does not exist.': "Ce partage n'existe pas",
 
     // pages/index.js, pages/new_storage.js
-    'New Share': 'Nouveau partage',
+    'New share': 'Nouveau partage',
 
     // pages/login.hjs, pages/new_storage.js, pages/register.js, pages/edit_storage.js
     'Submit': 'Envoyer',

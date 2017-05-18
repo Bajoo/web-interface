@@ -27,6 +27,33 @@ export default class BaseTask {
     ended() {
         return [TaskStatus.ERROR, TaskStatus.DONE, TaskStatus.ABORTED].includes(this.status);
     }
+
+    /**
+     *
+     * @param storage
+     * @param user
+     * @param passphrase_input
+     * @return {Promise.<?openpgp.Key>}
+     */
+    async unlock_storage(storage, user, passphrase_input) {
+        this.set_status(TaskStatus.GET_USER_KEY);
+        let user_key = await user.get_key();
+        if (!(user_key.primaryKey.isDecrypted)) {
+            this.set_status(TaskStatus.WAIT_FOR_PASSPHRASE);
+            try {
+                await passphrase_input.decrypt_key(user_key);
+            } catch (err) {
+                if (err instanceof passphrase_input.constructor.UserCancelError) {
+                    this.set_status(TaskStatus.ABORTED);
+                    return null;
+                }
+                throw err;
+            }
+        }
+
+        this.set_status(TaskStatus.GET_STORAGE_KEY);
+        return await storage.get_key(user_key);
+    }
 }
 
 

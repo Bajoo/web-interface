@@ -11,7 +11,7 @@ function create_storage_view() {
         m('i.media-left.media-middle', m('span.glyphicon.glyphicon-plus')),
         m('.media-body', [
             m('h4.media-heading',
-                m('a.storage-name[href=/storage/new]', {oncreate: m.route.link}, _('New Share'))
+                m('a.storage-name[href=/storage/new]', {oncreate: m.route.link}, _('New share'))
             ),
             _('Create a new share')
         ])
