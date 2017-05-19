@@ -27,6 +27,8 @@ export default {
     // pages/details_storage.js
     'Details of {0}': 'Détails de {0}',
     'Share details': 'Détails du partage',
+    'This share is encrypted' : 'Ce partage est chiffré',
+    'This share is not encrypted': "Ce partage n'est pas chiffré.",
     'Update storage data failed: {0}': 'La mise à jour du partage a échoué: {0}',
     'Update permission failed: {0}': 'La mise à jour des permissions a échoué: {0}',
     'The share has been updated.': 'Le partage a été mis à jour.',
@@ -58,10 +60,12 @@ export default {
     'Forgotten password ?': 'Mot de passe oublié ?',
     'Invalid username and/or password': 'login et/ou mot de passe invalide.',
 
+    // pages/new_storage.js
+    'Encrypt this share ?': 'Chiffrer ce partage ?',
+
     // pages/new_storage.js, pages/details_storage.js
     'Eg: \"Pictures Holidays 2017\"': 'Ex: Photo vacances 2017',
     'Description': 'Description',
-    'Encrypt this share ?': 'Chiffrer ce partage ?',
     'Member list': 'Liste des membres',
 
     // pages/register.js

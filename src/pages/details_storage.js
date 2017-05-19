@@ -50,41 +50,44 @@ export default class EditStorage {
     }
 
     view() {
+        let allow_edit = this.storage && this.storage.rights.admin;
         return m('', [
             m('h1.h3', this.storage ? _l`Details of ${this.storage.name}` : _('Share details')),
             m('hr'),
             this.wall_msg ? m('.jumbotron.empty-box', m('p.text-danger', this.wall_msg)) :
                 m('form', {onsubmit: () => this.submit()}, [
+                    m('.checkbox', m('label', [
+                        m('input[type=checkbox][readonly][disabled]', {
+                            checked: this.storage && this.storage.is_encrypted
+                        }),
+                        this.storage ? (this.storage.is_encrypted ?
+                            _('This share is encrypted') :
+                            _('This share is not encrypted')) : ''
+                    ])),
                     StatusAlert.make(this.status),
                     m('fieldset', { disabled: this.is_loading}, [
                         m('.form-group', [
                             m('label', _('Name')),
-                            m('input.form-control[required]', {
+                            allow_edit ? m('input.form-control[required]', {
                                 placeholder: _('Eg: \"Pictures Holidays 2017\"'),
                                 oninput: event => this.storage.name = event.target.value,
                                 value: this.storage ? this.storage.name : ''
-                            })
+                            }) : m('', this.storage ? this.storage.name : '')
                         ]),
                         m('.form-group', [
                             m('label', _('Description')),
-                            m('textarea.form-control',{
+                            allow_edit ? m('textarea.form-control',{
                                 oninput: event => this.storage.description = event.target.value,
                                 value: this.storage ? this.storage.description : ''
-                            })
+                            }) : m('', this.storage ? this.storage.description : '')
                         ]),
-                        m('.checkbox', m('label', [
-                            m('input[type=checkbox][readonly][disabled]', {
-                                checked: this.storage ? this.storage.is_encrypted : ''
-                            }),
-                            _('Encrypt this share ?')
-                        ])),
                         m('.form-group', [
                             m('label', _('Member list')),
                             this.diff_list ?
-                                StorageMemberList.make(this.diff_list, app.user, this.storage.rights) :
+                                StorageMemberList.make(this.diff_list, app.user, allow_edit) :
                                 m('', _('Loading ...'))
                         ]),
-                        m('button[type="submit"].btn.btn-default', _('Submit'))
+                        allow_edit ? m('button[type="submit"].btn.btn-default', _('Submit')) : ''
                     ]),
                 ])
         ]);

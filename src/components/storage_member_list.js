@@ -51,11 +51,13 @@ export default class StorageMemberList {
                                 m('option[value=write]', {selected: member.right === 'write'}, _('Write')),
                                 m('option[value=admin]', {selected: member.right === 'admin'}, _('Admin'))
                             ])),
-                            m('td', this._action_view(diff_list, member, user, (!allow_edit) || (member.status !== 'deleted' && !has_several_admins && member.right === 'admin')))
+                            m('td', allow_edit ?
+                                this._action_view(diff_list, member, user, (member.status !== 'deleted' && !has_several_admins && member.right === 'admin')) :
+                                ''
+                            )
                         ])),
-                    m('tr', [
+                    allow_edit ? m('tr', [
                         m('td', m('input.form-control.input-sm[type=email]', {
-                            disabled: !allow_edit,
                             value: this.new_member.email,
                             onchange: evt => this.new_member.email = evt.target.value,
                             onkeypress: evt => {
@@ -74,7 +76,6 @@ export default class StorageMemberList {
                             }
                         })),
                         m('td', m('select.form-control.input-sm', {
-                            disabled: !allow_edit,
                             onchange: evt => this.new_member.right = evt.target.value,
                         }, [
                             m('option[value=read]', {selected: this.new_member.right === 'read'}, _('Read')),
@@ -82,10 +83,9 @@ export default class StorageMemberList {
                             m('option[value=admin]', {selected: this.new_member.right === 'admin'}, _('Admin'))
                         ])),
                         m('td', m('button[type=button].btn.btn-default', {
-                            disabled: !allow_edit,
                             onclick: () => this._submit_new_member(diff_list, has_several_admins)
                         }, m('span.glyphicon.glyphicon-plus')))
-                    ])
+                    ]) : ''
                 ])
             ]),
             m('.small', _('Note: it must always remains at least one admin member.'))
