@@ -42,7 +42,7 @@ export default class Upload extends BaseTask {
         try {
             return await this._start(passphrase_input);
         } catch (err) {
-            this.progress = null;
+            this.set_progress(null);
             this.error = err;
             this.set_status(TaskStatus.ERROR);
             console.error(`Upload failed`, err);
@@ -67,7 +67,6 @@ export default class Upload extends BaseTask {
             this.set_status(TaskStatus.ENCRYPT_FILE);
             file_content = await encrypt(new Uint8Array(file_content), storage_key);
         }
-        this.set_status(TaskStatus.ENCRYPT_FILE);
 
         this.set_status(TaskStatus.UPLOAD_FILE);
         await this.dest_folder.storage.session.storage_request({
@@ -78,19 +77,15 @@ export default class Upload extends BaseTask {
             config: xhr => {
                 xhr.upload.addEventListener('progress', evt => {
                     if (evt.lengthComputable) {
-                        this.progress = evt.loaded / evt.total;
-                        m.redraw();
+                        this.set_progress(evt.loaded / evt.total);
                     }
                 });
             }
         });
-        this.progress = 1;
-        m.redraw();
-        this.set_status(TaskStatus.DONE);
+        this.set_status(TaskStatus.DONE, 1);
 
         //Reload folder list. Its result (or error) is not handled here.
         //Note that it should not be necessary to reload it if the folder is not displayed.
         this.dest_folder.load_items().then(m.redraw);
     }
-
 }

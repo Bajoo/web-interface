@@ -18,8 +18,16 @@ export default class BaseTask {
         this.progress = null;
     }
 
-    set_status(status) {
+    set_status(status, progress) {
         this.status = status;
+        if (progress !== undefined)
+            this.progress = progress;
+        if (this.onstatuschange)
+            this.onstatuschange(this.status);
+    }
+
+    set_progress(progres) {
+        this.progress = progres;
         if (this.onstatuschange)
             this.onstatuschange(this.status);
     }
