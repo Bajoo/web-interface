@@ -72,10 +72,9 @@ export default {
     },
 
     view({attrs: {path = ''}}) {
-        return [
+        return m('', [
             title(this.storage, path, this.file_selection),
             StatusAlert.make(this.status),
-            StatusAlert.make(app.task_manager.app_status),
             (this.is_loading ? _('Loading ...') : ''),
             [ // Note: this Array is required to activate the mithril's special "key" behavior.
                 this.storage && !this.is_loading ?
@@ -89,6 +88,6 @@ export default {
                     ''
             ],
             this.wall_msg ? m('.jumbotron.empty-box', m('p.text-danger', this.wall_msg)) : ''
-        ];
+        ]);
     }
 };

@@ -93,8 +93,9 @@
     padding: 0;
 }
 
-.task-progressbar {
+.task-item-list .task-progressbar {
     padding: 10px 15px;
+    margin: 0;
 }
 
 
@@ -133,10 +134,23 @@
     border-color: #ac2925;
 }
 
+.task-error.task-progress {
+    background-color: #ec673b;
+    border-color: #9e462a;
+}
 
-.task-aborted {
-    background:  lightgrey;
+.task-error.task-progress:hover {
+    background-color: #9e462a;
+}
+
+
+.task-canceled {
+    background: lightgrey;
     border: grey;
+}
+
+.task-canceled:hover {
+    background-color: grey;
 }
 
 

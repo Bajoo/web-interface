@@ -24,30 +24,12 @@ export default class Upload extends BaseTask {
     }
 
     /**
-     * @returns {string} name of the task. compatible 3state i18n.
+     * Return a few words describing the task.
+     * @param [ltpl=String.raw] literal template (used for i18n)
+     * @returns {string}
      */
-    get_name() {
-        return 'Upload';
-    }
-
-    /**
-     * @return {String} name of the target.
-     */
-    get_target() {
-        return this.file.name;
-    }
-
-    // app.user
-    async start(passphrase_input) {
-        try {
-            return await this._start(passphrase_input);
-        } catch (err) {
-            this.set_progress(null);
-            this.error = err;
-            this.set_status(TaskStatus.ERROR);
-            console.error(`Upload failed`, err);
-            throw err;
-        }
+    get_description(ltpl=String.raw) {
+        return ltpl`Upload of "${this.file.name}"`;
     }
 
     // app.user

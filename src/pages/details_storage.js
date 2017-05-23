@@ -107,16 +107,15 @@ export default class EditStorage {
         }
 
         try {
-            let t = new StorageMemberTask();
-            await t.start(this.storage, this.diff_list, app.task_manager.passphrase_input);
-            await this.storage.get_permissions();
-            this.diff_list = new DiffMemberList(this.storage.permissions);
+            let task = new StorageMemberTask(this.storage, this.diff_list);
+            await app.task_manager.start(task);
         } catch (err) {
-            console.error('Update permission failed', err);
-            this.status.set_error(_l`Update permission failed: ${err.message || err.toString()}`);
+            return;
+        } finally {
+            await this.storage.get_permissions();
+            this.diff_list.permissions = this.storage.permissions;
             this.is_loading = false;
             m.redraw();
-            return;
         }
 
         this.status.set('success', _('The share has been updated.'));

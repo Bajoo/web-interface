@@ -21,7 +21,6 @@ export default {
     view() {
         return m('', [
             m('h1.h3', _('New share')),
-            StatusAlert.make(app.task_manager.app_status),
             m('hr'),
             m('form', {onsubmit: () => this.submit()}, [
                 StatusAlert.make(this.status),

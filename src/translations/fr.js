@@ -30,7 +30,6 @@ export default {
     'This share is encrypted' : 'Ce partage est chiffré',
     'This share is not encrypted': "Ce partage n'est pas chiffré.",
     'Update storage data failed: {0}': 'La mise à jour du partage a échoué: {0}',
-    'Update permission failed: {0}': 'La mise à jour des permissions a échoué: {0}',
     'The share has been updated.': 'Le partage a été mis à jour.',
 
     // pages/gen_key.js
@@ -78,15 +77,24 @@ export default {
     "The password and its confirmation doesn't match": 'Le mot de passe et sa confirmation ne correspondent pas',
 
     // models/download.js
-    'Download': 'Téléchargement',
+    'Download of "{0}"': 'Téléchargement de "{0}"',
+
+    // models/storage_member_task.js
+    'Update permissions and members of "{0}"': 'Mise à jour des membres et permissions de "{0}"',
+
+    // models/task_errors.js
+
+    'Operation canceled': 'Opération annulé',
+    'The passphrase request was rejected': 'La demande de passphrase a été refusée',
+    'File not found (404)': 'Fichier introuvable (404)',
+    "User \"{0}\" doesn't exist or has no PGP key": "L'utilisateur \"{0}\" n'existe pas ou n'a pas de clé PGP",
+    'Update of "{0}" permissions for storage "{1}" failed': 'La mise à jour des permissions de "{0}" pour le partage "{1}" a échoué',
 
     // models/task_manager.js
     'Some of your operations (upload or download) are not done yet.\nLeaving this page will interrupt them. Are you sure to leave ?': 'Certaines opérations (téléchargement ou upload) sont toujours en cours.\nQuitter va les interrompre. Êtes-vous sûr de quitter la page ?',
-    'Download: file not found': 'Téléchargement: fichier non trouvé',
-    '{0} failed: {1}': '{0} échoué: {1}',
 
-    // models/upload
-    'Upload': 'Upload',
+    // models/upload.js
+    'Upload of "{0}"': 'Upload de "{0}"',
 
     // components/disconnect_button.js
     'Log out': 'Déconnexion',
@@ -127,12 +135,15 @@ export default {
     'Fetch storage key ...': 'Récupération de la clé du partage',
     'Download file from server ...': 'Téléchargement du fichier à partir du serveur ...',
     'Upload file to server...': 'Upload du fichier ...',
+    'Ongoing ...': 'En cours ...',
     'Finalize file ...': 'Préparation du fichier ...',
     'Done!': 'Fait !',
-    'Cancelled!': 'Annulé!',
-    'Error!': 'Erreur !',
     'Task list': 'Liste des tâches',
     'There is no task': "Il n'y a aucune tâche",
+    'Cancelled!': 'Annulé!',
+    'Error: {0}': 'Erreur: {0}',
+    '{0} errors:': '{0} erreurs:',
+
 
     // components/task_manager_status.js
     '{0} task(s) done' : ['{0} tâche(s) terminée(s)', '{0} tâche terminée', '{0} tâches terminées'],

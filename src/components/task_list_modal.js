@@ -1,10 +1,11 @@
 
 import m from 'mithril';
-import {_} from '../utils/i18n';
+import {_, _l} from '../utils/i18n';
 import Modal from './modal';
 import Download from '../models/download';
 import Upload from '../models/upload';
 import {TaskStatus} from '../models/base_task';
+import {TaskError} from '../models/task_errors';
 
 
 const status2msg = {
@@ -16,10 +17,9 @@ const status2msg = {
     [TaskStatus.GET_STORAGE_KEY]: 'Fetch storage key ...',
     [TaskStatus.DOWNLOAD_FILE]: 'Download file from server ...',
     [TaskStatus.UPLOAD_FILE]: 'Upload file to server...',
+    [TaskStatus.ONGOING]: 'Ongoing ...',
     [TaskStatus.FINALIZE]: 'Finalize file ...',
     [TaskStatus.DONE]: 'Done!',
-    [TaskStatus.ERROR]: 'Error!',
-    [TaskStatus.ABORTED]: 'Cancelled!'
 };
 
 
@@ -40,44 +40,70 @@ export default class TaskListModal {
             case task instanceof Upload:
                 return 'glyphicon-cloud-upload';
             default:
-                return 'glyphicon-play-circle';
+                return 'glyphicon-wrench';
         }
     }
 
     _task2class(task) {
-        switch (task.status) {
-            case TaskStatus.ERROR:
-                return 'task-error';
-            case TaskStatus.DONE:
-                return 'task-done';
-            case TaskStatus.ABORTED:
-                return 'task-aborted';
-            default:
-                return 'task-progress';
-        }
+        if (task.is_canceled())
+            return 'task-canceled';
+
+        let class_list = [];
+        if (task.has_unexpected_errors())
+            class_list.push('task-error');
+
+        if (task.is_done())
+            class_list.push('task-done');
+        else
+            class_list.push('task-progress');
+        return class_list.join(' ');
+    }
+
+    _task2status(task) {
+        if (task.is_canceled())
+            return _('Cancelled!');
+        return _(status2msg[task.status]);
+    }
+
+    _display_error(err) {
+        return err instanceof TaskError ?
+            err.toString() :
+            (err.message || err.toString());
     }
 
     view({attrs: {show_prop, task_manager}}) {
         return Modal.make(show_prop,
             _('Task list'), 'task-list-modal', [
                 task_manager.tasks.length ? m('ul.list-group', task_manager.tasks.map(task =>
-                    m('li.list-group-item.task-item-list', {class: this._task2class(task)}, m('.task-progressbar',
-                        {style: task.progress !== null ?
-                            `background: linear-gradient(to right, transparent ${task.progress * 100}%, #ffffff7f ${task.progress * 100}%)` :
-                            ''
-                        }, [
-                            m('span.glyphicon', {class: this._task2icon(task)}),
-                            ' ',
-                            _(task.get_name()),
-                            ' - ',
-                            task.get_target(),
-                            ' - ',
-                            _(status2msg[task.status]),
-
-                            task.ended() ?
-                                m('button.close', {onclick: () => task_manager.clean_task(task)}, m.trust('&times;'))
-                                : ''
-                        ])
+                    m('li.list-group-item.task-item-list', {class: this._task2class(task)},
+                        m('.task-progressbar.media',
+                            {style: task.progress !== null ?
+                                `background: linear-gradient(to right, transparent ${task.progress * 100}%, #ffffff7f ${task.progress * 100}%)` :
+                                ''
+                            }, [
+                                m('.media-left.media-middle', m('span.glyphicon', {class: this._task2icon(task)})),
+                                m('.media-body', [
+                                    task.get_description(),
+                                    ' - ',
+                                    this._task2status(task),
+                                    task.has_unexpected_errors() ? [
+                                        m('br'),
+                                        task.errors.length === 1 ?
+                                            _l`Error: ${this._display_error(task.errors[0])}` :
+                                            [
+                                                _l`${task.errors.length} errors:`,
+                                                m('ul', task.errors.map(err =>
+                                                    m('li', this._display_error(err))
+                                                ))
+                                            ]
+                                    ] : ''
+                                ]),
+                                task.is_done() ?
+                                    m('.media-right.media-middle',
+                                        m('button.close', {onclick: () => task_manager.clean_task(task)}, m.trust('&times;'))
+                                    )
+                                    : ''
+                            ])
                     )
                 )) : _('There is no task')
             ]

@@ -90,7 +90,6 @@ export default {
             m('.lead', _l`Welcome ${app.user.email}!`),
             m('hr'),
             StatusAlert.make(this.status),
-            StatusAlert.make(app.task_manager.app_status),
             app.user.storages ? [
                 app.user.storages.my_bajoo ? storage_view(app.user.storages.my_bajoo, true) : '',
                 m('h2', _('My shares')),

@@ -1,6 +1,7 @@
 
 import app from '../app';
 import {TaskStatus, default as BaseTask} from './base_task';
+import {CanceledError, NotFoundError} from './task_errors';
 import {decrypt} from '../encryption';
 
 
@@ -17,30 +18,12 @@ export default class Download extends BaseTask {
     }
 
     /**
-     * @returns {string} name of the task. compatible 3state i18n.
+     * Return a few words describing the task.
+     * @param [ltpl=String.raw] literal template (used for i18n)
+     * @returns {string}
      */
-    get_name() {
-        return 'Download';
-    }
-
-    /**
-     * @return {String} name of the target.
-     */
-    get_target() {
-        return this.file.name;
-    }
-
-    // app.user
-    async start(passphrase_input) {
-        try {
-            return await this._start(passphrase_input);
-        } catch (err) {
-            this.set_progress(null);
-            this.error = err;
-            this.set_status(TaskStatus.ERROR);
-            console.error(`Download of "${this.file.fullname}" failed`, err);
-            throw err;
-        }
+    get_description(ltpl = String.raw) {
+        return ltpl`Download of "${this.file.name}"`;
     }
 
     async _start(passphrase_input) {
@@ -51,11 +34,19 @@ export default class Download extends BaseTask {
         }
 
         this.set_status(TaskStatus.DOWNLOAD_FILE);
-        let raw_file = await this.file.storage.get_file(this.file.fullname, evt => {
-            if (evt.lengthComputable) {
-                this.set_progress(evt.loaded / evt.total);
-            }
-        });
+        let raw_file;
+        try {
+            raw_file = await this.file.storage.get_file(this.file.fullname, evt => {
+                if (evt.lengthComputable) {
+                    this.set_progress(evt.loaded / evt.total);
+                }
+            });
+        } catch (err) {
+            if (err.xhr && err.xhr.status === 404)
+                throw new NotFoundError(this);
+            throw err;
+        }
+
         this.set_progress(1);
         if (this.file.storage.is_encrypted) {
             this.set_status(TaskStatus.DECRYPT_FILE);

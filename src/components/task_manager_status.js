@@ -18,18 +18,19 @@ export default class TaskManagerStatus {
 
     view({attrs: {task_manager}}) {
 
-        // TODO: get task type if all tasks are of the same type.
-
-        // TODO: reset counter when ALL is DONE, then a new task is added. (need keeping memory)
-        // TODO: progress bar
-
         let total_tasks = task_manager.tasks.length;
         let tasks_done = task_manager.tasks.filter(t => t.status === TaskStatus.DONE || t.status === TaskStatus.ABORTED).length;
-        let has_error = task_manager.tasks.some(t => t.status === TaskStatus.ERROR);
+        let has_error = task_manager.tasks.some(t => t.has_unexpected_errors());
+
+        let class_list = [
+            tasks_done === total_tasks ? 'task-done' : 'task-progress',
+            has_error ? 'task-error' : ''
+        ];
 
         return m('#task-manager-status', {
             onclick: () => task_manager.show_task_list(true),
-            class: has_error ? 'task-error' : (tasks_done === total_tasks) ? 'task-done' : 'task-progress'}, [
+            class: class_list.join(' ')
+        }, [
             has_error ? [m('span.glyphicon.glyphicon-alert'), ' '] : '',
             tasks_done === total_tasks ?
                 _3l(total_tasks)`${total_tasks} task(s) done` :
