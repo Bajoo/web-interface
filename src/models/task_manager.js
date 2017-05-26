@@ -90,14 +90,23 @@ export default class TaskManager {
         }
     }
 
+    /**
+     * @param scope {String}
+     * @return {BaseTask[]}
+     */
+    get_tasks_by_scope(scope) {
+        return scope in this.tasks_by_scope ? this.tasks_by_scope[scope].tasks : [];
+    }
+
     _register_task_to_scope(task) {
         let scope = task.get_scope();
         if (scope) {
-            if (!(scope in this.tasks_by_scope))
+            if (!(scope in this.tasks_by_scope)) {
                 this.tasks_by_scope[scope] = {
                     tasks: [],
                     callbacks: []
                 };
+            }
             this.tasks_by_scope[scope].tasks.push(task);
         }
     }
@@ -106,15 +115,19 @@ export default class TaskManager {
         let scope = task.get_scope();
         if (!scope)
             return;
+
         let scope_rel = this.tasks_by_scope[scope];
 
-        for (let callback_ctx of scope_rel.callbacks)
-            callback_ctx.callback(); // TODO: try-catch
-        if (scope_rel.tasks.length === 1 && scope_rel.callbacks.length === 0)
+        let idx = scope_rel.tasks.indexOf(task);
+        scope_rel.tasks.splice(idx, 1);
+        if (scope_rel.tasks.length === 0 && scope_rel.callbacks.length === 0)
             delete this.tasks_by_scope[scope];
-        else {
-            let idx = scope_rel.tasks.indexOf(task);
-            scope_rel.tasks.splice(idx, 1);
+        for (let callback_ctx of scope_rel.callbacks) {
+            try {
+                callback_ctx.callback(scope_rel.tasks);
+            } catch(err) {
+                console.error(`TaskManager: callback failed for scope ${scope}`, err);
+            }
         }
     }
 }

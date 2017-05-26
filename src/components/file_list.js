@@ -17,9 +17,10 @@ export default class FileList {
      * @param [key=''] {string} path of the folder, relative to the container. It should have no trailing slash.
      * @param storage {Storage} storage containing the files.
      * @param status {Status}
+     * @param task_manager {TaskManager}
      * @param file_selection {FileSelection}
      */
-    constructor({attrs: {key, storage, status, file_selection}}) {
+    constructor({attrs: {key, storage, status, task_manager, file_selection}}) {
         /** @type {Function} item comparator */
         this.sort_cmp = name_cmp;
 
@@ -36,11 +37,17 @@ export default class FileList {
         this.folder.load_items().then(m.redraw, m.redraw);
         file_selection.reload = () => this.folder.load_items().then(m.redraw, m.redraw);
         file_selection.clear();
+
+        task_manager.register_scope_callback(`/storages/${storage.id}/explore/${this.folder.fullname}`,
+            this,
+            () => this.folder.load_items().then(m.redraw, m.redraw)
+        );
     }
 
-    onremove({attrs: {file_selection}}) {
+    onremove({attrs: {file_selection, storage, task_manager}}) {
         this.folder.onerror = null;
         file_selection.reload = null;
+        task_manager.unregister_scope_callback(`/storages/${storage.id}/explore/${this.folder.fullname}`, this);
     }
 
     _sort_order_arrow(cmp) {

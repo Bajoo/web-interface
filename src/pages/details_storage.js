@@ -26,13 +26,29 @@ export default class EditStorage {
             .then(storage => this.storage = storage)
             .then(() => this.storage.initialize())
             .then(() => this.storage.get_permissions())
-            .then(() => this.is_loading = false)
             .then(() => {
                 this.diff_list = new DiffMemberList(this.storage.permissions);
+
+                let scope_ref = `/storage/${this.storage.id}`;
+                this.is_loading = app.task_manager.get_tasks_by_scope(scope_ref).length > 0;
+
+                app.task_manager.register_scope_callback(scope_ref, this, tasks => {
+                    this.is_loading = tasks.length > 0;
+                    m.redraw();
+                });
+
             })
             .then(m.redraw)
             .catch(err => {
-                this.is_loading = false;
+                let scope_ref = `/storage/${this.storage.id}`;
+                this.is_loading = app.task_manager.get_tasks_by_scope(scope_ref).length > 0;
+
+                app.task_manager.register_scope_callback(scope_ref, this, tasks => {
+                    this.is_loading = tasks.length > 0;
+                    m.redraw();
+                });
+
+
                 console.error(`Error when fetching storage "${vnode.attrs.key}"`, err);
                 switch (true) {
                     case (err.code === 403):
@@ -47,6 +63,11 @@ export default class EditStorage {
                 }
                 m.redraw();
             });
+    }
+
+    onremove() {
+        let scope_ref = `/storage/${this.storage.id}`;
+        app.task_manager.unregister_scope_callback(scope_ref, this);
     }
 
     view() {
