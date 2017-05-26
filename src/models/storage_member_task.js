@@ -30,6 +30,10 @@ export default class StorageMemberTask extends BaseTask {
         return ltpl`Update permissions and members of "${this.storage.name}"`;
     }
 
+    get_scope() {
+        return `/storage/${this.storage.id}`;
+    }
+
     async _start(passphrase_input) {
         this.set_status(TaskStatus.ONGOING);
 

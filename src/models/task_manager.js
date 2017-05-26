@@ -1,11 +1,8 @@
 
 import m from 'mithril';
 import {initialize as initialize_encryption} from '../encryption';
-import {TaskStatus} from './base_task';
-import Download from './download';
-import {_, _l} from '../utils/i18n';
+import {_} from '../utils/i18n';
 import prop from '../utils/prop';
-import Status from '../view_models/status';
 import PassphraseInput from '../view_models/passphrase_input';
 
 
@@ -24,6 +21,13 @@ export default class TaskManager {
          * @type {BaseTask[]}
          */
         this.tasks = [];
+
+        /**
+         * List of tasks, referenced by the scope impacted (a string ID representing a page).
+         *
+         * @type {{}}
+         */
+        this.tasks_by_scope = {};
 
         /** @type {prop} if true, display the task list modal */
         this.show_task_list = prop(false);
@@ -47,13 +51,70 @@ export default class TaskManager {
 
     start(task) {
         this.tasks.push(task);
+        this._register_task_to_scope(task);
         task.onchange = task => m.redraw();
-        return task.start(this.passphrase_input);
+        return task.start(this.passphrase_input)
+            .then(
+                result => { this._resolve_task_by_scope(task); return result; },
+                err => { this._resolve_task_by_scope(task); throw err; });
     }
 
     clean_task(task) {
         let idx = this.tasks.indexOf(task);
-        if (idx !== -1)
+        if (idx !== -1) {
             this.tasks.splice(idx, 1);
+        }
+    }
+
+    register_scope_callback(scope, owner, callback) {
+        if (!(scope in this.tasks_by_scope)) {
+            this.tasks_by_scope[scope] = {
+                tasks: [],
+                callbacks: []
+            };
+        }
+        this.tasks_by_scope[scope].callbacks.push({
+            owner,
+            callback
+        });
+    }
+
+    unregister_scope_callback(scope, owner) {
+        let scope_rel = this.tasks_by_scope[scope];
+
+        if (scope_rel.tasks.length === 1 && scope_rel.callbacks.length === 0)
+            delete this.tasks_by_scope[scope];
+        else {
+            let idx = scope_rel.callbacks.findIndex(ctx => ctx.owner === owner);
+            scope_rel.callbacks.splice(idx, 1);
+        }
+    }
+
+    _register_task_to_scope(task) {
+        let scope = task.get_scope();
+        if (scope) {
+            if (!(scope in this.tasks_by_scope))
+                this.tasks_by_scope[scope] = {
+                    tasks: [],
+                    callbacks: []
+                };
+            this.tasks_by_scope[scope].tasks.push(task);
+        }
+    }
+
+    _resolve_task_by_scope(task) {
+        let scope = task.get_scope();
+        if (!scope)
+            return;
+        let scope_rel = this.tasks_by_scope[scope];
+
+        for (let callback_ctx of scope_rel.callbacks)
+            callback_ctx.callback(); // TODO: try-catch
+        if (scope_rel.tasks.length === 1 && scope_rel.callbacks.length === 0)
+            delete this.tasks_by_scope[scope];
+        else {
+            let idx = scope_rel.tasks.indexOf(task);
+            scope_rel.tasks.splice(idx, 1);
+        }
     }
 }

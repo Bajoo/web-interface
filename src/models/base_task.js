@@ -39,6 +39,17 @@ export default class BaseTask {
 
         /** @type {?number} between 0 and 1. */
         this.progress = null;
+
+        /** @type {?Promise} promise set when the task begins. */
+        this.promise = null;
+    }
+
+    /**
+     * Return the scope impacted by this task.
+     * @return {null}
+     */
+    get_scope() {
+        return null;
     }
 
     /**
@@ -65,7 +76,12 @@ export default class BaseTask {
      * @param passphrase_input {PassphraseInput}
      * @return {Promise}
      */
-    async start(passphrase_input) {
+    start(passphrase_input) {
+        this.promise = this._wrap_start(passphrase_input);
+        return this.promise;
+    }
+
+    async _wrap_start(passphrase_input) {
         try {
             await this._start(passphrase_input);
         } catch (err) {

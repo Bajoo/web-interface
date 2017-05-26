@@ -32,6 +32,10 @@ export default class Upload extends BaseTask {
         return ltpl`Upload of "${this.file.name}"`;
     }
 
+    get_scope() {
+        return `/storages/${this.dest_folder.storage.id}/explore`;
+    }
+
     // app.user
     async _start(passphrase_input) {
         let file = this.file;
