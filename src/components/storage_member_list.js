@@ -44,6 +44,7 @@ export default class StorageMemberList {
                         {class: this._row_class_view(member, user)}, [
                             m('td.email-member', member.email),
                             m('td', m('select.form-control.input-sm', {
+                                class: allow_edit ? '' : 'readonly',
                                 disabled: member.status === 'deleted' || (!allow_edit) || (!has_several_admins && member.right === 'admin'),
                                 onchange: evt => diff_list.set(member.email, evt.target.value)
                             }, [

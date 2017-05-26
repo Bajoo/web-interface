@@ -34,19 +34,23 @@ export default class EditStorage {
 
                 app.task_manager.register_scope_callback(scope_ref, this, tasks => {
                     this.is_loading = tasks.length > 0;
-                    m.redraw();
+                    this.storage.get_permissions().then(m.redraw, m.redraw);
                 });
 
             })
             .then(m.redraw)
             .catch(err => {
-                let scope_ref = `/storage/${this.storage.id}`;
-                this.is_loading = app.task_manager.get_tasks_by_scope(scope_ref).length > 0;
+                if (this.storage) {
+                    let scope_ref = `/storage/${this.storage.id}`;
+                    this.is_loading = app.task_manager.get_tasks_by_scope(scope_ref).length > 0;
 
-                app.task_manager.register_scope_callback(scope_ref, this, tasks => {
-                    this.is_loading = tasks.length > 0;
-                    m.redraw();
-                });
+                    app.task_manager.register_scope_callback(scope_ref, this, tasks => {
+                        this.is_loading = tasks.length > 0;
+                        this.storage.get_permissions().then(m.redraw, m.redraw);
+                    });
+                } else {
+                    this.is_loading = false;
+                }
 
 
                 console.error(`Error when fetching storage "${vnode.attrs.key}"`, err);

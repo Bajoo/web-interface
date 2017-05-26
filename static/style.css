@@ -1,5 +1,9 @@
 
 
+select.readonly:disabled {
+    cursor: default;
+}
+
 .side-nav {
     border-right: 1px solid grey;
 }
