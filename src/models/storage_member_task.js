@@ -12,10 +12,11 @@ import {NoUserKeyError, PermissionUpdateFailed, StorageKeyError} from './task_er
  */
 export default class StorageMemberTask extends BaseTask {
 
-    constructor(storage, diff_list) {
+    constructor(storage, diff_list, reset_key=false) {
         super();
         this.storage = storage;
         this.diff_list = diff_list;
+        this.reset_key = reset_key;
     }
 
     /**
@@ -58,11 +59,14 @@ export default class StorageMemberTask extends BaseTask {
         let storage_key = null;
         let public_key_list = [];
         let rebuild_storage_key_needed = storage.is_encrypted && (
-            member_list.new.length || member_list.deleted.length ||
+            this.reset_key || member_list.new.length || member_list.deleted.length ||
             (self_member && ['new', 'deleted'].includes(self_member.status)));
 
         if (rebuild_storage_key_needed) {
-            storage_key = await this.unlock_storage(storage, app.user, passphrase_input);
+            if (!this.reset_key)
+                storage_key = await this.unlock_storage(storage, app.user, passphrase_input);
+            else
+                storage_key = await storage.generate_new_key();
 
             // 1. Fetch "base member" keys.
             // It the minimal set of key to not accidentally "exclude" someone from the storage.

@@ -2,8 +2,11 @@
 import m from 'mithril';
 import app from '../app';
 import StatusAlert from '../components/status_alert';
+import StorageMemberList from '../components/storage_member_list';
 import Storage from '../models/storage';
+import StorageMemberTask from '../models/storage_member_task';
 import {_} from '../utils/i18n';
+import DiffMemberList from '../view_models/diff_member_list';
 import Status from '../view_models/status';
 
 
@@ -16,6 +19,8 @@ export default {
         this.name = null;
         this.description = '';
         this.is_encrypted = true;
+
+        this.member_list = DiffMemberList.make_new(app.user.email);
     },
 
     view() {
@@ -46,6 +51,10 @@ export default {
                             onchange: event => this.is_encrypted = event.target.checked}),
                         _('Encrypt this share ?')
                     ])),
+                    m('.form-group', [
+                        m('label', _('Member list')),
+                        StorageMemberList.make(this.member_list, app.user, true)
+                    ]),
                     m('button[type="submit"].btn.btn-default', _('Submit'))
                 ]),
             ])
@@ -58,13 +67,18 @@ export default {
         this.status.clear();
 
         Storage.create(app.session, this.name, this.description, this.is_encrypted)
-            .then(storage => m.route.set(`/storage/${storage.id}`))
             .catch(err => {
                 this.is_loading = false;
                 this.status.set_error(err.message || err);
                 m.redraw();
                 console.error('Container creation failed:', err);
             })
+            .then(storage => app.task_manager
+                // If this task fails, the storage is still created but not all permissions are valid.
+                .start(new StorageMemberTask(storage, this.member_list, true))
+                .then(_ => m.route.set(`/storage/${storage.id}`))
+                .catch(err => m.route.set(`/storage/details/${storage.id}`))
+            )
             .then(() => app.user.load_storages())  // Update storage list
             .then(m.redraw);
     }

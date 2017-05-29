@@ -75,7 +75,9 @@ export default class EditStorage {
     }
 
     view() {
-        let allow_edit = this.storage && this.storage.rights.admin;
+        let is_my_bajoo = this.storage && this.storage.name === 'MyBajoo';
+        let allow_edit = this.storage && this.storage.rights.admin && !is_my_bajoo;
+
         return m('', [
             m('h1.h3', this.storage ? _l`Details of ${this.storage.name}` : _('Share details')),
             m('hr'),

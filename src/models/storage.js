@@ -78,10 +78,20 @@ export default class Storage {
             let public_keys = await Promise.all(members.map(member => User.get_public_key(this.session, member)));
 
             // NOTE: the key is not saved, to force the user to use its own key before upload.
-            let key = await generate_key(`Bajoo storage "${this.name}"`, `bajoo-storage-${this.id}@bajoo.fr`);
+            let key = await this.generate_new_key();
 
             this.encrypt_key(public_keys, key);
         }
+    }
+
+    /**
+     * Low-level method, generating a new PGP key.
+     *
+     * The key is not uploaded nor encrypted.
+     * @return {Promise.<openpgp.key>}
+     */
+    generate_new_key() {
+        return generate_key(`Bajoo storage "${this.name}"`, `bajoo-storage-${this.id}@bajoo.fr`);
     }
 
     async encrypt_key(public_keys, key) {
