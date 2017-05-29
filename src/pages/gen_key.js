@@ -91,5 +91,6 @@ export default class GenKeyPage {
                 this.is_loading = false;
                 m.redraw();
             });
+        return false;
     }
 }

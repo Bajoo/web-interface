@@ -82,7 +82,7 @@ export default class EditStorage {
             m('h1.h3', this.storage ? _l`Details of ${this.storage.name}` : _('Share details')),
             m('hr'),
             this.wall_msg ? m('.jumbotron.empty-box', m('p.text-danger', this.wall_msg)) :
-                m('form', {onsubmit: () => this.submit()}, [
+                m('form', {onsubmit: () => {this.submit(); return false;}}, [
                     m('.checkbox', m('label', [
                         m('input[type=checkbox][readonly][disabled]', {
                             checked: this.storage && this.storage.is_encrypted

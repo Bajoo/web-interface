@@ -100,7 +100,7 @@ export default class TaskListModal {
                                 ]),
                                 task.is_done() ?
                                     m('.media-right.media-middle',
-                                        m('button.close', {onclick: () => task_manager.clean_task(task)}, m.trust('&times;'))
+                                        m('button.close[type=button]', {onclick: () => task_manager.clean_task(task)}, m.trust('&times;'))
                                     )
                                     : ''
                             ])

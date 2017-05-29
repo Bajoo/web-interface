@@ -25,7 +25,7 @@ export default {
         return m('.panel.panel-default',
             m('.panel-heading', m('h1.panel-title', _('Account creation'))),
             m('.panel-body', [
-                m('form', { onsubmit: (evt)=> this.submit(evt)}, [
+                m('form', { onsubmit: evt => this.submit(evt)}, [
                     this.error_message ? m('.alert .alert-danger', this.error_message) : '',
                     m('fieldset', { disabled: this.is_loading}, [
                         m(InputForm, {id: 'email', label: _('Email'), icon: 'user', type: 'email', value: this.email}),
@@ -60,11 +60,11 @@ export default {
 
         if (this.password().length < 8) {
             this.password_error = _('The password must have at least 8 characters');
-            return;
+            return false;
         }
         if (this.password() !== this.confirm_password()) {
             this.confirm_password_error = "The password and its confirmation doesn't match";
-            return;
+            return false;
         }
 
         this.is_loading = true;
@@ -79,5 +79,6 @@ export default {
                 m.redraw();
                 console.error('User creation failed', err);
             });
+        return false;
     }
 };

@@ -27,7 +27,7 @@ export default {
         return m('.panel.panel-default',
             m('.panel-heading', m('h1.panel-title', _('Connection'))),
             m('.panel-body', [
-                m('form', { onsubmit: ()=> this.submit()}, [
+                m('form', { onsubmit: () => this.submit()}, [
                     this.error_message ? m('.alert .alert-danger', this.error_message) : '',
                     m('fieldset', { disabled: this.is_loading}, [
                         m(InputForm, {id: 'username', label: 'Username', icon: 'user', type: 'email', value: this.username, autofocus: true}),
@@ -71,5 +71,6 @@ export default {
                 this.error_message = err.error_description || err.message || _('Unknown error');
                 m.redraw();
             });
+        return false;
     }
 };

@@ -22,7 +22,7 @@ export default class PassphraseInputModal {
             { class: model.enabled ? 'show' : ''},
             m('.modal-dialog[role=document]', m('.modal-content', [
                 m('.modal-header', [
-                    m('button.close[aria-label=Close]', {onclick: () => model.cancel()},
+                    m('button.close[aria-label=Close][type=button]', {onclick: () => model.cancel()},
                         m('span[aria-hidden=true]', m.trust('&times;'))
                     ),
                     m('h4.modal-title#passphrase-input-modal', _('Your passphrase is required'))
@@ -30,7 +30,7 @@ export default class PassphraseInputModal {
                 m('.modal-body', [
                     _('Please, enter your passphrase to encrypt or decrypt your files.'), m('br'), m('br'),
 
-                    m('form#passphrase-input-form', { onsubmit: ()=> model.submit()}, [
+                    m('form#passphrase-input-form', { onsubmit: () => {model.submit(); return false;} }, [
                         model.error ?
                             m('.alert .alert-danger', _("We're unable to decrypt the key. Bad passphrase ?")) :
                             '',
@@ -41,7 +41,7 @@ export default class PassphraseInputModal {
                     ])
                 ]),
                 m('.modal-footer', [
-                    m('button.btn.btn-default', {
+                    m('button.btn.btn-default[type=button]', {
                         disabled: model.wait_for_feedback,
                         onclick: () => model.cancel()
                     }, _('Cancel')),

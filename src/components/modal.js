@@ -26,7 +26,7 @@ export default class Modal {
             {'aria-labelledby': title_id, class: show_prop() ? 'show' : ''},
             m('.modal-dialog[role=document]', m('.modal-content', [
                 m('.modal-header', [
-                    m('button.close[aria-label=Close]', {onclick: () => show_prop(false)},
+                    m('button.close[aria-label=Close][type=button]', {onclick: () => show_prop(false)},
                         m('span[aria-hidden=true]', m.trust('&times;'))
                     ),
                     m('h2.h4.modal-title#task-list-modal', {id: title_id}, title)

@@ -81,5 +81,6 @@ export default {
             )
             .then(() => app.user.load_storages())  // Update storage list
             .then(m.redraw);
+        return false;
     }
 };
