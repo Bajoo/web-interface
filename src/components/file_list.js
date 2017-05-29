@@ -29,18 +29,13 @@ export default class FileList {
 
         this.folder = new Folder(storage, {subdir: key});
 
-        this.folder.onerror = err => {
-            status.set_error(_l`Fetching file list failed: ${err.message || err}`);
-            m.redraw();
-        };
+        this._load_folder(status);
 
-        this.folder.load_items().then(m.redraw, m.redraw);
-        file_selection.reload = () => this.folder.load_items().then(m.redraw, m.redraw);
+        file_selection.reload = () => this._load_folder(status);
         file_selection.clear();
 
         task_manager.register_scope_callback(`/storages/${storage.id}/explore/${this.folder.fullname}`,
-            this,
-            () => this.folder.load_items().then(m.redraw, m.redraw)
+            this, () => this._load_folder(status)
         );
     }
 
@@ -50,6 +45,13 @@ export default class FileList {
         // Warning: onremove() can be called after the next FileList creation (and thus, we could erase the new callback).
         //file_selection.reload = null;
         task_manager.unregister_scope_callback(`/storages/${storage.id}/explore/${this.folder.fullname}`, this);
+    }
+
+    _load_folder(status) {
+        this.folder.load_items().then(m.redraw, err => {
+            status.set_error(_l`Fetching file list failed: ${err.message || err}`);
+            m.redraw();
+        });
     }
 
     _sort_order_arrow(cmp) {
@@ -63,13 +65,13 @@ export default class FileList {
      * @param file_selection {FileSelection}
      */
     view({attrs: {task_manager, file_selection}}) {
-        return m('', this.folder.items === undefined ?
+        return m('', !this.folder.items ?
             m('#file-zone', _('Loading ...')) :
             Dropzone.make('#file-zone', file => task_manager.start(this.folder.upload(file)), [
                 m('table.table.table-hover', [
                     m('thead', m('tr', [
                         m('th', m('input[type=checkbox]', {
-                            checked: file_selection.all_selected(this.folder.items || []),
+                            checked: file_selection.all_selected(this.folder.items),
                             onchange: evt => evt.target.checked ? file_selection.select_all(this.folder.items) : file_selection.clear()
                         })),
                         m('th'),
@@ -86,7 +88,7 @@ export default class FileList {
                             this._sort_order_arrow(date_cmp)
                         ])
                     ])),
-                    m('tbody', this._sort(this.folder.items || []).map(
+                    m('tbody', this._sort(this.folder.items).map(
                         file => file instanceof Folder ?
                             FolderRow.make(file, task_manager, file_selection) :
                             FileRow.make(file, task_manager, file_selection))

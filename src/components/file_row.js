@@ -4,13 +4,6 @@ import human_readable_bytes from '../view_helpers/human_readable_bytes';
 import relative_date from '../view_helpers/relative_date';
 
 export default class FileRow {
-    constructor() {
-        /**
-         * download action. If null, there is no ongoing download.
-         * @type {?Download}
-         */
-        this.download = null;
-    }
 
     /**
      * @param file {File}

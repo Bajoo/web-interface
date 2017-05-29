@@ -1,7 +1,7 @@
 
 import app from '../app';
 import {TaskStatus, default as BaseTask} from './base_task';
-import {CanceledError, NotFoundError} from './task_errors';
+import {NotFoundError} from './task_errors';
 import {decrypt} from '../encryption';
 
 
