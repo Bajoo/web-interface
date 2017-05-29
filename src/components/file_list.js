@@ -46,7 +46,9 @@ export default class FileList {
 
     onremove({attrs: {file_selection, storage, task_manager}}) {
         this.folder.onerror = null;
-        file_selection.reload = null;
+        // TODO: remove file_selection.reload
+        // Warning: onremove() can be called after the next FileList creation (and thus, we could erase the new callback).
+        //file_selection.reload = null;
         task_manager.unregister_scope_callback(`/storages/${storage.id}/explore/${this.folder.fullname}`, this);
     }
 

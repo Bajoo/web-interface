@@ -73,7 +73,10 @@ export default class FileSelection {
         let file = this.items[0];
         file.del() // TODO: handle errors
             .then(() => this.deselect(file))
-            .then(() => this.loading = false, () => this.loading = true)
+            .then(() => this.loading = false, err =>  {
+                console.error('DELETE action failed', err);
+                this.loading = false;
+            })
             .then(() => this.reload ? this.reload() : null);
     }
 }
