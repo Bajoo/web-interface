@@ -91,7 +91,7 @@ export default {
             m('hr'),
             StatusAlert.make(this.status),
             app.user.storages ? [
-                app.user.storages.my_bajoo ? storage_view(app.user.storages.my_bajoo, true) : '',
+                app.user.storages.my_bajoo ? storage_view(app.user.storages.my_bajoo, false) : '',
                 m('h2', _('My shares')),
                 create_storage_view(),
                 m('hr'),
