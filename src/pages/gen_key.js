@@ -84,7 +84,7 @@ export default class GenKeyPage {
         }
 
         this.is_loading = true;
-        app.user.generate_key(app.user.email, passphrase).then(_ => m.route.set(app.redirect_to || '/'),
+        app.user.generate_key(passphrase).then(_ => m.route.set(app.redirect_to || '/'),
             err => {
                 console.error('User key generation failed', err);
                 this.error_message = _l`Key generation failed: ${err.message || err}`;
