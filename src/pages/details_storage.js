@@ -80,6 +80,12 @@ export default class EditStorage {
         let is_my_bajoo = this.storage && this.storage.name === 'MyBajoo';
         let allow_edit = this.storage && this.storage.rights.admin && !is_my_bajoo;
 
+        let leaving_allowed = this.storage && this.storage.permissions !== null && !is_my_bajoo &&
+            (
+                !this.storage.rights.admin ||
+                this.storage.permissions.filter(x => x.scope === 'user' && x.admin).length > 1
+            );
+
         return m('', [
             m('h1.h3', this.storage ? _l`Details of ${this.storage.name}` : _('Share details')),
             m('hr'),
@@ -118,9 +124,13 @@ export default class EditStorage {
                         ]),
                         allow_edit ? m('button[type="submit"].btn.btn-default', _('Submit')) : '',
 
-                        allow_edit ? [
+                        !is_my_bajoo ? [
                             m('hr'),
-                            m('button[type=button].btn.btn-danger', {onclick: () => this._delete_storage()}, _('Delete this share'))
+                            m('', [
+                                allow_edit ? m('button[type=button].btn.btn-danger', {onclick: () => this._delete_storage()}, _('Delete this share')) : '',
+                                ' ',
+                                leaving_allowed ? m('button[type=button].btn.btn-danger', {onclick: () => this._leave_storage()}, _('Leave this share')) : ''
+                            ])
                         ] : ''
                     ]),
                 ])
@@ -165,6 +175,20 @@ export default class EditStorage {
         this.storage.delete().then(_ => m.route.set('/'), err => {
             console.error('Storage deletion failed', err);
             this.status.set_error(_(`The share deletion has failed: ${err.message || err}`));
+            this.is_loading = false;
+            m.redraw();
+        });
+        return false;
+    }
+
+    _leave_storage() {
+        if (!window.confirm(_('Are you sure you want to leave this share ?')))
+            return false;
+
+        this.is_loading = true;
+        this.storage.remove_member(app.user.email).then(_ => m.route.set('/'), err => {
+            console.error('Storage leaving failed', err);
+            this.status.set_error(_(`Leaving this share has failed: ${err.message || err}`));
             this.is_loading = false;
             m.redraw();
         });

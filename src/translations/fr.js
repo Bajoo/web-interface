@@ -69,6 +69,9 @@ export default {
     'Delete this share': 'Supprimer ce partage',
     'Are you sure you want to delete this share ?': 'Êtes-vous sûr de vouloir supprimer ce partage ?',
     'The share deletion has failed: {0}': 'La suppression du partage a échoué: {0}',
+    'Leave this share': 'Quitter ce partage',
+    'Are you sure you want to leave this share ?': 'Êtes-vous sûr de vouloir quitter ce partage ?',
+    'Leaving this share has failed: {0}': 'Quitter ce partage a échoué: {0}',
 
     // pages/register.js
     'Account creation': 'Création de compte',
