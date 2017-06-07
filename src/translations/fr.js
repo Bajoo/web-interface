@@ -66,6 +66,9 @@ export default {
     'Eg: \"Pictures Holidays 2017\"': 'Ex: Photo vacances 2017',
     'Description': 'Description',
     'Member list': 'Liste des membres',
+    'Delete this share': 'Supprimer ce partage',
+    'Are you sure you want to delete this share ?': 'Êtes-vous sûr de vouloir supprimer ce partage ?',
+    'The share deletion has failed: {0}': 'La suppression du partage a échoué: {0}',
 
     // pages/register.js
     'Account creation': 'Création de compte',

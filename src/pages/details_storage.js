@@ -70,8 +70,10 @@ export default class EditStorage {
     }
 
     onremove() {
-        let scope_ref = `/storage/${this.storage.id}`;
-        app.task_manager.unregister_scope_callback(scope_ref, this);
+        if (this.storage) {
+            let scope_ref = `/storage/${this.storage.id}`;
+            app.task_manager.unregister_scope_callback(scope_ref, this);
+        }
     }
 
     view() {
@@ -114,7 +116,12 @@ export default class EditStorage {
                                 StorageMemberList.make(this.diff_list, app.user, allow_edit) :
                                 m('', _('Loading ...'))
                         ]),
-                        allow_edit ? m('button[type="submit"].btn.btn-default', _('Submit')) : ''
+                        allow_edit ? m('button[type="submit"].btn.btn-default', _('Submit')) : '',
+
+                        allow_edit ? [
+                            m('hr'),
+                            m('button[type=button].btn.btn-danger', {onclick: () => this._delete_storage()}, _('Delete this share'))
+                        ] : ''
                     ]),
                 ])
         ]);
@@ -149,4 +156,19 @@ export default class EditStorage {
         this.is_loading = false;
         m.redraw();
     }
+
+    _delete_storage() {
+        if (!window.confirm(_('Are you sure you want to delete this share ?')))
+            return false;
+
+        this.is_loading = true;
+        this.storage.delete().then(_ => m.route.set('/'), err => {
+            console.error('Storage deletion failed', err);
+            this.status.set_error(_(`The share deletion has failed: ${err.message || err}`));
+            this.is_loading = false;
+            m.redraw();
+        });
+        return false;
+    }
+
 }

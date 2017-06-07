@@ -180,4 +180,11 @@ export default class Storage {
             }
         });
     }
+
+    delete() {
+        return this.session.request({
+            method: 'DELETE',
+            url: `/storages/${this.id}`
+        });
+    }
 }
