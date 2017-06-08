@@ -1,5 +1,4 @@
 
-window.get_cookie = get_cookie;
 
 /**
  * Get a specific cookie value by its key.

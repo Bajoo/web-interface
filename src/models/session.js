@@ -136,7 +136,8 @@ export default class Session {
                         response = (new TextDecoder('utf8')).decode(new DataView(xhr.response));
                         response = JSON.parse(response);
                         for (let key in response)
-                            error[key] = response[key];
+                            if (response.hasOwnProperty(key))
+                                error[key] = response[key];
                     } catch(err) {}
                     error.response = response;
                     throw error;

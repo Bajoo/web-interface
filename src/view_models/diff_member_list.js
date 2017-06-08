@@ -71,7 +71,7 @@ export default class DiffMemberList {
     }
 
     del(email) {
-        if (email !== unmodifiable)
+        if (email !== this.unmodifiable)
             delete this.members[email];
     }
 

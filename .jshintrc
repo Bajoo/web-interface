@@ -1,5 +1,31 @@
 {
     "esversion": 6,
     "browser": true,
-    "devel": true
+    "devel": true,
+    "strict": "implied",
+
+    "varstmt": true,
+    "bitwise": true,
+    "eqeqeq": true,
+    "forin": true,
+    "freeze": true,
+    "futurehostile": true,
+    "latedef": true,
+    "maxcomplexity": 10,
+    "maxdepth": 5,
+    "maxparams": 5,
+
+    // TODO: enable no comma check.
+    //"nocomma": true,
+
+    "nonbsp": true,
+    "nonew": true,
+
+    // TODO: use "shadow": "outer"
+    "shadow": "inner",
+    "undef": true
+
+    // NOTE: "unused" is not compatible with "jshint:ignore" directives used for async methods.
+    // Also, "_" placeholder for ignored arguments are not handled.
+    //"unused": true
 }

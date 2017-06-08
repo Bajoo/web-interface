@@ -7,7 +7,7 @@ let loader;
  */
 let openpgp_worker_path;
 
-try {
+try { /* globals require: false */
     // webpack loader
     loader = path => require(`../../static/${path}`);
     openpgp_worker_path = require('../../node_modules/openpgp/dist/openpgp.worker.min.js');

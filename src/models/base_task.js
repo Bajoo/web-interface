@@ -2,6 +2,21 @@
 import {CanceledError, PassphraseRejectedError} from './task_errors';
 
 
+export let TaskStatus = {
+    GET_USER_KEY: 'GET_USER_KEY',
+    WAIT_FOR_PASSPHRASE: 'WAIT_FOR_PASSPHRASE',
+    GET_STORAGE_KEY: 'GET_STORAGE_KEY',
+    PREPARE_FILE: 'PREPARE_FILE',
+    ENCRYPT_FILE: 'ENCRYPT_FILE',
+    DECRYPT_FILE: 'DECRYPT_FILE',
+    DOWNLOAD_FILE: 'DOWNLOAD_FILE',
+    UPLOAD_FILE: 'UPLOAD_FILE',
+    ONGOING: 'ONGOING',
+    FINALIZE: 'FINALIZE',
+    DONE: 'DONE',
+};
+
+
 /**
  * Abstract class for long-running task.
  *
@@ -159,18 +174,3 @@ export default class BaseTask {
     }
     // jshint ignore:end
 }
-
-
-export let TaskStatus = {
-    GET_USER_KEY: 'GET_USER_KEY',
-    WAIT_FOR_PASSPHRASE: 'WAIT_FOR_PASSPHRASE',
-    GET_STORAGE_KEY: 'GET_STORAGE_KEY',
-    PREPARE_FILE: 'PREPARE_FILE',
-    ENCRYPT_FILE: 'ENCRYPT_FILE',
-    DECRYPT_FILE: 'DECRYPT_FILE',
-    DOWNLOAD_FILE: 'DOWNLOAD_FILE',
-    UPLOAD_FILE: 'UPLOAD_FILE',
-    ONGOING: 'ONGOING',
-    FINALIZE: 'FINALIZE',
-    DONE: 'DONE',
-};
