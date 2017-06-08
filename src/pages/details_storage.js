@@ -76,64 +76,79 @@ export default class EditStorage {
         }
     }
 
-    view() {
-        let is_my_bajoo = this.storage && this.storage.name === 'MyBajoo';
-        let allow_edit = this.storage && this.storage.rights.admin && !is_my_bajoo;
-
-        let leaving_allowed = this.storage && this.storage.permissions !== null && !is_my_bajoo &&
+    /**
+     * Display the 'Submit', 'Leave' and 'Quit' button.
+     */
+    _control_btn_view(is_my_bajoo, allow_edit) {
+        let leaving_allowed = this.storage && this.storage.permissions !== null &&
+            !is_my_bajoo &&
             (
                 !this.storage.rights.admin ||
                 this.storage.permissions.filter(x => x.scope === 'user' && x.admin).length > 1
             );
+        return [
+            allow_edit ? m('button[type="submit"].btn.btn-default', _('Submit')) : '',
+            !is_my_bajoo ? [
+                m('hr'),
+                allow_edit ? m('button[type=button].btn.btn-danger', {onclick: () => this._delete_storage()}, _('Delete this share')) : '',
+                ' ',
+                leaving_allowed ? m('button[type=button].btn.btn-danger', {onclick: () => this._leave_storage()}, _('Leave this share')) : ''
+            ]: ''
+        ];
+    }
 
+
+    /**
+     * Display the main content
+     */
+    _content_view() {
+        let is_my_bajoo = this.storage && this.storage.name === 'MyBajoo';
+        let allow_edit = this.storage && this.storage.rights.admin && !is_my_bajoo;
+
+        return m('form', {onsubmit: () => {this.submit(); return false;}}, [
+            m('.checkbox', m('label', [
+                m('input[type=checkbox][readonly][disabled]', {
+                    checked: this.storage && this.storage.is_encrypted
+                }),
+                this.storage ? (this.storage.is_encrypted ?
+                    _('This share is encrypted') :
+                    _('This share is not encrypted')) : ''
+            ])),
+            StatusAlert.make(this.status),
+            m('fieldset', {disabled: this.is_loading}, [
+                m('.form-group', [
+                    m('label', _('Name')),
+                    allow_edit ? m('input.form-control[required]', {
+                        placeholder: _('Eg: \"Pictures Holidays 2017\"'),
+                        oninput: event => this.storage.name = event.target.value,
+                        value: this.storage ? this.storage.name : ''
+                    }) : m('', this.storage ? this.storage.name : '')
+                ]),
+                m('.form-group', [
+                    m('label', _('Description')),
+                    allow_edit ? m('textarea.form-control', {
+                        oninput: event => this.storage.description = event.target.value,
+                        value: this.storage ? this.storage.description : ''
+                    }) : m('', this.storage ? this.storage.description : '')
+                ]),
+                m('.form-group', [
+                    m('label', _('Member list')),
+                    this.diff_list ?
+                        StorageMemberList.make(this.diff_list, app.user, allow_edit) :
+                        m('', _('Loading ...'))
+                ]),
+                this._control_btn_view(is_my_bajoo, allow_edit)
+            ]),
+        ]);
+    }
+
+    view() {
         return m('', [
             m('h1.h3', this.storage ? _l`Details of ${this.storage.name}` : _('Share details')),
             m('hr'),
-            this.wall_msg ? m('.jumbotron.empty-box', m('p.text-danger', this.wall_msg)) :
-                m('form', {onsubmit: () => {this.submit(); return false;}}, [
-                    m('.checkbox', m('label', [
-                        m('input[type=checkbox][readonly][disabled]', {
-                            checked: this.storage && this.storage.is_encrypted
-                        }),
-                        this.storage ? (this.storage.is_encrypted ?
-                            _('This share is encrypted') :
-                            _('This share is not encrypted')) : ''
-                    ])),
-                    StatusAlert.make(this.status),
-                    m('fieldset', { disabled: this.is_loading}, [
-                        m('.form-group', [
-                            m('label', _('Name')),
-                            allow_edit ? m('input.form-control[required]', {
-                                placeholder: _('Eg: \"Pictures Holidays 2017\"'),
-                                oninput: event => this.storage.name = event.target.value,
-                                value: this.storage ? this.storage.name : ''
-                            }) : m('', this.storage ? this.storage.name : '')
-                        ]),
-                        m('.form-group', [
-                            m('label', _('Description')),
-                            allow_edit ? m('textarea.form-control',{
-                                oninput: event => this.storage.description = event.target.value,
-                                value: this.storage ? this.storage.description : ''
-                            }) : m('', this.storage ? this.storage.description : '')
-                        ]),
-                        m('.form-group', [
-                            m('label', _('Member list')),
-                            this.diff_list ?
-                                StorageMemberList.make(this.diff_list, app.user, allow_edit) :
-                                m('', _('Loading ...'))
-                        ]),
-                        allow_edit ? m('button[type="submit"].btn.btn-default', _('Submit')) : '',
-
-                        !is_my_bajoo ? [
-                            m('hr'),
-                            m('', [
-                                allow_edit ? m('button[type=button].btn.btn-danger', {onclick: () => this._delete_storage()}, _('Delete this share')) : '',
-                                ' ',
-                                leaving_allowed ? m('button[type=button].btn.btn-danger', {onclick: () => this._leave_storage()}, _('Leave this share')) : ''
-                            ])
-                        ] : ''
-                    ]),
-                ])
+            this.wall_msg ?
+                m('.jumbotron.empty-box', m('p.text-danger', this.wall_msg)) :
+                this._content_view()
         ]);
     }
 
