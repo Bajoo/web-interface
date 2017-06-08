@@ -54,6 +54,7 @@ export default class Storage {
      *
      * Try to fetch the storage key. If there is no key, a new key is created.
      */
+    // jshint ignore:start
     async initialize() {
         try {
             await this._initialize();
@@ -62,7 +63,9 @@ export default class Storage {
             throw new Error(`Initialization failed: ${err.message || err}`);
         }
     }
+    // jshint ignore:end
 
+    // jshint ignore:start
     async _initialize() {
         if (!this.is_encrypted)
             return;
@@ -83,6 +86,7 @@ export default class Storage {
             this.encrypt_key(public_keys, key);
         }
     }
+    // jshint ignore:end
 
     /**
      * Low-level method, generating a new PGP key.
@@ -94,6 +98,7 @@ export default class Storage {
         return generate_key(`Bajoo storage "${this.name}"`, `bajoo-storage-${this.id}@bajoo.fr`);
     }
 
+    // jshint ignore:start
     async encrypt_key(public_keys, key) {
         let bin_key = key2bin(key);
 
@@ -105,6 +110,7 @@ export default class Storage {
             serialize: x => x
         });
     }
+    // jshint ignore:end
 
     list_files(folder = '') {
         return this.session.storage_request({

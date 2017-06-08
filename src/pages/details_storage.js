@@ -137,6 +137,7 @@ export default class EditStorage {
         ]);
     }
 
+    // jshint ignore:start
     async submit() {
         this.is_loading = true;
 
@@ -166,6 +167,7 @@ export default class EditStorage {
         this.is_loading = false;
         m.redraw();
     }
+    // jshint ignore:end
 
     _delete_storage() {
         if (!window.confirm(_('Are you sure you want to delete this share ?')))

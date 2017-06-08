@@ -35,6 +35,7 @@ export default class StorageMemberTask extends BaseTask {
         return `/storage/${this.storage.id}`;
     }
 
+    // jshint ignore:start
     async _start(passphrase_input) {
         this.set_status(TaskStatus.ONGOING);
 
@@ -146,6 +147,7 @@ export default class StorageMemberTask extends BaseTask {
             }
         }
     }
+    // jshint ignore:end
 
     _get_public_user_key(session, member, catch_err=false) {
         return User.get_public_key(session, member.email).catch(err => {

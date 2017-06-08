@@ -26,6 +26,7 @@ export default class Download extends BaseTask {
         return ltpl`Download of "${this.file.name}"`;
     }
 
+    // jshint ignore:start
     async _start(passphrase_input) {
         let storage_key = null;
 
@@ -57,6 +58,7 @@ export default class Download extends BaseTask {
         this._export(this.file.name, new Blob([raw_file]));
         this.set_status(TaskStatus.DONE);
     }
+    // jshint ignore:end
 
 
     /**

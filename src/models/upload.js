@@ -36,6 +36,7 @@ export default class Upload extends BaseTask {
     }
 
     // app.user
+    // jshint ignore:start
     async _start(passphrase_input) {
         let file = this.file;
         let storage_key = null;
@@ -69,4 +70,5 @@ export default class Upload extends BaseTask {
         });
         this.set_status(TaskStatus.DONE, 1);
     }
+    // jshint ignore:end
 }

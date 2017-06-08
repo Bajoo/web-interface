@@ -81,6 +81,7 @@ export default class BaseTask {
         return this.promise;
     }
 
+    // jshint ignore:start
     async _wrap_start(passphrase_input) {
         try {
             await this._start(passphrase_input);
@@ -94,6 +95,7 @@ export default class BaseTask {
             throw this.errors[0];
         }
     }
+    // jshint ignore:end
 
     /**
      * Safe way to trigger onchange callback.
@@ -136,6 +138,7 @@ export default class BaseTask {
      * @param passphrase_input
      * @return {Promise.<openpgp.Key>} the storage passphrase
      */
+    // jshint ignore:start
     async unlock_storage(storage, user, passphrase_input) {
         this.set_status(TaskStatus.GET_USER_KEY);
         let user_key = await user.get_key();
@@ -154,6 +157,7 @@ export default class BaseTask {
         this.set_status(TaskStatus.GET_STORAGE_KEY);
         return await storage.get_key(user_key);
     }
+    // jshint ignore:end
 }
 
 
