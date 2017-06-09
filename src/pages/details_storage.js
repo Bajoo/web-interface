@@ -4,7 +4,7 @@ import app from '../app';
 import StatusAlert from '../components/status_alert';
 import StorageMemberList from '../components/storage_member_list';
 import Storage from '../models/storage';
-import StorageMemberTask from '../models/storage_member_task';
+import StorageMemberTask from '../tasks/storage_member_task';
 import {_, _l} from '../utils/i18n';
 import DiffMemberList from '../view_models/diff_member_list';
 import Status from '../view_models/status';

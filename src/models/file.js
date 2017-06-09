@@ -1,5 +1,5 @@
 
-import Download from '../models/download';
+import Download from '../tasks/download';
 
 
 export default class File {

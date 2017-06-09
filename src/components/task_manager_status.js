@@ -1,6 +1,6 @@
 
 import m from 'mithril';
-import {TaskStatus} from '../models/base_task';
+import {TaskStatus} from '../tasks/base_task';
 import {_3l} from '../utils/i18n';
 
 

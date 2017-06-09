@@ -2,9 +2,9 @@
 import m from 'mithril';
 import {_, _l} from '../utils/i18n';
 import Modal from './modal';
-import Download from '../models/download';
-import Upload from '../models/upload';
-import {TaskStatus} from '../models/base_task';
+import Download from '../tasks/download';
+import Upload from '../tasks/upload';
+import {TaskStatus} from '../tasks/base_task';
 import {TaskError} from '../models/task_errors';
 
 

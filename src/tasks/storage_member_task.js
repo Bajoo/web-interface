@@ -1,8 +1,8 @@
 
 import {TaskStatus, default as BaseTask} from './base_task';
-import User from './user';
+import User from '../models/user';
 import app from '../app';
-import {NoUserKeyError, PermissionUpdateFailed, StorageKeyError} from './task_errors';
+import {NoUserKeyError, PermissionUpdateFailed, StorageKeyError} from '../models/task_errors';
 
 
 /**

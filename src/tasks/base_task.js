@@ -1,5 +1,5 @@
 
-import {CanceledError, PassphraseRejectedError} from './task_errors';
+import {CanceledError, PassphraseRejectedError} from '../models/task_errors';
 
 
 export let TaskStatus = {

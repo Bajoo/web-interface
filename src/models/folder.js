@@ -1,5 +1,5 @@
 
-import Upload from './upload';
+import Upload from '../tasks/upload';
 
 
 export default class Folder {
