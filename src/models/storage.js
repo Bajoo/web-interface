@@ -112,13 +112,13 @@ export default class Storage {
     }
     // jshint ignore:end
 
-    list_files(folder = '') {
+    list_files(folder = '', recursive=false) {
         return this.session.storage_request({
             url: `/storages/${this.id}`,
             data: { // GET params
                 format: 'json',
                 prefix: folder ? `${folder}/` : '',
-                delimiter: '/'
+                delimiter: recursive ? null : '/'
             }
         })
             .then(result => result.filter(item => item.name !== '.key'))

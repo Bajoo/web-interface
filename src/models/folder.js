@@ -19,8 +19,8 @@ export default class Folder {
      * Refresh the item list.
      * @return {Promise}
      */
-    load_items() {
-        return this.storage.list_files(this.fullname).then(items => {
+    load_items(recursive=false) {
+        return this.storage.list_files(this.fullname, recursive).then(items => {
             this.items = items;
             return items;
         }, err => {
