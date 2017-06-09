@@ -76,8 +76,8 @@ export default {
             .then(storage => app.task_manager
                 // If this task fails, the storage is still created but not all permissions are valid.
                 .start(new StorageMemberTask(storage, this.member_list, true))
-                .then(_ => m.route.set(`/storage/${storage.id}`))
-                .catch(err => m.route.set(`/storage/details/${storage.id}`))
+                .then(_ => m.route.set(`/storage/${storage.id}/browse`))
+                .catch(err => m.route.set(`/storage/${storage.id}/details`))
             )
             .then(() => app.user.load_storages())  // Update storage list
             .then(m.redraw);

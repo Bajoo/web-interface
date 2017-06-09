@@ -34,9 +34,9 @@ m.route(document.body, '/', {
     '/register': login_resolver(register),
     // "key" is a special parameter name, forcing rebuild of the component.
     '/storage/new': logged_resolver(new_storage),
-    '/storage/details/:key': logged_resolver(DetailsPage),
-    '/storage/:key': logged_resolver(storage),
-    '/storage/:key/:path...': logged_resolver(storage)
+    '/storage/:key/details': logged_resolver(DetailsPage),
+    '/storage/:key/browse': logged_resolver(storage),
+    '/storage/:key/browse/:path...': logged_resolver(storage)
 });
 
 

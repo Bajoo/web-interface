@@ -11,12 +11,12 @@ import {_} from '../utils/i18n';
 
 
 function breadcrumb(storage, path) {
-    let acc_path = `/storage/${storage.id}`;
+    let acc_path = `/storage/${storage.id}/browse`;
     let folder_list = path.split('/').filter(f => f !== '');
 
     return m('ol.breadcrumb', [
         folder_list.length > 0 ?
-            m('li', m('a', {oncreate: m.route.link, href: `/storage/${storage.id}`}, storage.name)) :
+            m('li', m('a', {oncreate: m.route.link, href: `/storage/${storage.id}/browse`}, storage.name)) :
             m('li.active', storage.name),
         folder_list.map((folder, idx) => {
             acc_path = `${acc_path}/${folder}`;

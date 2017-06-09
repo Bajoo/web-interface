@@ -4,7 +4,7 @@ import {_} from '../utils/i18n';
 
 
 function storage_link(storage) {
-    let href = `/storage/${storage.id}`;
+    let href = `/storage/${storage.id}/browse`;
     return m('li', {class: m.route.get().substr(0, href.length) === href ? 'active' : ''}, m('a',{
         href: href,
         oncreate: m.route.link,

@@ -25,7 +25,7 @@ function storage_view(storage, allow_edit=false) {
         m('.media-body', [
             m('h4.media-heading', [
                 m('a.storage-name', {
-                    href: `/storage/${storage.id}`,
+                    href: `/storage/${storage.id}/browse`,
                     oncreate: m.route.link
                 }, storage.name),
                 ' ',
@@ -37,7 +37,7 @@ function storage_view(storage, allow_edit=false) {
             storage.description
         ]),
         m('.media-right.media-middle.storage-details', m('a.btn.btn-default', {
-            href:  `/storage/details/${storage.id}`,
+            href:  `/storage/${storage.id}/details`,
             oncreate: m.route.link
         }, [
             m('span.glyphicon.glyphicon-eye-open'),
