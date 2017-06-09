@@ -21,7 +21,7 @@ export default function relative_date(date) {
             text = _('just now');
             break;
         case Math.round(diff / SECOND) < 60:
-            let nb_seconds = Math.round(diff / MINUTE);
+            let nb_seconds = Math.round(diff / SECOND);
             text = _3l(nb_seconds)`${nb_seconds} second(s) ago`;
             break;
         case Math.round(diff / MINUTE) < 60:
