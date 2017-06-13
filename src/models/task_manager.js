@@ -3,12 +3,33 @@ import m from 'mithril';
 import {initialize as initialize_encryption} from '../encryption';
 import {_} from '../utils/i18n';
 import prop from '../utils/prop';
+import {escape as regexp_escape} from '../utils/regexp';
 import PassphraseInput from '../view_models/passphrase_input';
 
 
 
 /**
  * Handle and execute long-running task such as upload and download.
+ *
+ * Tasks are stored in `this.tasks`. Only top-level tasks are listed, but all tasks should be part of a top-level
+ * "grouped" task. It's useful to read and display the state of tasks at instant t.
+ *
+ * To handle task changes and real-time impacts on pages, the task scopes must be used.
+ * Each task can declare (optionally) one or more object(s) that will be modified: these objects are the scope(s) of
+ * the task. Each scope is represented under the form of an URI.
+ * Each view can register a callback associated to a scope. When a task finish, all callbacks matching one of these
+ * criteria are called:
+ *  - The callback scope is the direct parent of the task scope.
+ *  - The callback scope is the task scope.
+ *  - The callback scope is a descendant of the task scope.
+ *
+ * Examples:
+ *
+ * The storage of id "deadbeaf" change its name. The scope of the task is "/storage/deadbeaf".
+ * - The "/storage/" scope is triggered (direct child changed)
+ * - The scope "/storage/deadbeaf/details" is triggered (descendant of "/storage/deadbeaf").
+ * - Everything under "/storage/deadbeaf/browse" is triggered.
+ *
  */
 export default class TaskManager {
 
@@ -17,7 +38,9 @@ export default class TaskManager {
         this.passphrase_input = new PassphraseInput();
 
         /**
-         * list of registered tasks.
+         * List containing top-level registered tasks
+         * Sub-tasks are not listed here.
+         *
          * @type {BaseTask[]}
          */
         this.tasks = [];
@@ -28,6 +51,7 @@ export default class TaskManager {
          * @type {{}}
          */
         this.tasks_by_scope = {};
+        this.callbacks_by_scope = {};
 
         /** @type {prop} if true, display the task list modal */
         this.show_task_list = prop(false);
@@ -67,47 +91,57 @@ export default class TaskManager {
     }
 
     register_scope_callback(scope, owner, callback) {
-        if (!(scope in this.tasks_by_scope)) {
-            this.tasks_by_scope[scope] = {
-                tasks: [],
-                callbacks: []
-            };
-        }
-        this.tasks_by_scope[scope].callbacks.push({
+        scope = scope.replace(/\/$/, '');
+        this.callbacks_by_scope[scope] = this.callbacks_by_scope[scope] || [];
+        this.callbacks_by_scope[scope].push({
             owner,
             callback
         });
     }
 
-    unregister_scope_callback(scope, owner) {
-        let scope_rel = this.tasks_by_scope[scope];
-
-        if (scope_rel.tasks.length === 1 && scope_rel.callbacks.length === 0)
-            delete this.tasks_by_scope[scope];
-        else {
-            let idx = scope_rel.callbacks.findIndex(ctx => ctx.owner === owner);
-            scope_rel.callbacks.splice(idx, 1);
+    unregister_scope_callback(owner) {
+        let is_not_owned_predicate = ctx => ctx.owner !== owner;
+        for (let scope of Object.keys(this.callbacks_by_scope)) {
+            this.callbacks_by_scope[scope] = this.callbacks_by_scope[scope].filter(is_not_owned_predicate);
+            if (this.callbacks_by_scope[scope].length === 0)
+                delete this.callbacks_by_scope[scope];
         }
+    }
+
+    /**
+     * Get a regexp matching all impacted scopes
+     *
+     * @param scope {string} modified scope
+     * @return {RegExp} regexp mathcing all impacted scopes.
+     */
+    _get_impacted_scope_regexp(scope) {
+        scope = scope.replace(/\/$/, '');
+
+        let path_parent = scope.split('/');
+        let item = path_parent.pop();
+        path_parent = path_parent.join('/');
+        return new RegExp(`^${regexp_escape(path_parent)}(/${regexp_escape(item)}(/.*)?)?$`);
     }
 
     /**
      * @param scope {String}
      * @return {BaseTask[]}
      */
-    get_tasks_by_scope(scope) {
-        return scope in this.tasks_by_scope ? this.tasks_by_scope[scope].tasks : [];
+    get_tasks_impacted_by_scope(scope) {
+        scope = scope.replace(/\/$/, '');
+        let regexp = this._get_impacted_scope_regexp(scope);
+
+        return Object.keys(this.tasks_by_scope)
+            .filter(key => regexp.test(key))
+            .reduce((result, key) => result.concat(this.tasks_by_scope[key]), []);
     }
 
     _register_task_to_scope(task) {
         let scope = task.get_scope();
         if (scope) {
-            if (!(scope in this.tasks_by_scope)) {
-                this.tasks_by_scope[scope] = {
-                    tasks: [],
-                    callbacks: []
-                };
-            }
-            this.tasks_by_scope[scope].tasks.push(task);
+            scope = scope.replace(/\/$/, '');
+            this.tasks_by_scope[scope] = this.tasks_by_scope[scope] || [];
+            this.tasks_by_scope[scope].push(task);
         }
     }
 
@@ -116,17 +150,24 @@ export default class TaskManager {
         if (!scope)
             return;
 
+        scope = scope.replace(/\/$/, '');
         let scope_rel = this.tasks_by_scope[scope];
 
-        let idx = scope_rel.tasks.indexOf(task);
-        scope_rel.tasks.splice(idx, 1);
-        if (scope_rel.tasks.length === 0 && scope_rel.callbacks.length === 0)
+        scope_rel.splice(scope_rel.indexOf(task), 1);
+        if (scope_rel.length === 0)
             delete this.tasks_by_scope[scope];
-        for (let callback_ctx of scope_rel.callbacks) {
-            try {
-                callback_ctx.callback(scope_rel.tasks);
-            } catch(err) {
-                console.error(`TaskManager: callback failed for scope ${scope}`, err);
+
+        let regexp = this._get_impacted_scope_regexp(scope);
+
+        for (let impacted_scope of Object.keys(this.callbacks_by_scope)) {
+            if (regexp.test(impacted_scope)) {
+                for (let callback_ctx of this.callbacks_by_scope[impacted_scope]) {
+                    try {
+                        callback_ctx.callback(task);
+                    } catch (err) {
+                        console.error(`TaskManager: callback failed for scope ${impacted_scope}`, err);
+                    }
+                }
             }
         }
     }

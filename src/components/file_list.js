@@ -34,9 +34,8 @@ export default class FileList {
         file_selection.reload = () => this._load_folder(status);
         file_selection.clear();
 
-        task_manager.register_scope_callback(`/storages/${storage.id}/explore/${this.folder.fullname}`,
-            this, () => this._load_folder(status)
-        );
+        let scope = decodeURIComponent(m.route.get());
+        task_manager.register_scope_callback(scope, this, () => this._load_folder(status));
     }
 
     onremove({attrs: {file_selection, storage, task_manager}}) {
@@ -44,7 +43,7 @@ export default class FileList {
         // TODO: remove file_selection.reload
         // Warning: onremove() can be called after the next FileList creation (and thus, we could erase the new callback).
         //file_selection.reload = null;
-        task_manager.unregister_scope_callback(`/storages/${storage.id}/explore/${this.folder.fullname}`, this);
+        task_manager.unregister_scope_callback(this);
     }
 
     _load_folder(status) {

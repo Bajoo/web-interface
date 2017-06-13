@@ -22,6 +22,8 @@ export default class EditStorage {
         this.diff_list = null;
 
 
+        let scope_ref = decodeURIComponent(m.route.get());
+
         Storage.get(app.session, vnode.attrs.key)
             .then(storage => this.storage = storage)
             .then(() => this.storage.initialize())
@@ -29,8 +31,7 @@ export default class EditStorage {
             .then(() => {
                 this.diff_list = new DiffMemberList(this.storage.permissions);
 
-                let scope_ref = `/storage/${this.storage.id}`;
-                this.is_loading = app.task_manager.get_tasks_by_scope(scope_ref).length > 0;
+                this.is_loading = app.task_manager.get_tasks_impacted_by_scope(scope_ref).length > 0;
 
                 app.task_manager.register_scope_callback(scope_ref, this, tasks => {
                     this.is_loading = tasks.length > 0;
@@ -41,8 +42,7 @@ export default class EditStorage {
             .then(m.redraw)
             .catch(err => {
                 if (this.storage) {
-                    let scope_ref = `/storage/${this.storage.id}`;
-                    this.is_loading = app.task_manager.get_tasks_by_scope(scope_ref).length > 0;
+                    this.is_loading = app.task_manager.get_tasks_impacted_by_scope(scope_ref).length > 0;
 
                     app.task_manager.register_scope_callback(scope_ref, this, tasks => {
                         this.is_loading = tasks.length > 0;
@@ -70,10 +70,7 @@ export default class EditStorage {
     }
 
     onremove() {
-        if (this.storage) {
-            let scope_ref = `/storage/${this.storage.id}`;
-            app.task_manager.unregister_scope_callback(scope_ref, this);
-        }
+        app.task_manager.unregister_scope_callback(this);
     }
 
     /**
