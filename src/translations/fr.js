@@ -8,6 +8,9 @@ export default {
     // view_models/passphrase_input.js
     'The user refused to enter the passphrase': "L'utilisateur a refusé d'entrer sa phrase de passe",
 
+    // view_models/file_selection.js
+    'Deletion of {0} items': 'Suppression de {0} éléments',
+
     // view_helpers/relative_date.js
     'just now': "à l'instant",
     '{0} second(s) ago': ['il y a {0} seconde(s)', 'il y a une seconde', 'il y a {0} secondes'],
@@ -161,6 +164,9 @@ export default {
 
     // tasks/grouped_tasks.js
     'Group of ${0} tasks': 'Groupe de {0} tâches',
+
+    // tasks/file_deletion.js, tasks/folder_deletion.js
+    'Deletion of "{0}"': 'Suppression de "{0}"',
 
     // pages/register.js, components/storage_member_list.js
     'Email': 'Email',

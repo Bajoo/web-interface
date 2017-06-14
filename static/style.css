@@ -102,6 +102,18 @@ select.readonly:disabled {
     margin: 0;
 }
 
+.task-item-list > ul { /* nested list */
+    padding-left: 15px;
+    padding-bottom: 5px;
+}
+
+.task-item-list  .task-item-list .task-progressbar { /* nested item */
+    padding: 5px 15px;
+}
+
+.folding-handle {
+    cursor: pointer;
+}
 
 /* task-* are used both for navbar status and for the modal */
 .task-progress {
