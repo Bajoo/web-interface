@@ -73,11 +73,19 @@ export default class TaskManager {
         }
     }
 
-    start(task) {
-        this.tasks.push(task);
+    /**
+     * Start a new task and add it to the manager.
+     *
+     * @param task {BaseTask}
+     * @param [is_subtask=false] {boolean} if true, the task is not added to the top-level task list.
+     * @return {Promise} task promise.
+     */
+    start(task, is_subtask=false) {
+        if (!is_subtask)
+            this.tasks.push(task);
         this._register_task_to_scope(task);
         task.onchange = task => m.redraw();
-        return task.start(this.passphrase_input)
+        return task.start(this)
             .then(
                 result => { this._resolve_task_by_scope(task); return result; },
                 err => { this._resolve_task_by_scope(task); throw err; });

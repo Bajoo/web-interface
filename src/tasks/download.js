@@ -27,11 +27,11 @@ export default class Download extends BaseTask {
     }
 
     // jshint ignore:start
-    async _start(passphrase_input) {
+    async _start(task_manager) {
         let storage_key = null;
 
         if (this.file.storage.is_encrypted) {
-            storage_key = await this.unlock_storage(this.file.storage, app.user, passphrase_input);
+            storage_key = await this.unlock_storage(this.file.storage, app.user, task_manager.passphrase_input);
         }
 
         this.set_status(TaskStatus.DOWNLOAD_FILE);

@@ -6,6 +6,8 @@ export let TaskStatus = {
     GET_USER_KEY: 'GET_USER_KEY',
     WAIT_FOR_PASSPHRASE: 'WAIT_FOR_PASSPHRASE',
     GET_STORAGE_KEY: 'GET_STORAGE_KEY',
+    LISTING_DIRECTORY: 'LISTING_DIRECTORY',
+    SUBTASK_EXECUTION: 'SUBTASK_EXECUTION',
     PREPARE_FILE: 'PREPARE_FILE',
     ENCRYPT_FILE: 'ENCRYPT_FILE',
     DECRYPT_FILE: 'DECRYPT_FILE',
@@ -88,25 +90,26 @@ export default class BaseTask {
     /**
      * Start the task.
      *
-     * @param passphrase_input {PassphraseInput}
+     * @param task_manager {TaskManager}
      * @return {Promise}
      */
-    start(passphrase_input) {
-        this.promise = this._wrap_start(passphrase_input);
+    start(task_manager) {
+        this.promise = this._wrap_start(task_manager);
         return this.promise;
     }
 
     // jshint ignore:start
-    async _wrap_start(passphrase_input) {
+    async _wrap_start(task_manager) {
         try {
-            await this._start(passphrase_input);
+            await this._start(task_manager);
         } catch (err) {
             this.set_progress(null);
             this.set_error(err);
         }
         this.set_status(TaskStatus.DONE);
-        if (this.has_unexpected_errors()) {
-            console.error(`Task ${this.get_description()} failed`, this.errors);
+        if (this.has_unexpected_errors() && this.errors.length) {
+            console.error(`Task ${this.get_description()} failed`,
+                this.errors.length > 1 ? this.errors : this.errors[0]);
             throw this.errors[0];
         }
     }

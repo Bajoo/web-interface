@@ -37,12 +37,12 @@ export default class Upload extends BaseTask {
 
     // app.user
     // jshint ignore:start
-    async _start(passphrase_input) {
+    async _start(task_manager) {
         let file = this.file;
         let storage_key = null;
 
         if (this.dest_folder.storage.is_encrypted) {
-            storage_key = await this.unlock_storage(this.dest_folder.storage, app.user, passphrase_input);
+            storage_key = await this.unlock_storage(this.dest_folder.storage, app.user, task_manager.passphrase_input);
         }
 
         this.set_status(TaskStatus.PREPARE_FILE);

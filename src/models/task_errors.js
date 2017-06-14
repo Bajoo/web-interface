@@ -90,3 +90,29 @@ export class StorageKeyError extends TaskError {
         this.reason = reason;
     }
 }
+
+export class FileDeletionError extends TaskError {
+    constructor(task, file, reason = null) {
+        super(task, 'File deletion failed');
+        this.name = 'FileDeletionError';
+        this.file = file;
+        this.reason = reason;
+    }
+
+    toString() {
+        return _l`The deletion of the file "${this.file.name}" has failed`;
+    }
+}
+
+export class FolderListingError extends TaskError {
+    constructor(task, folder, reason = null) {
+        super(task, 'Folder listing failed');
+        this.name = 'FolderListingError';
+        this.folder = folder;
+        this.reason = reason;
+    }
+
+    toString() {
+        return _l`Listing the files of folder "${this.folder.name}" has failed`;
+    }
+}

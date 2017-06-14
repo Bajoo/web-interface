@@ -36,7 +36,7 @@ export default class StorageMemberTask extends BaseTask {
     }
 
     // jshint ignore:start
-    async _start(passphrase_input) {
+    async _start(task_manager) {
         this.set_status(TaskStatus.ONGOING);
 
         let storage = this.storage;
@@ -65,7 +65,7 @@ export default class StorageMemberTask extends BaseTask {
 
         if (rebuild_storage_key_needed) {
             if (!this.reset_key)
-                storage_key = await this.unlock_storage(storage, app.user, passphrase_input);
+                storage_key = await this.unlock_storage(storage, app.user, task_manager.passphrase_input);
             else
                 storage_key = await storage.generate_new_key();
 

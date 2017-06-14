@@ -95,6 +95,8 @@ export default {
     'File not found (404)': 'Fichier introuvable (404)',
     "User \"{0}\" doesn't exist or has no PGP key": "L'utilisateur \"{0}\" n'existe pas ou n'a pas de clé PGP",
     'Update of "{0}" permissions for storage "{1}" failed': 'La mise à jour des permissions de "{0}" pour le partage "{1}" a échoué',
+    'The deletion of the file "{0}" has failed': 'La suppression du fichier {0} a échoué',
+    'Listing the files of folder "{0}" has failed': 'Lister les fichiers du dossier "{0}" a échoué',
 
     // models/task_manager.js
     'Some of your operations (upload or download) are not done yet.\nLeaving this page will interrupt them. Are you sure to leave ?': 'Certaines opérations (téléchargement ou upload) sont toujours en cours.\nQuitter va les interrompre. Êtes-vous sûr de quitter la page ?',
@@ -135,6 +137,8 @@ export default {
     // components/task_list_modal.js
     'Fetch user key ...': 'Récupération de la clé utilisateur ...',
     'Wait for passphrase ...': 'En attente de la phrase secrète ...',
+    'Listing directory ...': 'Lecture du dossier ...',
+    'Execution of sub-tasks ...': 'Exécution des sous-tâches ...',
     'Read file content ...': 'Lecture du fichier ...',
     'Encrypt file ...': 'Chiffrement du fichier ...',
     'Decrypt file ...': 'Déchiffrement du fichier ...',
@@ -155,6 +159,8 @@ export default {
     '{0} task(s) done' : ['{0} tâche(s) terminée(s)', '{0} tâche terminée', '{0} tâches terminées'],
     'Task(s): {0} / {1}': ['Tâche(s): {0} / {1}', 'Tâche: {0} / {1}', 'Tâches: {0} / {1}'],
 
+    // tasks/grouped_tasks.js
+    'Group of ${0} tasks': 'Groupe de {0} tâches',
 
     // pages/register.js, components/storage_member_list.js
     'Email': 'Email',

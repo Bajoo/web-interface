@@ -11,6 +11,8 @@ import {TaskError} from '../models/task_errors';
 const status2msg = {
     [TaskStatus.GET_USER_KEY]: 'Fetch user key ...',
     [TaskStatus.WAIT_FOR_PASSPHRASE]: 'Wait for passphrase ...',
+    [TaskStatus.LISTING_DIRECTORY]: 'Listing directory ...',
+    [TaskStatus.SUBTASK_EXECUTION]: 'Execution of sub-tasks ...',
     [TaskStatus.PREPARE_FILE]: 'Read file content ...',
     [TaskStatus.ENCRYPT_FILE]: 'Encrypt file ...',
     [TaskStatus.DECRYPT_FILE]: 'Decrypt file ...',
@@ -86,7 +88,7 @@ export default class TaskListModal {
                                     task.get_description(),
                                     ' - ',
                                     this._task2status(task),
-                                    task.has_unexpected_errors() ? [
+                                    task.has_unexpected_errors() && task.errors.length ? [
                                         m('br'),
                                         task.errors.length === 1 ?
                                             _l`Error: ${this._display_error(task.errors[0])}` :
