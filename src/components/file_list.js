@@ -35,7 +35,7 @@ export default class FileList {
         file_selection.clear();
 
         let scope = decodeURIComponent(m.route.get());
-        task_manager.register_scope_callback(scope, this, () => this._load_folder(status));
+        task_manager.register_scope_callback(scope, this, null, () => this._load_folder(status));
     }
 
     onremove({attrs: {file_selection, storage, task_manager}}) {

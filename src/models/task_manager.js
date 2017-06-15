@@ -17,8 +17,8 @@ import PassphraseInput from '../view_models/passphrase_input';
  * To handle task changes and real-time impacts on pages, the task scopes must be used.
  * Each task can declare (optionally) one or more object(s) that will be modified: these objects are the scope(s) of
  * the task. Each scope is represented under the form of an URI.
- * Each view can register a callback associated to a scope. When a task finish, all callbacks matching one of these
- * criteria are called:
+ * Each view can register a couple of callback associated to a scope. When a task start or finish, all callbacks
+ * matching one of these criteria are called:
  *  - The callback scope is the direct parent of the task scope.
  *  - The callback scope is the task scope.
  *  - The callback scope is a descendant of the task scope.
@@ -98,12 +98,20 @@ export default class TaskManager {
         }
     }
 
-    register_scope_callback(scope, owner, callback) {
+    /**
+     *
+     * @param scope
+     * @param owner
+     * @param onstart {?Function}
+     * @param onfinish {?Function}
+     */
+    register_scope_callback(scope, owner, onstart, onfinish) {
         scope = scope.replace(/\/$/, '');
         this.callbacks_by_scope[scope] = this.callbacks_by_scope[scope] || [];
         this.callbacks_by_scope[scope].push({
             owner,
-            callback
+            onstart,
+            onfinish
         });
     }
 
@@ -146,11 +154,28 @@ export default class TaskManager {
 
     _register_task_to_scope(task) {
         let scope = task.get_scope();
-        if (scope) {
-            scope = scope.replace(/\/$/, '');
-            this.tasks_by_scope[scope] = this.tasks_by_scope[scope] || [];
-            this.tasks_by_scope[scope].push(task);
+        if (!scope)
+            return;
+
+        scope = scope.replace(/\/$/, '');
+        this.tasks_by_scope[scope] = this.tasks_by_scope[scope] || [];
+        this.tasks_by_scope[scope].push(task);
+        for (let callback_ctx of this._get_impacted_callback_ctx(scope)) {
+            try {
+                if (callback_ctx.onstart)
+                    callback_ctx.onstart(task);
+            } catch (err) {
+                console.error(`TaskManager: 'start' callback failed for scope ${scope}`, err);
+            }
         }
+    }
+
+    _get_impacted_callback_ctx(scope) {
+        let regexp = this._get_impacted_scope_regexp(scope);
+
+        return Object.keys(this.callbacks_by_scope)
+            .filter(key => regexp.test(key))
+            .reduce((acc, key) => acc.concat(this.callbacks_by_scope[key]), []);
     }
 
     _resolve_task_by_scope(task) {
@@ -165,17 +190,12 @@ export default class TaskManager {
         if (scope_rel.length === 0)
             delete this.tasks_by_scope[scope];
 
-        let regexp = this._get_impacted_scope_regexp(scope);
-
-        for (let impacted_scope of Object.keys(this.callbacks_by_scope)) {
-            if (regexp.test(impacted_scope)) {
-                for (let callback_ctx of this.callbacks_by_scope[impacted_scope]) {
-                    try {
-                        callback_ctx.callback(task);
-                    } catch (err) {
-                        console.error(`TaskManager: callback failed for scope ${impacted_scope}`, err);
-                    }
-                }
+        for (let callback_ctx of this._get_impacted_callback_ctx(scope)) {
+            try {
+                if (callback_ctx.onfinish)
+                    callback_ctx.onfinish(task);
+            } catch (err) {
+                console.error(`TaskManager: 'finish' callback failed for scope ${scope}`, err);
             }
         }
     }

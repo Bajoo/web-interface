@@ -33,7 +33,7 @@ export default class EditStorage {
 
                 this.is_loading = app.task_manager.get_tasks_impacted_by_scope(scope_ref).length > 0;
 
-                app.task_manager.register_scope_callback(scope_ref, this, tasks => {
+                app.task_manager.register_scope_callback(scope_ref, this, null, tasks => {
                     this.is_loading = tasks.length > 0;
                     this.storage.get_permissions().then(m.redraw, m.redraw);
                 });
@@ -44,7 +44,7 @@ export default class EditStorage {
                 if (this.storage) {
                     this.is_loading = app.task_manager.get_tasks_impacted_by_scope(scope_ref).length > 0;
 
-                    app.task_manager.register_scope_callback(scope_ref, this, tasks => {
+                    app.task_manager.register_scope_callback(scope_ref, this, null, tasks => {
                         this.is_loading = tasks.length > 0;
                         this.storage.get_permissions().then(m.redraw, m.redraw);
                     });
