@@ -1,5 +1,9 @@
 
 import File from '../models/file';
+import {TaskType} from '../tasks/base_task';
+import FileDeletion from '../tasks/file_deletion';
+import FolderDeletion from '../tasks/folder_deletion';
+import GroupedTasks from '../tasks/grouped_tasks';
 
 
 export const SelectionAction = {
@@ -11,13 +15,10 @@ export const SelectionAction = {
  * Keep a list of file and/or folders selected by the user, and handle user actions on selection.
  */
 export default class FileSelection {
-    constructor() {
+    constructor(task_manager) {
         this.items = [];
-        this.loading = false;
 
-
-        // reload callback
-        this.reload = null;
+        this.task_manager = task_manager;
     }
 
     all_selected(items) {
@@ -49,34 +50,34 @@ export default class FileSelection {
     }
 
     available_actions() {
-        if (this.loading)
-            return [];
-        if (this.items.length !== 1 || !(this.items[0] instanceof File))
+        if (this.items.length === 0)
             return [];
         return [SelectionAction.DELETE];
     }
 
     execute(action) {
-        if (this.loading)
-            return;
         switch (action) {
             case SelectionAction.DELETE:
-                return this._del();
+                this._del();
         }
+        this.clear();
+    }
+
+    _deletion_task_builder(item) {
+        return item instanceof File ? new FileDeletion(item) : new FolderDeletion(item);
     }
 
     _del() {
-        if (this.items.length !== 1 || !(this.items[0] instanceof File))
+        if (this.items.length === 0)
             return false;
 
-        this.loading = true;
-        let file = this.items[0];
-        file.del() // TODO: handle errors
-            .then(() => this.deselect(file))
-            .then(() => this.loading = false, err =>  {
-                console.error('DELETE action failed', err);
-                this.loading = false;
-            })
-            .then(() => this.reload ? this.reload() : null);
+        let task = null;
+        if (this.items.length === 1)
+            task = this._deletion_task_builder(this.items[0]);
+        else
+            task = new GroupedTasks(TaskType.DELETION, this.items.map(item => this._deletion_task_builder(item)),
+                (task, ltpl) => ltpl`Deletion of ${task.task_list.length} items`);
+
+        this.task_manager.start(task);
     }
 }

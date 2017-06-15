@@ -109,7 +109,7 @@ export default class TaskDetails {
                         : ''
                 ]),
             !this.hide_child && task instanceof GroupedTasks && task.task_list.length ?
-                m('ul', task.task_list.map(task => TaskDetails.make(task, task_manager, false))) : ''
+                m('ul', task.task_list.map(task => TaskDetails.make(task, task_manager, true))) : ''
         ]);
     }
 }

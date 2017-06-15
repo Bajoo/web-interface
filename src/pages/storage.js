@@ -45,7 +45,7 @@ export default {
 
         this.wall_msg = null;
 
-        this.file_selection = new FileSelection();
+        this.file_selection = new FileSelection(app.task_manager);
 
         // Load storage infos
         Storage.get(app.session, vnode.attrs.key)
