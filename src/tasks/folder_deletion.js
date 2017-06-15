@@ -1,7 +1,7 @@
 
 import File from '../models/file';
 import {FolderListingError} from '../models/task_errors';
-import {TaskStatus} from './base_task';
+import {TaskStatus, TaskType} from './base_task';
 import GroupedTasks from './grouped_tasks';
 
 import FileDeletion from './file_deletion';
@@ -10,7 +10,7 @@ import FileDeletion from './file_deletion';
 export default class FolderDeletion extends GroupedTasks {
 
     constructor(item) {
-        super();
+        super(TaskType.DELETION);
 
         /** @type Folder */
         this.item = item;

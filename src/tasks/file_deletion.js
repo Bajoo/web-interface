@@ -1,12 +1,12 @@
 
-import BaseTask from './base_task';
+import {TaskType, default as BaseTask} from './base_task';
 import {FileDeletionError} from '../models/task_errors';
 
 
 export default class FileDeletion extends BaseTask {
 
     constructor(item) {
-        super();
+        super(TaskType.DELETION);
 
         /** @type {File} */
         this.item = item;

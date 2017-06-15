@@ -1,5 +1,5 @@
 
-import {default as BaseTask, TaskStatus} from './base_task';
+import {default as BaseTask, TaskStatus, TaskType} from './base_task';
 
 
 /**
@@ -18,8 +18,8 @@ import {default as BaseTask, TaskStatus} from './base_task';
  */
 export default class GroupedTasks extends BaseTask {
 
-    constructor(task_list = null, description=null) {
-        super();
+    constructor(type = TaskType.GENERIC, task_list = null, description=null) {
+        super(type);
 
         /**
          * list of subtasks.

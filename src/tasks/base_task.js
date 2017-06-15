@@ -19,6 +19,15 @@ export let TaskStatus = {
 };
 
 
+export let TaskType = {
+    CREATION: 'CREATION',
+    DELETION: 'DELETION',
+    DOWNLOAD: 'DOWNLOAD',
+    UPLOAD: 'UPLOAD',
+    GENERIC: 'GENERIC'
+};
+
+
 /**
  * Abstract class for long-running task.
  *
@@ -33,9 +42,12 @@ export let TaskStatus = {
  *
  */
 export default class BaseTask {
-    constructor() {
+    constructor(type = TaskType.GENERIC) {
         /** @type {?String} one of TaskStatus */
         this.status = null;
+
+        /** {String} one of TaskType */
+        this.type = type;
 
         /**
          * Callback called when the task state changes. It can be a state change, a progress change or a new error.

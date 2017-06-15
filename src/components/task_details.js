@@ -2,9 +2,7 @@
 import m from 'mithril';
 import {_, _l} from '../utils/i18n';
 import GroupedTasks from '../tasks/grouped_tasks';
-import Download from '../tasks/download';
-import Upload from '../tasks/upload';
-import {TaskStatus} from '../tasks/base_task';
+import {TaskStatus, TaskType} from '../tasks/base_task';
 import {TaskError} from '../models/task_errors';
 
 
@@ -51,11 +49,13 @@ export default class TaskDetails {
     }
 
     static _get_icon(task) {
-        switch (true) {
-            case task instanceof Download:
+        switch (task.type) {
+            case TaskType.DOWNLOAD:
                 return 'glyphicon-cloud-download';
-            case task instanceof Upload:
+            case TaskType.UPLOAD:
                 return 'glyphicon-cloud-upload';
+            case TaskType.DELETION:
+                return 'glyphicon-trash';
             default:
                 return 'glyphicon-wrench';
         }

@@ -1,6 +1,6 @@
 
 import app from '../app';
-import {TaskStatus, default as BaseTask} from './base_task';
+import {TaskStatus, TaskType, default as BaseTask} from './base_task';
 import {encrypt} from '../encryption';
 
 
@@ -17,7 +17,7 @@ function blob2array_buffer(blob) {
 export default class Upload extends BaseTask {
 
     constructor(folder, file) {
-        super();
+        super(TaskType.UPLOAD);
         this.dest_folder = folder;
         this.file = file;
     }

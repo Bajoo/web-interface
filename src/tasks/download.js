@@ -1,6 +1,6 @@
 
 import app from '../app';
-import {TaskStatus, default as BaseTask} from './base_task';
+import {TaskStatus, TaskType, default as BaseTask} from './base_task';
 import {NotFoundError} from '../models/task_errors';
 import {decrypt} from '../encryption';
 
@@ -13,7 +13,7 @@ import {decrypt} from '../encryption';
 export default class Download extends BaseTask {
 
     constructor(file) {
-        super();
+        super(TaskType.DOWNLOAD);
         this.file = file;
     }
 
