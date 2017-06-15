@@ -27,7 +27,7 @@ export default class FolderDeletion extends GroupedTasks {
     }
 
     get_scope() {
-        return `/storages/${this.item.storage.id}/browse/${this.item.fullname}`;
+        return `/storage/${this.item.storage.id}/browse/${this.item.fullname}`;
     }
 
     // jshint ignore:start

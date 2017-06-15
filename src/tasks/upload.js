@@ -32,7 +32,7 @@ export default class Upload extends BaseTask {
     }
 
     get_scope() {
-        return `/storages/${this.dest_folder.storage.id}/browse/${this.dest_folder.fullname}`;
+        return `/storage/${this.dest_folder.storage.id}/browse/${this.dest_folder.fullname}`;
     }
 
     // app.user

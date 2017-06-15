@@ -22,7 +22,7 @@ export default class FileDeletion extends BaseTask {
     }
 
     get_scope() {
-        return `/storages/${this.item.storage.id}/browse/${this.item.fullname}`;
+        return `/storage/${this.item.storage.id}/browse/${this.item.fullname}`;
     }
 
     _start() {
