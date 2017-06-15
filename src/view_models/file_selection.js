@@ -1,4 +1,5 @@
 
+import {_} from '../utils/i18n';
 import File from '../models/file';
 import {TaskType} from '../tasks/base_task';
 import FileDeletion from '../tasks/file_deletion';
@@ -56,11 +57,13 @@ export default class FileSelection {
     }
 
     execute(action) {
+        let res = false;
         switch (action) {
             case SelectionAction.DELETE:
-                this._del();
+                res = this._del();
         }
-        this.clear();
+        if (res)
+            this.clear();
     }
 
     _deletion_task_builder(item) {
@@ -71,6 +74,9 @@ export default class FileSelection {
         if (this.items.length === 0)
             return false;
 
+        if (!window.confirm(_('Are you sure to delete these files ?')))
+            return false;
+
         let task = null;
         if (this.items.length === 1)
             task = this._deletion_task_builder(this.items[0]);
@@ -79,5 +85,6 @@ export default class FileSelection {
                 (task, ltpl) => ltpl`Deletion of ${task.task_list.length} items`);
 
         this.task_manager.start(task);
+        return true;
     }
 }

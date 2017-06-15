@@ -9,6 +9,7 @@ export default {
     'The user refused to enter the passphrase': "L'utilisateur a refusé d'entrer sa phrase de passe",
 
     // view_models/file_selection.js
+    'Are you sure to delete these files ?': 'Êtes-vous sûr(e) de supprimer ces fichiers ?',
     'Deletion of {0} items': 'Suppression de {0} éléments',
 
     // view_helpers/relative_date.js
