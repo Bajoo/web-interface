@@ -116,3 +116,25 @@ export class FolderListingError extends TaskError {
         return _l`Listing the files of folder "${this.folder.name}" has failed`;
     }
 }
+
+export class FileReaderError extends TaskError {
+    constructor(task, file, reason = null) {
+        super(task, 'File reading failed');
+        this.name = 'FileReaderError';
+        this.file = file;
+        this.reason = reason;
+    }
+
+    toString() {
+        switch (this.reason.name) {
+            case 'NotFoundError':
+                return _('The file has not be found');
+            case 'SecurityError':
+                return _('Reading this file is not allowed');
+            case 'NotReadableError':
+                return _("The file can't be read");
+            default:
+                return _('File reading failed');
+        }
+    }
+}

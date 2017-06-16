@@ -101,6 +101,10 @@ export default {
     'Update of "{0}" permissions for storage "{1}" failed': 'La mise à jour des permissions de "{0}" pour le partage "{1}" a échoué',
     'The deletion of the file "{0}" has failed': 'La suppression du fichier {0} a échoué',
     'Listing the files of folder "{0}" has failed': 'Lister les fichiers du dossier "{0}" a échoué',
+    'The file has not be found': "Le fichier n'a pas pu être lu",
+    'Reading this file is not allowed': "La lecture de ce fichier n'est pas autorisé",
+    "The file can't be read": 'Ce fichier ne peut pas être lu',
+    'File reading failed': 'La lecture du fichier a échoué',
 
     // models/task_manager.js
     'Some of your operations (upload or download) are not done yet.\nLeaving this page will interrupt them. Are you sure to leave ?': 'Certaines opérations (téléchargement ou upload) sont toujours en cours.\nQuitter va les interrompre. Êtes-vous sûr de quitter la page ?',

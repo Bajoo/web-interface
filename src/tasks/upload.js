@@ -1,14 +1,15 @@
 
 import app from '../app';
 import {TaskStatus, TaskType, default as BaseTask} from './base_task';
+import {CanceledError, FileReaderError} from '../models/task_errors';
 import {encrypt} from '../encryption';
 
 
-function blob2array_buffer(blob) {
+function blob2array_buffer(task, blob) {
     return new Promise((resolve, reject) => {
         let reader = new FileReader();
-        reader.onerror = () => reject(reader.error);
-        reader.onabort = () => reject(reader.error);
+        reader.onerror = () => reject(new FileReaderError(task, blob, reader.error));
+        reader.onabort = () => reject(new CanceledError(task));
         reader.onloadend = () => resolve(reader.result);
         reader.readAsArrayBuffer(blob);
     });
@@ -51,7 +52,7 @@ export default class Upload extends BaseTask {
 
         this.set_status(TaskStatus.PREPARE_FILE);
 
-        let file_content = await blob2array_buffer(file);
+        let file_content = await blob2array_buffer(self, file);
 
         if (this.dest_folder.storage.is_encrypted) {
             this.set_status(TaskStatus.ENCRYPT_FILE);
