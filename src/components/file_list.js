@@ -66,7 +66,7 @@ export default class FileList {
     view({attrs: {task_manager, file_selection}}) {
         return m('', !this.folder.items ?
             m('#file-zone', _('Loading ...')) :
-            Dropzone.make('#file-zone', file => task_manager.start(this.folder.upload(file)), [
+            Dropzone.make('#file-zone', task_manager, this.folder, [
                 m('table.table.table-hover', [
                     m('thead', m('tr', [
                         m('th', m('input[type=checkbox]', {

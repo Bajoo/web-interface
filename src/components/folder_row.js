@@ -20,7 +20,7 @@ export default class FolderRow {
      * @param file_selection {FileSelection}
      */
     view({attrs: {folder, task_manager, file_selection}}) {
-        return Dropzone.make('tr.folder-row', f => task_manager.start(folder.upload(f)), [
+        return Dropzone.make('tr.folder-row', task_manager, folder, [
             m('td', m('input[type=checkbox]', {
                 checked: file_selection.is_selected(folder),
                 onchange: evt => evt.target.checked ? file_selection.select(folder) : file_selection.deselect(folder)

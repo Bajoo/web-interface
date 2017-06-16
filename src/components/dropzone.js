@@ -1,5 +1,7 @@
 
 import m from 'mithril';
+import {TaskType} from '../tasks/base_task';
+import GroupedTasks from '../tasks/grouped_tasks';
 
 
 /**
@@ -14,19 +16,21 @@ export default class Dropzone {
 
     /**
      * @param tag {string}
-     * @param callback {Function}
+     * @param task_manager {TaskManager}
+     * @param folder {Folder} folder in which the files will be dropped
      * @param children
      */
-    static make(tag, callback, children) {
-        return m(Dropzone, {html_tag: tag, on_drop_file: callback}, children);
+    static make(tag, task_manager, folder, children) {
+        return m(Dropzone, {html_tag: tag, task_manager, folder}, children);
     }
 
     /**
      * @param [html_tag='']{string} 1st value passed to `m()`. If not set '' is used (producing a div).
-     * @param on_drop_file {Function} called when a file is dropped. Receives the file in parameter.
+     * @param task_manager {TaskManager}
+     * @param folder {Folder} folder in which the files will be dropped
      * @param children children's component
      */
-    view({attrs: {html_tag = '', on_drop_file}, children}) {
+    view({attrs: {html_tag = '', task_manager, folder}, children}) {
         return m(html_tag, {
             class: this.drag_enter > 0 ? 'dropzone' : '',
             ondragover: evt => {
@@ -61,11 +65,24 @@ export default class Dropzone {
                     evt.stopPropagation();
                     evt.preventDefault();
 
-                    for (let f of evt.dataTransfer.files) {
-                        on_drop_file(f);
-                    }
+                    this._upload(task_manager, folder, evt.dataTransfer);
                 }
             }
         }, children);
+    }
+
+    _upload(task_manager, folder, data_transfer) {
+        if (data_transfer.files.length === 0)
+            return;
+
+        let task;
+        if (data_transfer.files.length === 1)
+            task = folder.upload(data_transfer.files[0]);
+        else
+            task = new GroupedTasks(TaskType.UPLOAD,
+                Array.from(data_transfer.files).map(file => folder.upload(file)),
+                (task, ltpl) => ltpl`Upload of ${task.task_list.length} items`);
+
+        task_manager.start(task);
     }
 }
