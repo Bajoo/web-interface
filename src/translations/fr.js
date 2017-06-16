@@ -111,6 +111,9 @@ export default {
     // components/disconnect_button.js
     'Log out': 'Déconnexion',
 
+    // components/dropzone.js
+    'Upload of {0} items': 'Upload de {0} éléments',
+
     // components/file_list.js
     'Fetching file list failed: {0}': 'La récupération de la liste des fichiers a échouée: {0}',
     'Size': 'Taille',
