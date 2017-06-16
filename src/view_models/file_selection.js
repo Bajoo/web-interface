@@ -1,5 +1,6 @@
 
 import {_} from '../utils/i18n';
+import prop from '../utils/prop';
 import File from '../models/file';
 import {TaskType} from '../tasks/base_task';
 import FileDeletion from '../tasks/file_deletion';
@@ -8,7 +9,8 @@ import GroupedTasks from '../tasks/grouped_tasks';
 
 
 export const SelectionAction = {
-    DELETE: 'DELETE'
+    DELETE: 'DELETE',
+    CREATE_FOLDER: 'CREATE_FOLDER'
 };
 
 
@@ -20,6 +22,9 @@ export default class FileSelection {
         this.items = [];
 
         this.task_manager = task_manager;
+
+        /** @type {prop} if true, display the folder creation modal */
+        this.show_folder_creation_modal = prop(false);
     }
 
     all_selected(items) {
@@ -51,9 +56,14 @@ export default class FileSelection {
     }
 
     available_actions() {
-        if (this.items.length === 0)
-            return [];
-        return [SelectionAction.DELETE];
+        let actions = [
+            SelectionAction.CREATE_FOLDER
+        ];
+
+        if (this.items.length !== 0) {
+            actions.push(SelectionAction.DELETE);
+        }
+        return actions;
     }
 
     execute(action) {
@@ -61,6 +71,10 @@ export default class FileSelection {
         switch (action) {
             case SelectionAction.DELETE:
                 res = this._del();
+                break;
+            case SelectionAction.CREATE_FOLDER:
+                this.show_folder_creation_modal(true);
+                break;
         }
         if (res)
             this.clear();

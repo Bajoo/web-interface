@@ -117,6 +117,12 @@ export default {
     'Last modification': 'Dernière modification',
     'This folder is empty': 'Ce dossier est vide',
 
+    // components/folder_creation_modal.js
+    'Creation of a new folder': 'Création d\'un nouveau dossier',
+    'Name of the new folder:': 'Nom du nouveau dossier :',
+    'Note: folders are not really created until a file is added into it.': 'Note: Le dossier ne sera pas réellement créé avant qu\'un fichier ne lui soit ajouté',
+    'Create': 'Créer',
+
     // components/layout.js
     'Connection ...': 'Connexion ...',
 
