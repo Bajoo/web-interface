@@ -14,6 +14,7 @@ export default class PassphraseInput {
         this.wait_for_feedback = false;
         this.error = false;
 
+        this._promise = null;
         this._resolve = null;
         this._reject = null;
     }
@@ -26,12 +27,14 @@ export default class PassphraseInput {
      *  is rejected.
      */
     ask() {
-        return new Promise((resolve, reject) => {
-            this.enabled = true;
-            this._resolve = resolve;
-            this._reject = reject;
-            m.redraw();
-        });
+        if (!this._promise)
+            this._promise = new Promise((resolve, reject) => {
+                this.enabled = true;
+                this._resolve = resolve;
+                this._reject = reject;
+                m.redraw();
+            });
+        return this._promise;
     }
 
     /**
@@ -52,10 +55,12 @@ export default class PassphraseInput {
     cancel() {
         this.enabled = false;
         this.passphrase('');
+        this._promise = null;
         this._reject(new this.constructor.UserCancelError());
     }
 
     submit() {
+        this._promise = null;
         this._resolve(this.passphrase());
     }
 
