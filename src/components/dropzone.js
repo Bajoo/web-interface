@@ -1,6 +1,7 @@
 
 import m from 'mithril';
 import {TaskType} from '../tasks/base_task';
+import FolderUpload from '../tasks/folder_upload';
 import GroupedTasks from '../tasks/grouped_tasks';
 
 
@@ -75,12 +76,26 @@ export default class Dropzone {
         if (data_transfer.files.length === 0)
             return;
 
+        let tasks;
+        if (FolderUpload.is_supported()) {
+            tasks = Array.from(data_transfer.items)
+                .filter(item => item.kind === 'file')
+                .map(item => {
+                    let entry = 'getAsEntry' in item ? item.getAsEntry() : item.webkitGetAsEntry();
+                    if (entry.isFile)
+                        return folder.upload(entry.getAsFile());
+                    else
+                        return new FolderUpload(folder, entry);
+                });
+        } else {
+            tasks = Array.from(data_transfer.files).map(file => folder.upload(file));
+        }
+
         let task;
-        if (data_transfer.files.length === 1)
-            task = folder.upload(data_transfer.files[0]);
+        if (tasks.length === 1)
+            task = tasks[0];
         else
-            task = new GroupedTasks(TaskType.UPLOAD,
-                Array.from(data_transfer.files).map(file => folder.upload(file)),
+            task = new GroupedTasks(TaskType.UPLOAD, tasks,
                 (task, ltpl) => ltpl`Upload of ${task.task_list.length} items`);
 
         task_manager.start(task);

@@ -27,7 +27,7 @@ export default class FileList {
         /** @type {boolean} sort order: ascendant (true) or descendant (false) */
         this.sort_ascendant = true;
 
-        this.folder = new Folder(storage, {subdir: key});
+        this.folder = new Folder(storage, key);
 
         this._load_folder(status);
 

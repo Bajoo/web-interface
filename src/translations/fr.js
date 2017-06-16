@@ -109,7 +109,7 @@ export default {
     // models/task_manager.js
     'Some of your operations (upload or download) are not done yet.\nLeaving this page will interrupt them. Are you sure to leave ?': 'Certaines opérations (téléchargement ou upload) sont toujours en cours.\nQuitter va les interrompre. Êtes-vous sûr de quitter la page ?',
 
-    // models/upload.js
+    // tasks/folder_upload.js, tasks/upload.js
     'Upload of "{0}"': 'Upload de "{0}"',
 
     // components/disconnect_button.js

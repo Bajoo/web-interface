@@ -127,7 +127,7 @@ export default class Storage {
                     return new File(this, item);
                 }
                 if ('subdir' in item) {
-                    return new Folder(this, item);
+                    return new Folder(this, item.subdir);
                 }
                 return item;
             }));

@@ -4,11 +4,11 @@ import Upload from '../tasks/upload';
 
 export default class Folder {
 
-    constructor(storage, {subdir}) {
+    constructor(storage, path) {
         this.storage = storage;
 
         // full name (without trailing slash).
-        this.fullname = subdir.replace(/\/+$/, '');
+        this.fullname = path.replace(/\/+$/, '');
         this.name = this.fullname.split('/').pop() || '';
 
         /** @type {?Array<File|Folder>} */
