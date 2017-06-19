@@ -11,7 +11,8 @@ import GroupedTasks from '../tasks/grouped_tasks';
 export const SelectionAction = {
     DELETE: 'DELETE',
     CREATE_FOLDER: 'CREATE_FOLDER',
-    UPLOAD: 'UPLOAD'
+    UPLOAD: 'UPLOAD',
+    REFRESH: 'REFRESH'
 };
 
 
@@ -23,6 +24,8 @@ export default class FileSelection {
         this.items = [];
 
         this.task_manager = task_manager;
+
+        this.reload = null;
 
         /** @type {prop} if true, display the folder creation modal */
         this.show_folder_creation_modal = prop(false);
@@ -62,7 +65,8 @@ export default class FileSelection {
     available_actions() {
         let actions = [
             SelectionAction.CREATE_FOLDER,
-            SelectionAction.UPLOAD
+            SelectionAction.UPLOAD,
+            SelectionAction.REFRESH
         ];
 
         if (this.items.length !== 0) {
@@ -83,6 +87,9 @@ export default class FileSelection {
             case SelectionAction.UPLOAD:
                 this.show_upload_modal(true);
                 break;
+            case SelectionAction.REFRESH:
+                this.reload();
+                res = true;
         }
         if (res)
             this.clear();

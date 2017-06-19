@@ -18,6 +18,8 @@ export default class SelectionActionMenu {
                 return 'glyphicon-folder-open';
             case SelectionAction.UPLOAD:
                 return 'glyphicon-cloud-upload';
+            case SelectionAction.REFRESH:
+                return 'glyphicon-refresh';
         }
     }
 
