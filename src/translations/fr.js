@@ -177,9 +177,9 @@ export default {
     'Task(s): {0} / {1}': ['Tâche(s): {0} / {1}', 'Tâche: {0} / {1}', 'Tâches: {0} / {1}'],
 
     // components/upload_modal.js
-    'Upload files': 'Upload de fichier',
-    'Select the file(s) you want to upload': 'Sélectionnez les fichiers que vous voulez uploader',
-    'Start upload': 'Commencer l\'upload',
+    'Upload files': 'Ajout de fichier',
+    'Select the file(s) you want to upload': 'Sélectionnez les fichiers que vous voulez ajouter',
+    'Send the file(s)': 'Envoyer les fichier(s)',
 
 
     // tasks/grouped_tasks.js

@@ -25,7 +25,7 @@ export default class UploadModal {
                     m('input#upload-file-input[type=file][multiple].btn.btn-default', {onchange: evt => this._on_change(evt)})
                 ])
             ), [
-                m('button[type=submit][form=upload-form].btn.btn-primary', _('Start upload'))
+                m('button[type=submit][form=upload-form].btn.btn-primary', _('Send the file(s)'))
             ]
         );
     }
