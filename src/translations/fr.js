@@ -176,6 +176,12 @@ export default {
     '{0} task(s) done' : ['{0} tâche(s) terminée(s)', '{0} tâche terminée', '{0} tâches terminées'],
     'Task(s): {0} / {1}': ['Tâche(s): {0} / {1}', 'Tâche: {0} / {1}', 'Tâches: {0} / {1}'],
 
+    // components/upload_modal.js
+    'Upload files': 'Upload de fichier',
+    'Select the file(s) you want to upload': 'Sélectionnez les fichiers que vous voulez uploader',
+    'Start upload': 'Commencer l\'upload',
+
+
     // tasks/grouped_tasks.js
     'Group of ${0} tasks': 'Groupe de {0} tâches',
 

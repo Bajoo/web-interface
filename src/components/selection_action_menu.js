@@ -16,6 +16,8 @@ export default class SelectionActionMenu {
                 return 'glyphicon-trash';
             case SelectionAction.CREATE_FOLDER:
                 return 'glyphicon-folder-open';
+            case SelectionAction.UPLOAD:
+                return 'glyphicon-cloud-upload';
         }
     }
 

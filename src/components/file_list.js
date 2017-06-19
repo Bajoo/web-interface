@@ -3,6 +3,7 @@ import m from 'mithril';
 import Dropzone from '../components/dropzone';
 import FileRow from '../components/file_row';
 import FolderRow from '../components/folder_row';
+import UploadModal from '../components/upload_modal';
 import Folder from '../models/folder';
 import {_, _l} from '../utils/i18n';
 
@@ -65,38 +66,40 @@ export default class FileList {
      */
     view({attrs: {task_manager, file_selection}}) {
         return m('', !this.folder.items ?
-            m('#file-zone', _('Loading ...')) :
-            Dropzone.make('#file-zone', task_manager, this.folder, [
-                m('table.table.table-hover', [
-                    m('thead', m('tr', [
-                        m('th', m('input[type=checkbox]', {
-                            checked: file_selection.all_selected(this.folder.items),
-                            onchange: evt => evt.target.checked ? file_selection.select_all(this.folder.items) : file_selection.clear()
-                        })),
-                        m('th'),
-                        m('th', {onclick: () => this._sort_order(name_cmp)}, [
-                            _('Name'),
-                            this._sort_order_arrow(name_cmp)
-                        ]),
-                        m('th', {onclick: () => this._sort_order(size_cmp)}, [
-                            _('Size'),
-                            this._sort_order_arrow(size_cmp)
-                        ]),
-                        m('th', {onclick: () => this._sort_order(date_cmp)}, [
-                            _('Last modification'),
-                            this._sort_order_arrow(date_cmp)
-                        ])
-                    ])),
-                    m('tbody', this._sort(this.folder.items).map(
-                        file => file instanceof Folder ?
-                            FolderRow.make(file, task_manager, file_selection) :
-                            FileRow.make(file, task_manager, file_selection))
-                    )
-                ]),
-                (this.folder.items && this.folder.items.length === 0) ?
-                    m('.jumbotron.empty-box', m('p', _('This folder is empty'))) :
-                    ''
-            ]));
+            m('#file-zone', _('Loading ...')) : [
+                UploadModal.make(file_selection, this.folder, task_manager),
+                Dropzone.make('#file-zone', task_manager, this.folder, [
+                    m('table.table.table-hover', [
+                        m('thead', m('tr', [
+                            m('th', m('input[type=checkbox]', {
+                                checked: file_selection.all_selected(this.folder.items),
+                                onchange: evt => evt.target.checked ? file_selection.select_all(this.folder.items) : file_selection.clear()
+                            })),
+                            m('th'),
+                            m('th', {onclick: () => this._sort_order(name_cmp)}, [
+                                _('Name'),
+                                this._sort_order_arrow(name_cmp)
+                            ]),
+                            m('th', {onclick: () => this._sort_order(size_cmp)}, [
+                                _('Size'),
+                                this._sort_order_arrow(size_cmp)
+                            ]),
+                            m('th', {onclick: () => this._sort_order(date_cmp)}, [
+                                _('Last modification'),
+                                this._sort_order_arrow(date_cmp)
+                            ])
+                        ])),
+                        m('tbody', this._sort(this.folder.items).map(
+                            file => file instanceof Folder ?
+                                FolderRow.make(file, task_manager, file_selection) :
+                                FileRow.make(file, task_manager, file_selection))
+                        )
+                    ]),
+                    (this.folder.items && this.folder.items.length === 0) ?
+                        m('.jumbotron.empty-box', m('p', _('This folder is empty'))) :
+                        ''
+                ])
+            ]);
     }
 
     _sort(items) {

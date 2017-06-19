@@ -10,7 +10,8 @@ import GroupedTasks from '../tasks/grouped_tasks';
 
 export const SelectionAction = {
     DELETE: 'DELETE',
-    CREATE_FOLDER: 'CREATE_FOLDER'
+    CREATE_FOLDER: 'CREATE_FOLDER',
+    UPLOAD: 'UPLOAD'
 };
 
 
@@ -25,6 +26,9 @@ export default class FileSelection {
 
         /** @type {prop} if true, display the folder creation modal */
         this.show_folder_creation_modal = prop(false);
+
+        /** @type {prop} if true, display the upload modal */
+        this.show_upload_modal = prop(false);
     }
 
     all_selected(items) {
@@ -57,7 +61,8 @@ export default class FileSelection {
 
     available_actions() {
         let actions = [
-            SelectionAction.CREATE_FOLDER
+            SelectionAction.CREATE_FOLDER,
+            SelectionAction.UPLOAD
         ];
 
         if (this.items.length !== 0) {
@@ -74,6 +79,9 @@ export default class FileSelection {
                 break;
             case SelectionAction.CREATE_FOLDER:
                 this.show_folder_creation_modal(true);
+                break;
+            case SelectionAction.UPLOAD:
+                this.show_upload_modal(true);
                 break;
         }
         if (res)
