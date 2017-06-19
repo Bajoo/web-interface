@@ -37,8 +37,6 @@ export default class UploadModal {
     _submit(folder, task_manager, show_prop) {
         let tasks = Array.from(this.files).map(file => folder.upload(file));
 
-        console.log('!', this.files);
-
         let task;
         if (tasks.length === 1)
             task = tasks[0];
