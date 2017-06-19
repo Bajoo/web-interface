@@ -48,5 +48,6 @@ export default class UploadModal {
 
         task_manager.start(task);
         show_prop(false);
+        return false;
     }
 }
