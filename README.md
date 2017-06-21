@@ -36,6 +36,13 @@ The web app can be built in dev mode:
 npm start  # build & listen to file changes
 ```
 
+Also, it has unit tests, an internal documentation API as well as a few lint rules used to maintain code quality.
+```sh
+npm test  # run the tests
+npm run jshint  # check jshint rules
+npm run doc  # build the doc. The index can be found in './doc/index.html'
+```
+
 ## License
 
 The Bajoo web interface is available under the MIT license:

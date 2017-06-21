@@ -54,15 +54,6 @@ module.exports = {
             test: /\.js$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
-            options: {
-                presets: ['es2015'],
-                plugins: [
-                    ["babel-plugin-transform-builtin-extend", {
-                        globals: ["Error", "Array"]
-                    }],
-                    "transform-async-to-generator"
-                ]
-            }
         }]
     },
     plugins: [

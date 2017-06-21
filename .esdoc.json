@@ -1,4 +1,9 @@
 {
   "source": "./src",
-  "destination": "./doc"
+  "destination": "./doc",
+  "test": {
+    "type": "mocha",
+    "source": "./test",
+    "includes": ["^[a-zA-Z].*\\.js$"]
+  }
 }
