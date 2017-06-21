@@ -9,13 +9,15 @@
   "scripts": {
     "start": "node_modules/.bin/webpack --watch",
     "prod": "NODE_ENV=production node_modules/.bin/webpack -p",
-    "test": "node_modules/.bin/jshint src"
+    "test": "node_modules/.bin/jshint src",
+    "doc": "node_modules/.bin/esdoc"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "dependencies": {
     "bootstrap": "^3.3.7",
+    "esdoc": "^0.5.2",
     "mithril": "^1.1.1",
     "openpgp": "^2.4.0",
     "webpack": "^2.2.1"
