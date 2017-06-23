@@ -6,16 +6,18 @@ import {_} from '../utils/i18n';
 export default class DisconnectButton {
 
     /**
-     * @param callback {Function}
+     * Mithril view constructor.
+     *
+     * @param {function()} disconnect_cb - callback executed when the button is activated.
      */
-    static make(callback) {return m(DisconnectButton, {disconnect: callback});}
+    static make(disconnect_cb) {return m(DisconnectButton, {disconnect_cb});}
 
     /**
-     * @param disconnect {() => undefined} callback called when the user click on the button.
+     * @param {function()} disconnect_cb - callback executed when the button is activated.
      */
-    view({attrs: {disconnect}}) {
+    view({attrs: {disconnect_cb}}) {
         return m('button.btn.navbar-btn.btn-danger.navbar-right[type=button]',
-            {onclick: () => disconnect() },
+            {onclick: () => disconnect_cb()},
             _('Log out'));
     }
 }

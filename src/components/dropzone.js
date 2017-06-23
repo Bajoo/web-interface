@@ -6,7 +6,10 @@ import GroupedTasks from '../tasks/grouped_tasks';
 
 
 /**
- * HTML tag which can receive files during an drag&drop operation.
+ * Drag & drop component, accepting files and folders.
+ *
+ * At drop, upload tasks are created from the dropped files, then started by the task manager.
+ * This component is meant to be generic: its HTML tag can be set at construction, as well as its child nodes.
  */
 export default class Dropzone {
     constructor() {
@@ -16,22 +19,24 @@ export default class Dropzone {
     }
 
     /**
-     * @param tag {string}
-     * @param task_manager {TaskManager}
-     * @param folder {Folder} folder in which the files will be dropped
-     * @param children
+     * Mithril view constructor
+     *
+     * @param {string} tag - HTML tag for mithril (CSS selector)
+     * @param {TaskManager} task_manager
+     * @param {Folder} folder - folder in which the files will be dropped
+     * @param {*} children - child vnodes passed to mithril
      */
     static make(tag, task_manager, folder, children) {
         return m(Dropzone, {html_tag: tag, task_manager, folder}, children);
     }
 
     /**
-     * @param [html_tag='']{string} 1st value passed to `m()`. If not set '' is used (producing a div).
-     * @param task_manager {TaskManager}
-     * @param folder {Folder} folder in which the files will be dropped
-     * @param children children's component
+     * @param {string} html_tag - 1st value passed to `m()`.
+     * @param {TaskManager} task_manager
+     * @param {Folder} folder - folder in which the files will be dropped
+     * @param {*} children - child vnodes passed to mithril
      */
-    view({attrs: {html_tag = '', task_manager, folder}, children}) {
+    view({attrs: {html_tag, task_manager, folder}, children}) {
         return m(html_tag, {
             class: this.drag_enter > 0 ? 'dropzone' : '',
             ondragover: evt => {
