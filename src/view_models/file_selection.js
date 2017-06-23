@@ -27,10 +27,10 @@ export default class FileSelection {
 
         this.reload = null;
 
-        /** @type {prop} if true, display the folder creation modal */
+        /** @type {Prop.<Boolean>} if true, display the folder creation modal */
         this.show_folder_creation_modal = prop(false);
 
-        /** @type {prop} if true, display the upload modal */
+        /** @type {Prop.<Boolean>} if true, display the upload modal */
         this.show_upload_modal = prop(false);
     }
 

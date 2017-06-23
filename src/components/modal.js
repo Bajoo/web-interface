@@ -11,11 +11,11 @@ export default class Modal {
     /**
      * Make a generic modal
      *
-     * @param {prop.<boolean>} show_prop property used to hide and show the modal.
-     * @param {string} title string used as title
-     * @param {string} title_id HTML ID of the modal title
-     * @param body modal content. must be an object valid for mithril (vnode, string, array)
-     * @param [footer] if set, content of the footer. must be an object valid for mithril (vnode, string, array)
+     * @param {Prop.<boolean>} show_prop - property used to hide and show the modal.
+     * @param {string} title - string used as title
+     * @param {string} title_id - HTML ID of the modal title
+     * @param {*} body - modal content. must be an object valid for mithril (vnode, string, array)
+     * @param {*} [footer] - if set, content of the footer. must be an object valid for mithril (vnode, string, array)
      */
     static make(show_prop, title, title_id, body, footer = null) {
         return show_prop() ? m(Modal, {show_prop, title, title_id, body, footer}) : '';

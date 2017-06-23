@@ -53,7 +53,7 @@ export default class TaskManager {
         this.tasks_by_scope = {};
         this.callbacks_by_scope = {};
 
-        /** @type {prop} if true, display the task list modal */
+        /** @type {Prop.<Boolean>} if true, display the task list modal */
         this.show_task_list = prop(false);
 
         initialize_encryption();
