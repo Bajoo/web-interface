@@ -88,7 +88,7 @@ export default class Dropzone {
                 .map(item => {
                     let entry = 'getAsEntry' in item ? item.getAsEntry() : item.webkitGetAsEntry();
                     if (entry.isFile)
-                        return folder.upload(entry.getAsFile());
+                        return folder.upload(item.getAsFile());
                     else
                         return new FolderUpload(folder, entry);
                 });
