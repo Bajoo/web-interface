@@ -5,7 +5,7 @@ import StorageList from './storage_list';
 
 export default class User {
 
-    constructor(session, {email, lang, quota}) {
+    constructor(session, {email, lang = null, quota}) {
         this.session = session;
 
         this.email = email;

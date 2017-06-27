@@ -19,6 +19,8 @@ let lang = 'en';
 
 
 export function set_lang(new_lang) {
+    if (!new_lang)
+        return false;
     if (new_lang in translations) {
         lang = new_lang;
         return true;
