@@ -1,6 +1,6 @@
 
 import m from 'mithril';
-import {base_url} from '../models/session';
+import {api_url} from '../../config';
 import User from '../models/user';
 import app from '../app';
 import InputForm from '../components/input_form';
@@ -8,8 +8,7 @@ import {_} from '../utils/i18n';
 import prop from '../utils/prop';
 import ActivationPage from './activation';
 
-
-const forgotten_password_url = `${base_url}/user/password-forgotten`;
+const forgotten_password_url = `${api_url}/user/password-forgotten`;
 
 
 export default {
