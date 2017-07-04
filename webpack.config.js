@@ -5,7 +5,22 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const extract_html = new ExtractTextPlugin('index.html');
 const extract_css = new ExtractTextPlugin('style.css');
 
+/*
+ * Webpack use three different build configs:
+ * - The first config build the index.html file. All resources are copied in the dist folder, except for internal JS
+ *   and CSS (build via others configs). The path references to JS and CSS are renamed to match the new folder
+ *   hierarchy, but are not included (These files are chunks of the other configs).
+ * - The CSS build config will produces CSS chunks, and copy asset resources. All '@import' statements will produce a
+ *   bundled file.
+ * - The JS build config will build all Bajoo-related JS into one file. External JS dependencies are copied in the dist
+ *   folder. AS a side effect of the dynamic asset loader, everything in the static/ folder will be copied.
+ *
+ * File paths of JS and CSS files, referenced by the HTML build config, must match the chunk names of the JS and CSS
+ * build configs.
+ */
 
+
+// Loader common to all build configs
 const common_loaders = [
     {
         test: /\.(woff|woff2|eot|ttf|svg)$/,
