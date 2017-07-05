@@ -17,7 +17,7 @@ export default class LanguageMenu {
     }
 
     view() {
-        return m('.navbar-text.navbar-right', list_lang().reduce(
+        return m('#lang-selection.navbar-text.navbar-right', list_lang().reduce(
             (result, [code, lang], index, array) => {
                 result.push(_flag(code, lang));
                 if (index < array.length - 1)

@@ -24,7 +24,7 @@ export default class SideMenu {
      * @param user {User} reference to the user connected.
      */
     view({attrs: {user}}) {
-        return m('nav.side-nav', [
+        return m('nav#side-menu.side-nav', [
             m('ul.nav',
                 user.storages && user.storages.my_bajoo ? storage_link(user.storages.my_bajoo) : '',
                 m('li', {class: m.route.get() === '/' ? 'active' : ''}, [

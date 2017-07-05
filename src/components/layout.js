@@ -10,17 +10,20 @@ import TaskListModal from './task_list_modal';
 import TaskManagerStatus from './task_manager_status';
 
 
-function two_column_content(user, content) {
-    return m('div.row', [
-        m('.col-md-2[role="nav"]', m(side_menu, {user: user})),
-        m('.col-md-10[role="main"]', content)
-    ]);
-}
-
 /**
  * A mithril component wrapping its children around a layout common to all pages.
  */
 export default class Layout {
+
+    constructor() {
+        this.main_menu_open = false;
+    }
+
+    _toggle_menu() {
+        this.main_menu_open = !this.main_menu_open;
+        return false;
+    }
+
     /**
      * @param app {Application}: reference to the Application instance.
      * @param children
@@ -28,32 +31,38 @@ export default class Layout {
     view({attrs: {app}, children}) {
         return m('', [
             m('header', [
-                m('nav.navbar.navbar-default', [
-                    m('.container-fluid', [
-                        m('.navbar-header',
-                            // TODO: navbar-brand declares a forced, hard-coded height value.
-                            // Custom CSS should be added.
-                            m('a.navbar-brand[href=#]',
-                                m('img[width=100]', {src: loader('bajoo-logo.png')})
-                            )
-                        ),
-                        m('.navbar-collapse', [
-                            m('p.navbar-text', 'Bajoo web interface'),
-                            LanguageMenu.make(),
-                            app.is_logged ? DisconnectButton.make(() => app.reset()) : '',
-                            TaskManagerStatus.make(app.task_manager),
-                            TaskListModal.make(app.task_manager),
-                            PassphraseInputModal.make(app.task_manager.passphrase_input)
-                        ])
-                    ])
-                ])
+                // TODO: adjust img width and/or height
+                m('a#brand-logo', { onclick: () => this._toggle_menu()},
+                    m('span#hamburger-icon.glyphicon.glyphicon-menu-hamburger'),
+                    m('img[height=30]', {src: loader('bajoo-logo.png')})
+                ),
+
+                m('nav#main-menu', { class: this.main_menu_open ? 'menu-open' : ''}, [
+
+                    m('a[href=#].close', {onclick: () => this._toggle_menu()}, m('span.glyphicon.glyphicon-chevron-left')),
+
+                    // #user-menu
+                    m('#user-menu',
+                        app.is_logged ? DisconnectButton.make(() => app.reset()) : ''
+                    ),
+
+                    LanguageMenu.make(),
+
+                    app.is_logged ? m(side_menu, {user: app.user}) : '',
+                ]),
+
+                m('span#app-name', 'Bajoo web interface'),
+
+                TaskListModal.make(app.task_manager),
+
+                // modals
+                TaskManagerStatus.make(app.task_manager),
+                PassphraseInputModal.make(app.task_manager.passphrase_input)
             ]),
-            m('.container',
+            m('#main-content[role=main]', {class: app.is_logged ? 'two-column' : ''},
                 app.is_logged === null ?
                     _('Connection ...') :
-                    (
-                        app.is_logged ? two_column_content(app.user, children) : children
-                    )
+                    children
             )
         ]);
     }

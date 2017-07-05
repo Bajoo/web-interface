@@ -1,11 +1,170 @@
 
 
-select.readonly:disabled {
-    cursor: default;
+header {
+    width: 100%;
+    min-height: 50px;
+    margin-bottom: 1.5%;
+
+    background-color: #f8f8f8;
+    border-bottom: 1px solid #e7e7e7;
+    border-radius: 4px;
 }
 
-.side-nav {
-    border-right: 1px solid grey;
+
+/* All items displayed inside the header should have a height of 50px; */
+
+#brand-logo
+{
+    float: left;
+    margin: 10px;
+    height: 30px; /* TODO: resize the original image */
+    line-height: 0; /* Remove unwanted extra 5px at bottom */
+}
+
+#app-name {
+    margin: 15px; /* for line-height=14px; */
+    display: inline-block; /* required to "enable" margin-top */
+    color: #777;
+}
+
+
+#task-manager-status {
+    float: right;
+    margin: 8px; /* for standard bootstrap button size (42px) */
+}
+
+
+#main-content {
+    padding: 0 2%;
+}
+
+#brand-logo > #hamburger-icon {
+    display: none;
+}
+
+
+@media screen and (max-width: 767px) {
+    #brand-logo {
+        position: relative; /* placement du ham menu */
+
+        cursor: pointer;
+
+        width: 62px; /*48px + 14px (ham) */
+        height: 40px;
+        overflow: hidden;
+
+        padding: 4px 8px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+
+        background-color: #fff;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    #brand-logo > #hamburger-icon {
+        display: inline;
+        /* position absolute will keep it out of the flow and the Bajoo icon will not go on the line. */
+        position: absolute;
+    }
+
+    #brand-logo > #hamburger-icon::before {
+        line-height: 36px;
+    }
+    #brand-logo > img {
+        margin-left: 14px; /* space for the hamburger logo */
+    }
+
+    #app-name {
+        display: none;
+    }
+
+    /* main-menu is a left panel */
+    #main-menu {
+        z-index: 100;
+
+        position: fixed;
+        top: 50px;
+        bottom: 0;
+        left: -100%; /* NOTE: % is relative to the parent, not itself. */
+        transition: left 0.5s;
+
+        overflow-y: auto;
+        max-width: 100%;
+
+        margin: 0;
+        padding: 2% 2% 2% 0;
+
+        background-color: #fff;
+        border-top: 2px solid #ccc;
+        border-right: 2px solid #ccc;
+        border-top-right-radius: 4px;
+    }
+    #main-menu.menu-open {
+        position: fixed;
+        top: 50px;
+        bottom: 0;
+        left: 0;
+        transition: left 0.5s;
+    }
+
+    #main-menu > * {
+        margin: 15px;
+    }
+
+    #main-menu > .close {
+        margin: 0;
+    }
+
+    #lang-selection,
+    #user-menu {
+        text-align: center;
+    }
+
+}
+
+@media screen and (min-width: 768px) {
+    header {
+        position: relative;
+    }
+
+    #main-menu > .close {
+        display: none;
+    }
+
+    #side-menu {
+        position: absolute;
+        top: 100%; /* 100% of the header */
+        margin-top: 1.5%;
+        width: 20%;
+
+        min-height: 80vh; /* the shift from top must be handled. */
+        border-right: 1px solid grey;
+    }
+    #side-menu > * {
+        float: right;
+    }
+
+    #lang-selection {
+        line-height: 1em;
+        margin: 18px; /* (header.width - self.line-height) / 2 */
+        float: right;
+    }
+    #user-menu {
+        float: right;
+        margin: 8px;
+    }
+
+    #main-content.two-column {
+        margin-left: 20%; /* space left for the side-menu */
+    }
+
+}
+
+
+
+select.readonly:disabled {
+    cursor: default;
 }
 
 .side-nav .nav .nav > li > a {
@@ -83,7 +242,7 @@ select.readonly:disabled {
 
     border: solid 1px;
     border-radius: 4px;
-    margin: 8px 16px;
+    /* margin: 8px 16px; */
     padding: 6px 12px;
 }
 
