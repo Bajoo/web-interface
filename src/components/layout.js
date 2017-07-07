@@ -4,6 +4,7 @@ import {_} from '../utils/i18n';
 import loader from '../utils/loader';
 import side_menu from './side_menu';
 import DisconnectButton from './disconnect_button.js';
+import Footer from './footer.js';
 import LanguageMenu from './language_menu.js';
 import PassphraseInputModal from './passphrase_input_modal';
 import TaskListModal from './task_list_modal';
@@ -63,7 +64,8 @@ export default class Layout {
                 app.is_logged === null ?
                     _('Connection ...') :
                     children
-            )
+            ),
+            Footer.make()
         ]);
     }
 }

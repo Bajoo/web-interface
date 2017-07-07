@@ -130,6 +130,16 @@ export default {
     'Note: folders are not really created until a file is added into it.': 'Note: Le dossier ne sera pas réellement créé avant qu\'un fichier ne lui soit ajouté',
     'Create': 'Créer',
 
+    // components/footer.js
+    'https://www.bajoo.fr': 'https://www.bajoo.fr/fr',
+    'Website': 'Site web',
+    'https://drop.bajoo.fr': 'https://drop.bajoo.fr',
+    'Bajoo Drop': 'Bajoo Drop',
+    'https://www.bajoo.fr/en/contact-us': 'https://www.bajoo.fr/fr/contact',
+    'Contact': 'Contact',
+    'https://www.bajoo.fr/en/help': 'https://www.bajoo.fr/fr/assistance',
+    'Help': 'Assistance',
+
     // components/layout.js
     'Connection ...': 'Connexion ...',
 
