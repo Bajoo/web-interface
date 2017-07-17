@@ -25,14 +25,18 @@ export default class SideMenu {
      */
     view({attrs: {user}}) {
         return m('nav#side-menu.side-nav', [
-            m('ul.nav',
-                user.storages && user.storages.my_bajoo ? storage_link(user.storages.my_bajoo) : '',
+            m('ul.nav', [
+                user.storages.dispatch(storages => storages.my_bajoo ? storage_link(storages.my_bajoo) : ''),
                 m('li', {class: m.route.get() === '/' ? 'active' : ''}, [
                     m('a[href=/]', {oncreate: m.route.link}, _('All shares')),
-                    user.storages ? m('ul.nav', user.storages.shares.map(storage_link)) :
-                        user.error ? m('.side-block.bg-danger', _('Loading error')) : '...'
+                    user.storages.dispatch(
+                        storages => m('ul.nav', storages.shares.map(storage_link)),
+                        () => '...',
+                        err => m('.side-block.bg-danger', _('Loading error'))
+                    )
                 ])
-            )
+            ])
+
         ]);
     }
 }

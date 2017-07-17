@@ -72,7 +72,7 @@ export default {
     oninit() {
         this.status = new Status();
 
-        app.user.onerror = err => {
+        app.user.storages.onerror = err => {
             this.status.set_error(_l`Unable to fetch the list of share: ${err.message || err}`);
             m.redraw();
         };
@@ -81,7 +81,7 @@ export default {
 
     onremove() {
         if (app.user) {
-            app.user.onerror = null;
+            app.user.storages.onerror = null;
         }
     },
 
@@ -90,13 +90,16 @@ export default {
             m('.lead', _l`Welcome ${app.user.email}!`),
             m('hr'),
             StatusAlert.make(this.status),
-            app.user.storages ? [
-                app.user.storages.my_bajoo ? storage_view(app.user.storages.my_bajoo, false) : '',
-                m('h2', _('My shares')),
-                create_storage_view(),
-                m('hr'),
-                storage_grid(app.user.storages.shares)
-            ] : (app.user.error ? '' : _('Loading ...'))
+            app.user.storages.dispatch(
+                storages => [
+                    storages.my_bajoo ? storage_view(storages.my_bajoo, false) : '',
+                    m('h2', _('My shares')),
+                    create_storage_view(),
+                    m('hr'),
+                    storage_grid(storages.shares)
+                ],
+                () => _('Loading ...')
+            )
         ];
     }
 };

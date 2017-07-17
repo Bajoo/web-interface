@@ -1,5 +1,6 @@
 
 import {bin2key, generate_key, key2bin, sha256} from '../encryption';
+import AsyncProp from '../utils/async_prop';
 import StorageList from './storage_list';
 
 
@@ -14,14 +15,8 @@ export default class User {
 
         this.key = null;
 
-        /** @type {?Promise<StorageList>} */
-        this.promise = null;
-
-        /** @type {undefined|?StorageList} */
-        this.storages = undefined;
-
-        /** @type {?Error} */
-        this.error = null;
+        /** @type {AsyncProp<StorageList>} */
+        this.storages = new AsyncProp();
 
         /**
          * @type {?Function} callback, called when an error occurs.
@@ -67,24 +62,13 @@ export default class User {
     }
 
     load_storages() {
-        if (this.promise) // reuse ongoing promise
-            return this.promise;
-
-        this.promise = StorageList.from_user_session(this).then(storage_list => {
-            this.promise = null;
-            this.error = null;
-            this.storages = storage_list;
-            return this.storages;
-        }, err => {
-            this.promise = null;
-            this.error = err;
-            this.storages = null;
-            console.error('Fetching storage list failed', err);
-            if (this.onerror)
-                this.onerror(err);
-            throw err;
-        });
-        return this.promise;
+        return this.storages.load(() => StorageList.from_user_session(this)
+            .catch(err => {
+                // TODO: make an helper for the "console.error + throw" pattern ?
+                console.error('Fetching storage list failed', err);
+                throw err;
+            })
+        );
     }
 
     _fetch_key(session) {

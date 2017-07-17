@@ -66,8 +66,10 @@ describe('AsyncProp', () => {
         });
     });
 
+    /** @test {AsyncProp#load} */
     describe('#load()', () => {
 
+        /** @test {AsyncProp#load} */
         it('should call the loader', () => {
             let prop = new AsyncProp();
             let success = false;
@@ -81,6 +83,7 @@ describe('AsyncProp', () => {
             });
         });
 
+        /** @test {AsyncProp#load} */
         it('should return a promise wrapping the AsyncProp instance', () => {
             let prop = new AsyncProp();
 
@@ -89,6 +92,7 @@ describe('AsyncProp', () => {
             });
         });
 
+        /** @test {AsyncProp#load} */
         it('should set the value when the loader promise is fulfilled', () => {
             let prop = new AsyncProp();
             let loader = () => Promise.resolve(753);
@@ -98,6 +102,7 @@ describe('AsyncProp', () => {
             });
         });
 
+        /** @test {AsyncProp#load} */
         it('should return a promise always fulfilled', () => {
             let prop = new AsyncProp();
             let loader = () => Promise.reject(new Error('Example error'));
@@ -105,6 +110,7 @@ describe('AsyncProp', () => {
             return prop.load(loader);
         });
 
+        /** @test {AsyncProp#load} */
         it('should set the error when the loader promise is rejected', () => {
             let prop = new AsyncProp();
             let error = new Error('Example error');
@@ -116,6 +122,7 @@ describe('AsyncProp', () => {
 
         });
 
+        /** @test {AsyncProp#load} */
         it('should call the "onerror" callback when the promise is rejected', () => {
             let prop = new AsyncProp();
             let loader = () => Promise.reject(new Error('Example error'));
@@ -128,13 +135,13 @@ describe('AsyncProp', () => {
             });
         });
 
+        /** @test {AsyncProp#load} */
         it('should reuse the same promise when called twice or more at the same time', () => {
             let prop = new AsyncProp();
             let loader_call = 0;
             let resolve_loader  = null;
 
             function loader() {
-                console.log('CALL');
                 loader_call++;
                 return new Promise(resolve => resolve_loader = resolve);
             }
@@ -152,12 +159,15 @@ describe('AsyncProp', () => {
         });
     });
 
+    /** @test {AsyncProp#dispatch} */
     describe('#dispatch()', () => {
 
+        /** @test {AsyncProp#dispatch} */
         function fail_test_cb() {
             throw new Error('This callback should not be called');
         }
 
+        /** @test {AsyncProp#dispatch} */
         it('should call the "loaded" callback if loaded', () => {
             let prop = new AsyncProp();
             prop.value = 999;
@@ -169,6 +179,7 @@ describe('AsyncProp', () => {
             assert.deepEqual(res, 1000);
         });
 
+        /** @test {AsyncProp#dispatch} */
         it('should call the "loading" callback if not loaded', () => {
             let prop = new AsyncProp();
 
@@ -176,6 +187,7 @@ describe('AsyncProp', () => {
             assert.deepEqual(res, 'loading value');
         });
 
+        /** @test {AsyncProp#dispatch} */
         it('should call the "failed" callback if in error', () => {
             let prop = new AsyncProp();
             prop.error = new Error('Example error');
@@ -187,6 +199,7 @@ describe('AsyncProp', () => {
             assert.deepEqual(res, 'FAILBACK');
         });
 
+        /** @test {AsyncProp#dispatch} */
         it('should accept undefined arguments', () => {
             let prop = new AsyncProp();
 
@@ -194,6 +207,7 @@ describe('AsyncProp', () => {
             assert.equal(prop.dispatch(() => 'OK'), 'OK');
         });
 
+        /** @test {AsyncProp#dispatch} */
         it('should return null if there is not callback', () => {
             let prop = new AsyncProp();
             assert.deepEqual(prop.dispatch(), null);
@@ -203,6 +217,7 @@ describe('AsyncProp', () => {
             assert.deepEqual(loaded_prop.dispatch(), null);
         });
 
+        /** @test {AsyncProp#dispatch} */
         it('should return null if the callback argument is set to null', () => {
             let prop = new AsyncProp();
 
