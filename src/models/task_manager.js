@@ -1,6 +1,7 @@
 
 import m from 'mithril';
 import {initialize as initialize_encryption} from '../encryption';
+import {safe_exec_callback} from '../utils/callbacks';
 import {_} from '../utils/i18n';
 import prop from '../utils/prop';
 import {escape as regexp_escape} from '../utils/regexp';
@@ -161,12 +162,7 @@ export default class TaskManager {
         this.tasks_by_scope[scope] = this.tasks_by_scope[scope] || [];
         this.tasks_by_scope[scope].push(task);
         for (let callback_ctx of this._get_impacted_callback_ctx(scope)) {
-            try {
-                if (callback_ctx.onstart)
-                    callback_ctx.onstart(task);
-            } catch (err) {
-                console.error(`TaskManager: 'start' callback failed for scope ${scope}`, err);
-            }
+            safe_exec_callback(callback_ctx.onstart, `TaskManager: onstart (scope '${scope}')`, task);
         }
     }
 
@@ -191,12 +187,7 @@ export default class TaskManager {
             delete this.tasks_by_scope[scope];
 
         for (let callback_ctx of this._get_impacted_callback_ctx(scope)) {
-            try {
-                if (callback_ctx.onfinish)
-                    callback_ctx.onfinish(task);
-            } catch (err) {
-                console.error(`TaskManager: 'finish' callback failed for scope ${scope}`, err);
-            }
+            safe_exec_callback(callback_ctx.onfinish, `TaskManager: onfinish (scope '${scope}')`, task);
         }
     }
 }

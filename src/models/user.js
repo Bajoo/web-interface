@@ -1,6 +1,7 @@
 
 import {bin2key, generate_key, key2bin, sha256} from '../encryption';
 import AsyncProp from '../utils/async_prop';
+import {log_failed_promise} from '../utils/callbacks';
 import StorageList from './storage_list';
 
 
@@ -63,11 +64,7 @@ export default class User {
 
     load_storages() {
         return this.storages.load(() => StorageList.from_user_session(this)
-            .catch(err => {
-                // TODO: make an helper for the "console.error + throw" pattern ?
-                console.error('Fetching storage list failed', err);
-                throw err;
-            })
+            .catch(log_failed_promise('Fetching storage list failed'))
         );
     }
 

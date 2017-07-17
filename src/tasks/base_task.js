@@ -1,5 +1,6 @@
 
 import {CanceledError, PassphraseRejectedError} from '../models/task_errors';
+import {safe_exec_callback} from '../utils/callbacks';
 
 
 export let TaskStatus = {
@@ -127,37 +128,23 @@ export default class BaseTask {
     }
     // jshint ignore:end
 
-    /**
-     * Safe way to trigger onchange callback.
-     * @private
-     */
-    _call_onchange() {
-        if (this.onchange) {
-            try {
-                this.onchange(this);
-            } catch (err) {
-                console.error('Task: onchange callback threw an unexpected Error', err);
-            }
-        }
-    }
-
     //// Protected methods
 
     set_status(status, progress) {
         this.status = status;
         if (progress !== undefined)
             this.progress = progress;
-        this._call_onchange();
+        safe_exec_callback(this.onchange, 'Task:onchange', this);
     }
 
     set_progress(progress) {
         this.progress = progress;
-        this._call_onchange();
+        safe_exec_callback(this.onchange, 'Task:onchange', this);
     }
 
     set_error(error) {
         this.errors.push(error);
-        this._call_onchange();
+        safe_exec_callback(this.onchange, 'Task:onchange', this);
     }
 
     /**

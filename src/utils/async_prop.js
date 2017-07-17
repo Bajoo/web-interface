@@ -1,4 +1,6 @@
 
+import {safe_exec_callback} from '../utils/callbacks';
+
 
 /**
  * Wrapper of asynchronously-loaded property
@@ -90,10 +92,7 @@ export default class AsyncProp {
             this.promise = null;
             this.set_error(err);
 
-            // TODO: wrap callbacks for catching unexpected exceptions
-            if (this.onerror)
-                this.onerror(err);
-
+            safe_exec_callback(this.onerror, 'AsyncProp:onerror', err);
             return this;
         });
         return this.promise;
