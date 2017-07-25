@@ -1,0 +1,82 @@
+
+/* DOM structure
+
+body
+    header
+        #user-menu (PC only)
+    #lateral-menu (mobile only)
+    #side-column (PC only)
+    main
+    footer (PC only)
+*/
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+
+    /* required for footer placement */
+    position: relative;
+    min-height: 100vh;
+}
+
+body > header {
+    width: 100%;
+    min-height: 5vh;
+}
+
+
+/* Phone mode */
+@media screen and (max-width: 767px) {
+
+    #side-column,
+    footer,
+    #user-menu {
+        display: none;
+    }
+
+    main {
+        padding: 2%;
+    }
+}
+
+
+/* Desktop mode */
+@media screen and (min-width: 768px) {
+
+    main,
+    #side-column {
+        position: relative;
+        padding: 2.5vh 2% 2.5vh 2%;
+
+        /* keep both blocks top-aligned on the same line */
+        display: inline-block;
+        vertical-align: top;
+
+        /* space for footer */
+        box-sizing: border-box;
+        border-bottom: solid 5vh transparent;
+    }
+
+    #side-column {
+        width: 20%;
+    }
+
+    main {
+        width: 78%;
+    }
+
+    #lateral-menu {
+        display: none;
+    }
+
+    body > footer {
+        width: 100%;
+        min-height: 5vh;
+
+        /* fix footer at bottom of the page */
+        position: absolute;
+        box-sizing: border-box;
+        bottom: 0;
+    }
+}

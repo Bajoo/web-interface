@@ -1,12 +1,10 @@
 
+@import "layout.css";
 @import "footer.css";
+@import "lateral_menu.css";
 
 
 header {
-    width: 100%;
-    min-height: 50px;
-    margin-bottom: 1.5%;
-
     background-color: #f8f8f8;
     border-bottom: 1px solid #e7e7e7;
     border-radius: 4px;
@@ -33,11 +31,6 @@ header {
 #task-manager-status {
     float: right;
     margin: 8px; /* for standard bootstrap button size (42px) */
-}
-
-
-#main-content {
-    padding: 0 2%;
 }
 
 #brand-logo > #hamburger-icon {
@@ -81,66 +74,21 @@ header {
         display: none;
     }
 
-    /* main-menu is a left panel */
-    #main-menu {
-        z-index: 100;
-
-        position: fixed;
-        top: 50px;
-        bottom: 0;
-        left: -100%; /* NOTE: % is relative to the parent, not itself. */
-        transition: left 0.5s;
-
-        overflow-y: auto;
-        max-width: 100%;
-
-        margin: 0;
-        padding: 2% 2% 2% 0;
-
-        background-color: #fff;
-        border-top: 2px solid #ccc;
-        border-right: 2px solid #ccc;
-        border-top-right-radius: 4px;
-    }
-    #main-menu.menu-open {
-        position: fixed;
-        top: 50px;
-        bottom: 0;
-        left: 0;
-        transition: left 0.5s;
-    }
-
-    #main-menu > * {
-        margin: 15px;
-    }
-
-    #main-menu > .close {
+    #lang-selection {
+        padding: 12px 0;
         margin: 0;
     }
 
-    #lang-selection,
-    #user-menu {
-        text-align: center;
+    header::after {
+        content: '';
+        display: block;
+        clear: both;
     }
-
 }
 
 @media screen and (min-width: 768px) {
-    header {
-        position: relative;
-    }
-
-    #main-menu > .close {
-        display: none;
-    }
-
     #side-menu {
-        position: absolute;
-        top: 100%; /* 100% of the header */
-        margin-top: 1.5%;
-        width: 20%;
-
-        min-height: 80vh; /* the shift from top must be handled. */
+        min-height: 80vh;
         border-right: 1px solid grey;
     }
     #side-menu > * {
@@ -156,11 +104,6 @@ header {
         float: right;
         margin: 8px;
     }
-
-    #main-content.two-column {
-        margin-left: 20%; /* space left for the side-menu */
-    }
-
 }
 
 
