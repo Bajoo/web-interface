@@ -3,9 +3,8 @@ import m from 'mithril';
 import {_} from '../utils/i18n';
 import loader from '../utils/loader';
 import prop from '../utils/prop';
-import side_menu from './side_menu';
-import DisconnectButton from './disconnect_button.js';
-import Footer from './footer.js';
+import StorageNav from './storage_nav';
+import StaticLinksNav from './static_links_nav.js';
 import LanguageMenu from './language_menu.js';
 import LateralMenu from './lateral_menu.js';
 import PassphraseInputModal from './passphrase_input_modal';
@@ -42,7 +41,9 @@ export default class Layout {
 
                 // #user-menu
                 m('#user-menu',
-                    app.is_logged ? DisconnectButton.make(() => app.reset()) : ''
+                    app.is_logged ? [
+                        m('button.btn.btn-danger[type=button]', {onclick: () => app.reset()}, _('Log out'))
+                    ] : ''
                 ),
 
                 LanguageMenu.make(),
@@ -59,14 +60,14 @@ export default class Layout {
             LateralMenu.make(app.user, this.lateral_menu_open, () => app.reset()),
 
             m('#side-column',
-                app.is_logged ? m(side_menu, {user: app.user}) : ''
+                app.is_logged ? StorageNav.make(app.user) : ''
             ),
             m('main',
                 app.is_logged === null ?
                     _('Connection ...') :
                     children
             ),
-            Footer.make()
+            m('footer', StaticLinksNav.make())
         ];
     }
 }

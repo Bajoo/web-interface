@@ -2,6 +2,7 @@
 @import "layout.css";
 @import "footer.css";
 @import "lateral_menu.css";
+@import "menu.css";
 
 
 header {
@@ -87,11 +88,9 @@ header {
 }
 
 @media screen and (min-width: 768px) {
-    #side-menu {
+    #side-column > nav {
         min-height: 80vh;
         border-right: 1px solid grey;
-    }
-    #side-menu > * {
         float: right;
     }
 
@@ -110,16 +109,6 @@ header {
 
 select.readonly:disabled {
     cursor: default;
-}
-
-.side-nav .nav .nav > li > a {
-    padding: 5px 30px;
-}
-
-
-.side-nav .nav > li.active > a {
-    background-color: #eee;
-    color: #23527c;
 }
 
 .side-block {

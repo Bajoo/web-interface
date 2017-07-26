@@ -1,8 +1,8 @@
 
 import m from 'mithril';
 import {_} from '../utils/i18n';
-import DisconnectButton from './disconnect_button';
-import SideMenu from './side_menu';
+import StorageNav from './storage_nav';
+import StaticLinksNav from './static_links_nav';
 
 
 export default class LateralMenu {
@@ -22,28 +22,24 @@ export default class LateralMenu {
             m('a.close[href=#]', {onclick: () => is_open(false)}, m.trust('&times;')),
 
             user ? [
-                m('span.center', user.email),
+                m('span.menu-item', user.email),
                 m('hr'),
 
-                // TODO: don't use it directly: use only inner elements
-                m(SideMenu, {user}),
-
+                StorageNav.make(user),
                 m('hr'),
-                DisconnectButton.make(disconnect_cb)
-            ] : m('ul.nav', [
-                m('li', m('a[ref=/login]', {oncreate: m.route.link}, _('Login'))),
-                m('li', m('a[href=/register]', {oncreate: m.route.link}, _('Register')))
+
+                m('ul.menu', [
+                    m('li.menu-item',
+                        m('a[href=#]', {onclick: disconnect_cb}, _('Log out'))
+                    )
+                ])
+            ] : m('ul.menu', [
+                m('li.menu-item', m('a[ref=/login]', {oncreate: m.route.link}, _('Login'))),
+                m('li.menu-item', m('a[href=/register]', {oncreate: m.route.link}, _('Register')))
             ]),
 
             m('hr'),
-
-            // footer links
-            m('ul.nav', [
-                m('li', m('a', {href: _('https://www.bajoo.fr')}, _('Website'))),
-                m('li', m('a', {href: _('https://drop.bajoo.fr')}, _('Bajoo Drop'))),
-                m('li', m('a', {href: _('https://www.bajoo.fr/en/contact-us')}, _('Contact'))),
-                m('li', m('a', {href: _('https://www.bajoo.fr/en/help')}, _('Help'))),
-            ])
+            StaticLinksNav.make(true)
         ]);
     }
 }

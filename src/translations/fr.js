@@ -130,7 +130,7 @@ export default {
     'Note: folders are not really created until a file is added into it.': 'Note: Le dossier ne sera pas réellement créé avant qu\'un fichier ne lui soit ajouté',
     'Create': 'Créer',
 
-    // components/footer.js
+    // components/static_links_nav.js
     'https://www.bajoo.fr': 'https://www.bajoo.fr/fr',
     'Website': 'Site web',
     'https://drop.bajoo.fr': 'https://drop.bajoo.fr',
@@ -150,7 +150,7 @@ export default {
     'Cancel': 'Annuler',
     'Apply': 'Appliquer',
 
-    // components/side_menu.js
+    // components/storage_nav.js
     'All shares': 'Tous les partages',
     'Loading error': 'Erreur de chargement',
 
