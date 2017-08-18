@@ -13,6 +13,7 @@
 
         Variations:
             .active: highlight this item.
+            .empty: on PC only, keep space even if the item is empty.
 
     .sub-menu
         Add and offset at the left of the menu.
@@ -36,12 +37,25 @@
     list-style: none;
 
     margin: 0;
-    /* padding: 10px 15px; */
+    padding: 10px 15px;
 }
 
-.menu-item > a {
-    padding: 10px 15px;
+.menu-item > * {
     display: block;
+    padding: 10px 15px;
+    margin: 0 -15px;
+}
+
+.menu-item > :first-child {
+    margin-top: -10px;
+}
+
+.menu-item > :last-child {
+    margin-bottom: -10px;
+}
+
+
+.menu-item > a {
     color: #337ab7;
     text-decoration: none;
 }
@@ -53,7 +67,15 @@
     background: #eee;
 }
 
-
 .sub-menu {
-    padding-left: 20px;
+    /* "take" the side-space from the padding of the parent menu */
+    margin: 0 -15px;
+    padding: 0 0 0 20px;
+}
+
+
+@media screen and (min-width: 768px) {
+    .menu-item.empty {
+        min-height: 40px;
+    }
 }

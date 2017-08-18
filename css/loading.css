@@ -1,0 +1,41 @@
+
+/*
+    .spinner
+        Standalone element used to indicate a loading. It's not displayed, until the ".loading" class is added.
+
+    .loading-block
+        Placeholder block for section still in loading.
+ */
+
+.spinner {
+    float: right;
+    padding: 0;
+    margin: 10px;
+}
+
+.spinner:not(.loading) {
+    display: none;
+}
+
+.spinner.loading {
+    -webkit-animation:spin 2s linear infinite;
+    -moz-animation:spin 2s linear infinite;
+    animation:spin 2s linear infinite;
+}
+
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+
+.loading-block {
+    text-align: center;
+    background-color: #eeeeee;
+    border-radius: 5%;
+
+    /* TODO: set the sizes in relative units. */
+    min-width: 200px;
+    padding-top: 75px;
+    padding-bottom: 75px;
+}

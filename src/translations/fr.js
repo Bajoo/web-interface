@@ -153,6 +153,8 @@ export default {
     // components/storage_nav.js
     'All shares': 'Tous les partages',
     'Loading error': 'Erreur de chargement',
+    "We're unable to fetch the storage list": "Impossible de charger la liste des conteneurs",
+    'Retry': 'Réessayer',
 
     // components/storage_member_list.js
     'Permission level': 'Niveau de permission',

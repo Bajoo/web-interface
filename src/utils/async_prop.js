@@ -84,6 +84,7 @@ export default class AsyncProp {
         if (this.promise) // reuse ongoing promise
             return this.promise;
 
+        this.error = null;
         this.promise = loader().then(res => {
             this.promise = null;
             this(res);
@@ -99,6 +100,17 @@ export default class AsyncProp {
     }
 
     /**
+     * Indicate if there is an ongoing data loading.
+     *
+     * Noet that the prop can have data and be in loading (in case of refresh).
+     *
+     * @return {boolean} true if data are being loaded (or being refreshed); false otherwise.
+     */
+    is_loading() {
+        return this.promise !== null;
+    }
+
+    /**
      * Set the property in error state (and erase the value).
      *
      * Warning: it does NOT trigger the `onerror` callback.
@@ -107,7 +119,7 @@ export default class AsyncProp {
      */
     set_error(err) {
         this.error = err;
-        this.value = null;
+        this.value = undefined;
     }
 
     /**
