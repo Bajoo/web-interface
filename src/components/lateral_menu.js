@@ -1,6 +1,7 @@
 
 import m from 'mithril';
 import {_} from '../utils/i18n';
+import LanguageSelector from './language_selector';
 import StorageNav from './storage_nav';
 import StaticLinksNav from './static_links_nav';
 
@@ -23,6 +24,8 @@ export default class LateralMenu {
 
             user ? [
                 m('span.menu-item', user.email),
+                m('hr'),
+                m(LanguageSelector),
                 m('hr'),
 
                 StorageNav.make(user),

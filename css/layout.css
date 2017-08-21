@@ -31,7 +31,8 @@ body > header {
 
     #side-column,
     footer,
-    #user-menu {
+    #user-menu,
+    #lang-selection {
         display: none;
     }
 
